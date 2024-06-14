@@ -1,0 +1,59 @@
+
+
+.form-title {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+    color: #283593;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-group input,
+.form-group select {
+    width: calc(100% - 10px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.option-group {
+    margin-bottom: 15px;
+}
+
+.form-submit {
+    text-align: center;
+}
+
+.oval-button {
+    background-color: #283593;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.oval-button:hover {
+    background-color: #1a237e;
+}
+.custom-dropdown {
+    width: 200px;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
