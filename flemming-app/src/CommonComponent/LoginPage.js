@@ -130,7 +130,7 @@ function LoginPage() {
             value={email}
             onChange={handleUsernameChange}
           />
-          {emailError && <p className="error-message">{emailError}</p>}
+          {/* {emailError && <p className="error-message">{emailError}</p>} */}
         </div>
         <div className="form-group">
           <span className='input-icon'>
@@ -146,7 +146,7 @@ function LoginPage() {
             value={password}
             onChange={handlePasswordChange}
           />
-          {passwordError && <p className="error-message">{passwordError}</p>}
+          {/* {passwordError && <p className="error-message">{passwordError}</p>} */}
         </div>
         <div style={{ marginBottom: '25px' }}> {/* Add some margin between buttons */}
           <button className="btn btn-primary btn-lg" type="submit">
