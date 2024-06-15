@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
 
 function FileUploadPage() {
     const [instructions, setInstructions] = useState(['']);
+    const token = sessionStorage.getItem('accessToken');
 
     const handleInstructionChange = (index, event) => {
         const newInstructions = instructions.slice();
@@ -21,9 +23,35 @@ function FileUploadPage() {
         setInstructions(newInstructions);
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('Instructions submitted:', instructions);
+        const description = instructions.join('\n');
+
+        const dataToSend = {
+            tittle: 'Question 1',
+            level: 0,
+            description: description,
+            status: true,
+            mode: 'image',
+            collage_name: 'fleming',
+            game_type: 3,
+            options: []
+        };
+
+        console.log('Data to send:', dataToSend);
+
+        try {
+            const response = await axios.post('https://api-flrming.dhoomaworksbench.site/game', dataToSend, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            console.log('Response:', response.data);
+            // Handle success (e.g., display a success message or redirect)
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle error (e.g., display an error message)
+        }
     };
 
     return (
@@ -33,7 +61,7 @@ function FileUploadPage() {
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
                         <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '800px' }}>
-                            <h5 style={{color:'black'}}>Add Instructions For File Uploading</h5>
+                            <h5 style={{ color: 'black' }}>Add Instructions For File Uploading</h5>
                             <form onSubmit={handleSubmit}>
                                 {instructions.map((instruction, index) => (
                                     <div className="mb-3" key={index}>

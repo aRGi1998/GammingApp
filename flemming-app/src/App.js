@@ -10,6 +10,7 @@ import McqCreationPage from './AdminComponent/McqCreationPage';
 import FileUploadPage from './AdminComponent/FileUploadPage';
 import QrCreationPage from './AdminComponent/QrCreationPage';
 import StudentListPage from './AdminComponent/StudentListPage';
+import QuestionListPage from './AdminComponent/QuestionListPage';
 import HomePage from './StudentComponent/HomePage';
 import LevelListPage from './StudentComponent/LevelListPage';
 import GameListPage from './StudentComponent/GameListPage';
@@ -19,6 +20,7 @@ import ScannerListing from './StudentComponent/ScannerListing';
 import StatusPage from './StudentComponent/StatusPage';
 import ForgotPasswordPage from './CommonComponent/ForgetPasswordPage';
 import OtpVerificationPage from './CommonComponent/OtpVerificationPage';
+
 
 function App() {
   return (
@@ -32,6 +34,7 @@ function App() {
           <Route path="/fu-creation" element={<FileUploadPage />} />
           <Route path="/qr-creation" element={<QrCreationPage />} />
           <Route path="/student-list" element={<StudentListPage />} />
+          <Route path="/question-list" element={<QuestionListPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/levels" element={<LevelListPage />} />
           <Route path="/game-list" element={<GameListPage />} />

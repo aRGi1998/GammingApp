@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
 import QRCode from 'qrcode.react';
@@ -7,6 +8,7 @@ function QrCreationPage() {
     const [instructions, setInstructions] = useState(['']);
     const [qrText, setQrText] = useState('');
     const [generatedQr, setGeneratedQr] = useState(null);
+    const token = sessionStorage.getItem('accessToken');
 
     const handleInstructionChange = (index, event) => {
         const newInstructions = instructions.slice();
@@ -24,9 +26,36 @@ function QrCreationPage() {
         setInstructions(newInstructions);
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('Instructions submitted:', instructions);
+        const description = instructions.join('\n');
+
+        const dataToSend = {
+            tittle: 'Question 1',
+            level: 0,
+            description: description,
+            status: true,
+            mode: 'qr',
+            collage_name: 'fleming',
+            game_type: 2,
+            options: [],
+            qr_value: qrText // Setting the QR text/URL
+        };
+
+        console.log('Data to send:', dataToSend);
+
+        try {
+            const response = await axios.post('https://api-flrming.dhoomaworksbench.site/game', dataToSend, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            console.log('Response:', response.data);
+            // Handle success (e.g., display a success message or redirect)
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle error (e.g., display an error message)
+        }
     };
 
     const handleQrGenerate = () => {

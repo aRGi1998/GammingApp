@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
 import '../StyleComponent/McqForm.css';
@@ -9,6 +10,7 @@ function McqCreationPage() {
         options: ['', '', '', ''],
         correctAnswer: ''
     });
+    const token = sessionStorage.getItem('accessToken');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -21,13 +23,36 @@ function McqCreationPage() {
         setFormData({ ...formData, options: newOptions });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const { question, options, correctAnswer } = formData;
-        console.log(formData,'data')
-        console.log("Question:", question);
-        console.log("Options:", options);
-        console.log("Correct Answer:", correctAnswer);
+
+        const dataToSend = {
+            tittle: question,
+            level: 0,
+            description: 'string', 
+            status: true, 
+            mode: 'options', 
+            collage_name: 'fleming',
+            game_type: 1, 
+            options: options.filter(option => option !== ''),
+            qr_value: correctAnswer
+        };
+
+        console.log(dataToSend, 'data to send');
+
+        try {
+            const response = await axios.post('https://api-flrming.dhoomaworksbench.site/game', dataToSend, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            console.log('Response:', response.data);
+            // Handle success (e.g., display a success message or redirect)
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle error (e.g., display an error message)
+        }
     };
 
     return (
@@ -103,5 +128,4 @@ function McqCreationPage() {
         </>
     );
 }
-
 export default McqCreationPage;

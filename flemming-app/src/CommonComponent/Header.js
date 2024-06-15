@@ -23,6 +23,7 @@ function Header() {
                         {isAdmin ? (
                             <>
                                 <a href="/student-list" className="nav-link text-white">Student List</a> |
+                                <a href="/question-list" className="nav-link text-white">Question List</a> |
                             </>
                         ) : (
                             <>

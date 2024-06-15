@@ -5,7 +5,7 @@ function Footer() {
     return (
         <footer className="bg-black text-white py-3">
             <div className="container text-center">
-                <p className="mb-0">© 2024 Fleming.ca, All Rights Reserved</p>
+                <p className="mb-0">flemingcollege.ca</p>
             </div>
         </footer>
     );

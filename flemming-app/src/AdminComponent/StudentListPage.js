@@ -1,29 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
 
 function StudentListPage() {
     const [selectedCampus, setSelectedCampus] = useState('');
+    const [students, setStudents] = useState([]);
     const campuses = ['Campus A', 'Campus B', 'Campus C'];
-    const students = [
-        { name: 'John Doe', image: 'image1.jpg', time: '10:00 AM', status: 'Active', level: 'Level 1' },
-        { name: 'Jane Smith', image: 'image2.jpg', time: '10:30 AM', status: 'Inactive', level: 'Level 2' },
-        { name: 'Sam Johnson', image: 'image3.jpg', time: '11:00 AM', status: 'Active', level: 'Level 3' },
-        { name: 'John Doe', image: 'image1.jpg', time: '10:00 AM', status: 'Active', level: 'Level 1' },
-        { name: 'Jane Smith', image: 'image2.jpg', time: '10:30 AM', status: 'Inactive', level: 'Level 2' },
-        { name: 'Sam Johnson', image: 'image3.jpg', time: '11:00 AM', status: 'Active', level: 'Level 3' },
-        { name: 'John Doe', image: 'image1.jpg', time: '10:00 AM', status: 'Active', level: 'Level 1' },
-        { name: 'Jane Smith', image: 'image2.jpg', time: '10:30 AM', status: 'Inactive', level: 'Level 2' },
-        { name: 'Sam Johnson', image: 'image3.jpg', time: '11:00 AM', status: 'Active', level: 'Level 3' },
-        { name: 'John Doe', image: 'image1.jpg', time: '10:00 AM', status: 'Active', level: 'Level 1' },
-        { name: 'Jane Smith', image: 'image2.jpg', time: '10:30 AM', status: 'Inactive', level: 'Level 2' },
-        { name: 'Sam Johnson', image: 'image3.jpg', time: '11:00 AM', status: 'Active', level: 'Level 3' },
-        // Add more dummy data as needed
-    ];
+    const token = sessionStorage.getItem('accessToken');
 
     const handleCampusChange = (event) => {
         setSelectedCampus(event.target.value);
     };
+
+    useEffect(() => {
+        const fetchStudents = async () => {
+            try {
+                const response = await axios.get('https://api-flrming.dhoomaworksbench.site/api/api_student_list', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                setStudents(response.data);
+            } catch (error) {
+                console.error('Error fetching students:', error);
+            }
+        };
+
+        fetchStudents();
+    }, [token]);
 
     return (
         <>
