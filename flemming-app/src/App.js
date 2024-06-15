@@ -17,6 +17,8 @@ import McqListingPage from './StudentComponent/McqListingPage';
 import FuListingPage from './StudentComponent/FuListingPage';
 import ScannerListing from './StudentComponent/ScannerListing';
 import StatusPage from './StudentComponent/StatusPage';
+import ForgotPasswordPage from './CommonComponent/ForgetPasswordPage';
+import OtpVerificationPage from './CommonComponent/OtpVerificationPage';
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
           <Route path="/fu-list" element={<FuListingPage />} />
           <Route path="/qr-list" element={<ScannerListing />} />
           <Route path="/status" element={<StatusPage />} />
+          <Route path="/forgot-pwd" element={<ForgotPasswordPage />} />
+          <Route path="/otp" element={<OtpVerificationPage />} />
         </Routes>
       </div>
     </Router>

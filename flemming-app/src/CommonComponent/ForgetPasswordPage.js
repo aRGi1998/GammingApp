@@ -1,5 +1,4 @@
 import React, { useState }  from 'react';
-import './componentStyles/ForgetPasswoed.css';
 import logo from '../assests/logo.png';
 import axios from 'axios';
 

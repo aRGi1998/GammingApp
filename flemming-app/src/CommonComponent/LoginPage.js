@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../StyleComponent/LoginPage.css';
-import '../StyleComponent/RegisterPage.css';
 import logo from '../assests/logo.png';
+import '../StyleComponent/RegisterPage.css';
 import axios from 'axios';
 import { MdEmail } from "react-icons/md";
 import { IoMdLock } from "react-icons/io";
@@ -116,11 +117,11 @@ function LoginPage() {
       <div className="gradient"></div>
       
       <form onSubmit={handleSubmit} className="register-form">
-        <img src={logo} alt="logo" style={{ width: '300px', height: '80px', marginBottom: '20px' }} />
+        <img src={logo} alt="logo" style={{ width: '50%', height: '20%', marginBottom: '20px' }} />
         <h2 style={{ color: 'white' }}>Login To Your Account</h2>
         <div className="form-group">
           <span className='input-icon'>
-            <MdEmail className='input-icon-svg'/>
+            {/* <MdEmail className='input-icon-svg'/> */}
           </span>
           <input
             type="text"
@@ -133,10 +134,10 @@ function LoginPage() {
         </div>
         <div className="form-group">
           <span className='input-icon'>
-            <IoMdLock className='input-icon-svg'/>
+            {/* <IoMdLock className='input-icon-svg'/> */}
           </span>
           <span className='input-show-password'>
-            <AiFillEyeInvisible className='input-icon-svg'/>
+            {/* <AiFillEyeInvisible className='input-icon-svg'/> */}
           </span>
           <input
             type="password"
@@ -153,8 +154,8 @@ function LoginPage() {
           </button>
         </div>
         <div className="additional-links mt-5">
-          <span className="mb-5" style={{ color: 'white' }}>Don't have an account? <a href="/register" style={{ textDecoration: 'underline', color: 'white' }}><span className='link-reg-span'>Sign Up</span></a></span> <br></br>
-          <a style={{ textDecoration: 'underline', color: 'white' }} href="/forgot-password">Forgotten Password?</a>
+          <span className="mb-1" style={{ color: 'white' }}>Don't have an account? <a href="/register" style={{ textDecoration: 'underline', color: 'white' }}><span className='link-reg-span'>Sign Up</span></a></span> <br></br>
+          <a style={{ textDecoration: 'underline', color: 'white' }} href="/forgot-pwd">Forgotten Password?</a>
         </div>
         {apiError && <p className="error-message" style={{ color: 'white' }}>{apiError}</p>}
       </form>
