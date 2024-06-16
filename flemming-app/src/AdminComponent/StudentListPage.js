@@ -3,10 +3,10 @@ import axios from 'axios';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
 
-function StudentListPage() {
-    const [selectedCampus, setSelectedCampus] = useState('');
+function StudentListPage() { 
+    const [selectedCampus, setSelectedCampus] = useState('Sutherland'); // Set default campus to Sutherland
     const [students, setStudents] = useState([]);
-    const campuses = ['Campus A', 'Campus B', 'Campus C'];
+    const campuses = ['Sutherland', 'Lindsay', 'Haliburton'];
     const token = sessionStorage.getItem('accessToken');
 
     const handleCampusChange = (event) => {
@@ -15,20 +15,23 @@ function StudentListPage() {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            try {
-                const response = await axios.get('https://api-flrming.dhoomaworksbench.site/api/api_student_list', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                setStudents(response.data);
-            } catch (error) {
-                console.error('Error fetching students:', error);
+            if (selectedCampus) {
+                try {
+                    const response = await axios.get(`https://api-flrming.dhoomaworksbench.site/api/student/?campus_name=${selectedCampus}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    setStudents(response.data.results); // Use response.data.results to get the students array
+                    console.log(response.data,'data')
+                } catch (error) {
+                    console.error('Error fetching students:', error);
+                }
             }
         };
 
         fetchStudents();
-    }, [token]);
+    }, [selectedCampus, token]); // Call the API on initial render and when selectedCampus changes
 
     return (
         <>
@@ -38,7 +41,7 @@ function StudentListPage() {
                     <div className="col-md-8 d-flex flex-column align-items-center">
                         <div className="card text-white p-4 rounded shadow-lg mt-4" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '800px' }}>
                             <div className="form-group">
-                                <label htmlFor="campusSelect" className="text-white">Select Campus:</label>
+                                <label htmlFor="campusSelect" className="text-black">Select Campus:</label>
                                 <select id="campusSelect" className="form-control" value={selectedCampus} onChange={handleCampusChange}>
                                     <option value="" disabled>Select a campus</option>
                                     {campuses.map((campus, index) => (
@@ -49,21 +52,21 @@ function StudentListPage() {
                             <table className="table table-striped table-light">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Image</th>
-                                        <th>Time</th>
-                                        <th>Status</th>
-                                        <th>Level</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Contact Number</th>
+                                        <th>Campus</th>
+                                        <th>Date Joined</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {students.map((student, index) => (
                                         <tr key={index}>
-                                            <td>{student.name}</td>
-                                            <td><img src={student.image} alt={student.name} style={{ width: '50px', height: '50px' }} /></td>
-                                            <td>{student.time}</td>
-                                            <td>{student.status}</td>
-                                            <td>{student.level}</td>
+                                            <td>{student.username}</td>
+                                            <td>{student.email}</td>
+                                            <td>{student.contact_number}</td>
+                                            <td>{student.collage_name}</td>
+                                            <td>{new Date(student.date_joined).toLocaleDateString()}</td>
                                         </tr>
                                     ))}
                                 </tbody>

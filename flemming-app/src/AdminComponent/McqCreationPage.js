@@ -36,7 +36,7 @@ function McqCreationPage() {
             collage_name: 'fleming',
             game_type: 1, 
             options: options.filter(option => option !== ''),
-            qr_value: correctAnswer
+            answer_value: correctAnswer
         };
 
         console.log(dataToSend, 'data to send');
