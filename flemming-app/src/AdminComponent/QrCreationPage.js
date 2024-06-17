@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Header from '../CommonComponent/Header';
-import Footer from '../CommonComponent/Footer';
 import QRCode from 'qrcode.react';
 
 function QrCreationPage() {
@@ -31,16 +29,16 @@ function QrCreationPage() {
         const description = instructions.join('\n');
 
         const dataToSend = {
-            tittle: 'Question 1',
-            level: 0,
+            tittle: '',
             description: description,
             status: true,
             mode: 'qr',
             collage_name: 'fleming',
-            game_type: 2,
+            game_type: 3,
             options: [],
-            qr_value: qrText // Setting the QR text/URL
-        };
+            level: 0,
+            // qr_value: qrText 
+        };          
 
         console.log('Data to send:', dataToSend);
 

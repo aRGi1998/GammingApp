@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Header from '../CommonComponent/Header';
-import Footer from '../CommonComponent/Footer';
 import '../StyleComponent/McqForm.css';
 
 function McqCreationPage() {
@@ -10,6 +8,8 @@ function McqCreationPage() {
         options: ['', '', '', ''],
         correctAnswer: ''
     });
+    const [popupMessage, setPopupMessage] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
     const token = sessionStorage.getItem('accessToken');
 
     const handleChange = (e) => {
@@ -48,11 +48,31 @@ function McqCreationPage() {
                 }
             });
             console.log('Response:', response.data);
+
             // Handle success (e.g., display a success message or redirect)
+            if (response.data.message === 'Sucessfully created') {
+                setPopupMessage('MCQ created successfully!');
+                setShowPopup(true);
+
+                // Clear the form
+                setFormData({
+                    question: '',
+                    options: ['', '', '', ''],
+                    correctAnswer: ''
+                });
+            }
         } catch (error) {
             console.error('Error:', error);
+
             // Handle error (e.g., display an error message)
+            setPopupMessage('An error occurred while creating the MCQ.');
+            setShowPopup(true);
         }
+    };
+
+    const closePopup = () => {
+        setShowPopup(false);
+        setPopupMessage('');
     };
 
     return (
@@ -118,6 +138,14 @@ function McqCreationPage() {
                                         <button type="submit" className="btn btn-primary btn-block">Submit</button>
                                     </div>
                                 </form>
+                                {/* {showPopup && (
+                                    <div className="popup">
+                                        <div className="popup-content">
+                                            <p>{popupMessage}</p>
+                                            <button onClick={closePopup} className="btn btn-secondary">Close</button>
+                                        </div>
+                                    </div>
+                                )} */}
                             </div>
                         </div>
                     </div>
@@ -126,4 +154,5 @@ function McqCreationPage() {
         </>
     );
 }
+
 export default McqCreationPage;

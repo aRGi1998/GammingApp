@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Header from '../CommonComponent/Header';
-import Footer from '../CommonComponent/Footer';
 
 function StudentListPage() { 
     const [selectedCampus, setSelectedCampus] = useState('Sutherland'); // Set default campus to Sutherland
