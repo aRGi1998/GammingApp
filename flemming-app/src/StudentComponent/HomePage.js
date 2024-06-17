@@ -1,6 +1,4 @@
 import React from 'react';
-import Header from '../CommonComponent/Header';
-import Footer from '../CommonComponent/Footer';
 import { useNavigate } from 'react-router-dom';
 // import Substract from '../assests/Subtract.png';
 import frametrophy from '../assests/Frame2.png';
@@ -13,7 +11,6 @@ function HomePage() {
   }
   return (
     <>
-      <Header />
       <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
         <div className="container mt-5">
           <div style={{ position: 'relative' }}>
@@ -34,7 +31,6 @@ function HomePage() {
           </div>
         </div>
       </div>
-      <Footer style={{ position: 'absolute', bottom: '0', width: '100%' }} />
     </>
   );
 }

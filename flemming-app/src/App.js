@@ -20,6 +20,8 @@ import ScannerListing from './StudentComponent/ScannerListing';
 import StatusPage from './StudentComponent/StatusPage';
 import ForgotPasswordPage from './CommonComponent/ForgetPasswordPage';
 import OtpVerificationPage from './CommonComponent/OtpVerificationPage';
+import Header from './CommonComponent/Header';
+import Footer from './CommonComponent/Footer';
 
 
 function App() {
@@ -29,6 +31,9 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+        <Header />
+        <Routes>
           <Route path="/admin-home" element={<AdminHomePage />} />
           <Route path="/mcq-creation" element={<McqCreationPage />} />
           <Route path="/fu-creation" element={<FileUploadPage />} />
@@ -45,6 +50,7 @@ function App() {
           <Route path="/forgot-pwd" element={<ForgotPasswordPage />} />
           <Route path="/otp" element={<OtpVerificationPage />} />
         </Routes>
+        <Footer style={{ position: 'absolute', bottom: '0', width: '100%' }} />
       </div>
     </Router>
   );

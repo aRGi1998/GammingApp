@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import lock from '../assests/lock.png';
+import unlock from '../assests/unlock.png.png';
 import { useNavigate } from 'react-router-dom';
-import Header from '../CommonComponent/Header';
-import Footer from '../CommonComponent/Footer';
+import { levelStatusChecker } from '../utils/StatusChecker'
 
 function LevelListPage() {
     const [games, setGames] = useState([]);
+    const [taskIds , setTaskIds] = useState([])
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -48,6 +49,7 @@ function LevelListPage() {
         })
             .then(response => {
                 setGames(response.data.results);
+                setTaskIds(response.data.results.map((data,index) => data.id))
             })
             .catch(error => {
                 if (error.response && error.response.data.code === 'token_not_valid') {
@@ -60,7 +62,7 @@ function LevelListPage() {
                                 }
                             })
                                 .then(response => {
-                                    setGames(response.data.results);
+                                    setGames(response.data.results);                                    
                                 })
                                 .catch(error => {
                                     console.error('Error fetching game data with new token:', error);
@@ -76,9 +78,25 @@ function LevelListPage() {
     };
 
     const navigate = useNavigate();
-    const navigateToTask = (taskId) => {
-        const url = `/game-list?taskId=${taskId}`;
-        navigate(url);
+    const navigateToTask = async (taskId) => {
+        if ( taskIds.indexOf(taskId) === -1 ) {
+            navigate("/levels");
+        }
+
+        if ( taskIds.indexOf(taskId) === 0 ) {
+            const url = `/game-list?taskId=${taskId}`;
+            navigate(url);
+        } else {
+            const allow = await levelStatusChecker(taskIds[taskIds.indexOf(taskId) - 1])
+            console.log(allow)
+            if ( allow ) {
+                const url = `/game-list?taskId=${taskId}`;
+                navigate(url);                
+            } else {
+                navigate("/levels");
+                alert(`you must pass previous level ${taskIds[taskIds.indexOf(taskId) - 1]} before taking this level ${taskId}`)
+            }
+        }
     };
 
 
@@ -97,7 +115,6 @@ function LevelListPage() {
 
     return (
         <>
-            <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -110,7 +127,14 @@ function LevelListPage() {
                                             <div className="left-side">*</div>
                                             <span style={{ cursor: 'pointer' }}>{game.tittle}</span>
                                             <div className="right-side">
-                                                <img src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
+                                                {
+                                                    game.status ? (
+                                                        <img src={unlock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
+                                                    ): (
+                                                        <img src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
+                                                    )
+                                                }
+                                                
                                             </div>
                                         </div>
                                     ))}
@@ -120,7 +144,6 @@ function LevelListPage() {
                     </div>
                 </div>
             </div>
-            <Footer style={{ position: 'absolute', bottom: '0', width: '100%' }} />
         </>
     );
 }

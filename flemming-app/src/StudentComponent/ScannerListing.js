@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { QrReader } from 'react-qr-reader';
-import Header from '../CommonComponent/Header';
-import Footer from '../CommonComponent/Footer';
+import QrReaderZ from './QrReaderZ';
 
-const ScannerListing = () => {
+const ScannerListing = ({data}) => {
     const [qrResult, setQrResult] = useState('');
+    console.log("data",data)
 
-    const handleScan = data => {
-        if (data) {
-            setQrResult(data);
-        }
-    };
+    // const handleResult = (result,error) => {
+    //     if(!!result) {
+    //         console.log("result",result)
+    //     }
 
-    const handleError = err => {
-        console.error(err);
-    };
+    //     if (!!error) {
+    //         console.log("error", error)
+    //     }
+    // }
+
+    // const handleError = err => {
+    //     console.error(err);
+    // };
 
     return (
         <>
-            <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -37,13 +40,8 @@ const ScannerListing = () => {
                                             <li className="list-group-item">Dummy</li>
                                         </ul>
                                         <h1 className="scan-header">SCAN ME</h1>
-                                        <QrReader
-                                            delay={500}
-                                            onError={handleError}
-                                            onScan={handleScan}
-                                            style={{ width: '100%' }}
-                                        />
-                                        <p>{qrResult}</p>
+                                        <QrReaderZ setQrResult={setQrResult}/>
+                                        <p style={{ position:'relative' , zIndex:'1' , color:'black' , textAlign:'center' , fontWeight:'bolder'}}>the result: {qrResult || 'none'}</p>
                                     </>
                                 </div>
                             </div>
@@ -51,7 +49,6 @@ const ScannerListing = () => {
                     </div>
                 </div>
             </div>
-            <Footer style={{ position: 'absolute', bottom: '0', width: '100%' }} />
         </>
     );
 };

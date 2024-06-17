@@ -20,7 +20,6 @@ function AdminHomePage() {
 
     return (
         <>
-            <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -43,7 +42,6 @@ function AdminHomePage() {
                     </div>
                 </div>
             </div>
-            <Footer style={{ position: 'absolute', bottom: '0', width: '100%' }} />
         </>
     );
 }

@@ -1,6 +1,4 @@
 import React from 'react';
-import Header from '../CommonComponent/Header';
-import Footer from '../CommonComponent/Footer';
 import { useNavigate } from 'react-router-dom';
 
 function StatusPage() {
@@ -14,7 +12,6 @@ function StatusPage() {
 
     return (
         <>
-            <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -28,7 +25,6 @@ function StatusPage() {
                     </div>
                 </div>
             </div>
-            <Footer style={{ position: 'absolute', bottom: '0', width: '100%' }} />
         </>
     );
 }

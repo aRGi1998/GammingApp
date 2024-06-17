@@ -23,7 +23,7 @@ const QRScanner = () => {
                     delay={300}
                     onError={handleError}
                     onScan={handleScan}
-                    style={{ width: '100%' }}
+                    style={{ width: '100%' , border:'1px solid black' }}
                 />
             </div>
             <p>{result}</p>
