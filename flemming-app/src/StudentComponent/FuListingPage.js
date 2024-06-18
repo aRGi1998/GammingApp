@@ -2,11 +2,17 @@ import React, { useState , useEffect } from 'react';
 import axios from 'axios';
 import Footer from '../CommonComponent/Footer';
 import Header from '../CommonComponent/Header';
+import Modal from 'react-modal'
+import Tenor from '../assests/tenor.gif'
+import {Link} from 'react-router-dom'
+
 
 function FuListingPage({ data }) {
     console.log("data",data)
     const [selectedFile, setSelectedFile] = useState(null);
     const [error, setError] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState({ message: '', imageUrl: false , linkUrl: '/game-list?taskId=2' });
 
     let descriptions = '' || []
     if ( data.description.includes("\n") ) {
@@ -28,6 +34,34 @@ function FuListingPage({ data }) {
         }
     };
 
+    const handleResult = async (result) => {
+        if (result) {
+            try {
+                const payload = {
+                    "game_id": data.id,
+                    "notes": 0,
+                    "answer_value": result, // Scanned values add here
+                    "status": "C"
+                };
+                const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+                    }
+                });
+
+                if (response.status === 200) {
+                    setModalContent({ message: 'Congrats! file upload was successful.' , imageUrl: true , linkUrl: '/game-list?taskId=2'});
+                    setShowModal(true);
+                }
+            } catch (error) {
+                console.error('Error posting scan result:', error);
+                setModalContent({ message: error.message, imageUrl: false , linkUrl: ``});
+                setShowModal(true);
+            }
+        }
+    };    
+
+
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -48,12 +82,14 @@ function FuListingPage({ data }) {
         axios.post(apiUrl, formData)
             .then(response => {
                 console.log('File uploaded successfully:', response.data);
+                handleResult(response.status)
                 // Add your success handling logic here
             })
             .catch(error => {
                 console.error('Error uploading file:', error);
                 setError('Failed to upload file.');
             });
+        
     };
 
 
@@ -106,6 +142,30 @@ function FuListingPage({ data }) {
                     </div>
                 </div>
             </div>
+            <Modal
+                isOpen={showModal}
+                onRequestClose={() => setShowModal(false)}
+                contentLabel="Result Modal"
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.75)'
+                    },
+                    content: {
+                        color: 'black',
+                        textAlign: 'center',
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        marginRight: '-50%',
+                        transform: 'translate(-50%, -50%)'
+                    }
+                }}
+            >
+                <h2>{modalContent.message}</h2>
+                {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />}
+                {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Go to the next page</Link>}
+            </Modal>            
             <Footer/>
         </>
     );

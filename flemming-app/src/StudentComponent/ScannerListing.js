@@ -38,7 +38,7 @@ const ScannerListing = ({data}) => {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Congrats! Scan was successful.' , imageUrl: true , linkUrl: '/game-list?taskId=1'});
+                    setModalContent({ message: 'Congrats! Scan was successful.' , imageUrl: true , linkUrl: '/game-list?taskId=3'});
                     setShowModal(true);
                 }
             } catch (error) {

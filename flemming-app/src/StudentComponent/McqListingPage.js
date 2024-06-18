@@ -17,7 +17,7 @@ function McqListingPage() {
         options: [],
         answer_value: '',
         mode: ''
-    }) 
+    })
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({ message: '', imageUrl: false , linkUrl: '/game-list?taskId=1' });    
     
