@@ -28,11 +28,11 @@ const GameListPage = () => {
         const token = sessionStorage.getItem('accessToken');
         let url = ''
         if ( taskId === 1) {
-             url = `https://api-flrming.dhoomaworksbench.site/user-game-list?game_type=${taskId}?game_mode=options&campus_name=fleming`;
+             url = `https://api-flrming.dhoomaworksbench.site/user-game-list/${taskId}?game_mode=options&campus_name=fleming`;
         } else if ( taskId === 2) {
-            url = `https://api-flrming.dhoomaworksbench.site/user-game-list?game_type=${taskId}?game_mode=image&campus_name=fleming`;
+            url = `https://api-flrming.dhoomaworksbench.site/user-game-list/${taskId}?game_mode=image&campus_name=fleming`;
         } else {
-            url = `https://api-flrming.dhoomaworksbench.site/user-game-list?game_type=${taskId}?game_mode=qr&campus_name=fleming`;
+            url = `https://api-flrming.dhoomaworksbench.site/user-game-list/${taskId}?game_mode=qr&campus_name=fleming`;
         }
         axios.get(url, {
             headers: {
