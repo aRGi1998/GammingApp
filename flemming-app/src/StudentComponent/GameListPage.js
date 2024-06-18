@@ -6,6 +6,8 @@ import unlock from '../assests/unlock.png.png'
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { gameStatusChecker } from '../utils/StatusChecker'
+import Header from '../CommonComponent/Header';
+import Footer from '../CommonComponent/Footer';
 
 const GameListPage = () => {
 
@@ -89,6 +91,7 @@ const GameListPage = () => {
 
     return (
         <>
+            <Header/>
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -115,6 +118,7 @@ const GameListPage = () => {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </>
     );
 };

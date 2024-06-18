@@ -4,6 +4,8 @@ import lock from '../assests/lock.png';
 import unlock from '../assests/unlock.png.png';
 import { useNavigate } from 'react-router-dom';
 import { levelStatusChecker } from '../utils/StatusChecker'
+import Header from '../CommonComponent/Header';
+import Footer from '../CommonComponent/Footer';
 
 function LevelListPage() {
     const [games, setGames] = useState([]);
@@ -115,6 +117,7 @@ function LevelListPage() {
 
     return (
         <>
+            <Header/>
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -144,6 +147,7 @@ function LevelListPage() {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </>
     );
 }

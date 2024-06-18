@@ -1,5 +1,7 @@
 import React, { useState , useEffect } from 'react';
 import axios from 'axios';
+import Footer from '../CommonComponent/Footer';
+import Header from '../CommonComponent/Header';
 
 function FuListingPage({ data }) {
     console.log("data",data)
@@ -50,6 +52,7 @@ function FuListingPage({ data }) {
 
     return (
         <>
+            <Header/>
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -94,6 +97,7 @@ function FuListingPage({ data }) {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </>
     );
 }
