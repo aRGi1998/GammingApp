@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Header from '../CommonComponent/Header';
-import Footer from '../CommonComponent/Footer';
 
 function FileUploadPage() {
     const [instructions, setInstructions] = useState(['']);
@@ -28,20 +26,19 @@ function FileUploadPage() {
         const description = instructions.join('\n');
 
         const dataToSend = {
-            tittle: 'Question 1',
+            tittle: '',
             level: 0,
             description: description,
             status: true,
             mode: 'image',
             collage_name: 'fleming',
-            game_type: 3,
+            game_type: 2,
             options: []
         };
-
         console.log('Data to send:', dataToSend);
 
         try {
-            const response = await axios.post('https://api-flrming.dhoomaworksbench.site/game', dataToSend, {
+            const response = await axios.post('https://api-flrming.dhoomaworksbench.site/api/game/', dataToSend, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

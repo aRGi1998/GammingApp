@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-// import Substract from '../assests/Subtract.png';
 import frametrophy from '../assests/Frame2.png';
 import rectangleImage from '../assests/Rectangle 11.png'
 

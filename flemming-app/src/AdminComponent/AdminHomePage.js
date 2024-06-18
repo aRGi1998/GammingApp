@@ -1,7 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../CommonComponent/Header';
-import Footer from '../CommonComponent/Footer';
 import lock from '../assests/lock.png';
 
 function AdminHomePage() {
