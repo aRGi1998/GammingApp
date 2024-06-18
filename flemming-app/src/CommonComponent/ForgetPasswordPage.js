@@ -1,5 +1,6 @@
 import React, { useState }  from 'react';
 import logo from '../assests/logo.png';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const ForgotPasswordPage = () => {
@@ -7,9 +8,10 @@ const ForgotPasswordPage = () => {
     const handleEmailChange = (e) => {
         setEmail(e.target.value); 
     }
+    const navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+        navigate('/otp');
         try {
             // Sending the email to the API
             const response = await axios.post('https://api-flrming.dhoomaworksbench.site/api/api_student_send_verify_email_create', 
