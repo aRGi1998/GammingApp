@@ -34,7 +34,6 @@ export async function levelStatusChecker(levelId){
         if(res.status === 200) {
             const response = res.data.results
             const game = response.filter((gameObj) => gameObj.id == levelId)[0]
-            console.log(game , levelId)
             return game?.status
         }
 
