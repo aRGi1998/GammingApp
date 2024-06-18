@@ -102,7 +102,7 @@ const GameListPage = () => {
                                     {gameData.map((game, index) => (                                        
                                         <div key={game.id} id={`task-${game.id}`} className="oval-button mb-3" style={{ backgroundColor: taskColors[index % taskColors.length] }} onClick={() => navigateToFirstLevel(game.id)}>
                                             <div className="left-side">*</div>
-                                            <span style={{ cursor: 'pointer' }}>{game.tittle}</span>
+                                            <span style={{ cursor: 'pointer' }}>Game: {index}</span>
                                             <div className="right-side">
                                                 {                                                
                                                     game.status ? (

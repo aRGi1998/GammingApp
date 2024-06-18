@@ -11,6 +11,7 @@ const ScannerListing = ({data}) => {
     const [qrResult, setQrResult] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({ message: '', imageUrl: '' , linkUrl: '' });
+    const descriptions = data?.description.map((inst) => inst.split('\n'))
 
     const handleResult = async (result) => {
         if (result) {
@@ -52,13 +53,11 @@ const ScannerListing = ({data}) => {
                                     <>
                                         <h5 style={{ color: 'black' }}>Instructions List</h5>
                                         <ul style={{ color: 'black' }} className="list-group mb-3">
-                                            <li className="list-group-item">Dummy</li>
-                                            <li className="list-group-item">Dummy</li>
-                                            <li className="list-group-item">Dummy</li>
-                                            <li className="list-group-item">Dummy</li>
-                                            <li className="list-group-item">Dummy</li>
-                                            <li className="list-group-item">Dummy</li>
-                                            <li className="list-group-item">Dummy</li>
+                                            {
+                                                descriptions.map((describe,index) => (
+                                                    <li key={index} className="list-group-item">{describe}</li>        
+                                                ))
+                                            }
                                         </ul>
                                         <h1 className="scan-header">SCAN ME</h1>
                                         <QrReaderZ setQrResult={handleResult}/>

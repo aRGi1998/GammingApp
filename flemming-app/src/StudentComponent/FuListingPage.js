@@ -7,6 +7,7 @@ function FuListingPage({ data }) {
     console.log("data",data)
     const [selectedFile, setSelectedFile] = useState(null);
     const [error, setError] = useState('');
+    const descriptions = data?.description.map((inst) => inst.split('\n'))
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -59,13 +60,11 @@ function FuListingPage({ data }) {
                         <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '600px' }}>
                             <h5 style={{ color: 'black' }}>Instructions List</h5>
                             <ul style={{ color: 'black' }} className="list-group mb-3">
-                                <li className="list-group-item">Dummy</li>
-                                <li className="list-group-item">Dummy</li>
-                                <li className="list-group-item">Dummy</li>
-                                <li className="list-group-item">Dummy</li>
-                                <li className="list-group-item">Dummy</li>
-                                <li className="list-group-item">Dummy</li>
-                                <li className="list-group-item">Dummy</li>
+                                {
+                                    descriptions.map((describe,index) => (
+                                        <li key={index} className="list-group-item">{describe}</li>
+                                    ))
+                                }
                                 {/* Uncomment and use instructions array to display dynamic instructions
                                 {instructions.map((instruction, index) => (
                                     <li key={index} className="list-group-item" style={{color: 'black'}}>
