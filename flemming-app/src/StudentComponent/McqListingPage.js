@@ -5,6 +5,9 @@ import ScannerListing from './ScannerListing';
 import FuListingPage from './FuListingPage';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
+import Modal from 'react-modal';
+import Tenor from '../assests/tenor.gif'
+import { Link } from 'react-router-dom'
 
 function McqListingPage() {
     const [correctAnswer,setCorrectAnswer] = useState('')
@@ -15,12 +18,41 @@ function McqListingPage() {
         answer_value: '',
         mode: ''
     }) 
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState({ message: '', imageUrl: false , linkUrl: '/game-list?taskId=1' });    
     
     const location = useLocation();
     const url = new URLSearchParams(location.search)
     const param = url.get('id')
 
     const navigate = useNavigate();
+
+    const handleResult = async (result) => {
+        if (result) {
+            try {
+                const payload = {
+                    "game_id": data.id,
+                    "notes": 0,
+                    "answer_value": result, // Scanned values add here
+                    "status": "C"
+                };
+                const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+                    }
+                });
+
+                if (response.status === 200) {
+                    setModalContent({ message: 'Congrats! your answer was correct' , imageUrl: true , linkUrl: '/game-list?taskId=1'});
+                    setShowModal(true);
+                }
+            } catch (error) {
+                console.error('Error posting scan result:', error);
+                setModalContent({ message: error.message, imageUrl: false , linkUrl: ``});
+                setShowModal(true);
+            }
+        }
+    };
 
     const handleChange = (e) => {
         setSelectedOption(e.target.value)
@@ -54,6 +86,12 @@ function McqListingPage() {
         e.preventDefault();
         console.log(selectedOption)
         console.log(correctAnswer)
+        if ( selectedOption === correctAnswer ) {
+            handleResult(correctAnswer)
+        } else {
+            setModalContent({ message: 'Congrats! your answer was wrong' , imageUrl: true , linkUrl: '/game-list?taskId=1'});
+            setShowModal(true);
+        }
     };  
 
     // const handleSubmit = () => {
@@ -81,7 +119,7 @@ function McqListingPage() {
                                                         {index}
                                                     </div>
                                                     <div className="span" style={{ marginLeft: '10px' }}>
-                                                        <span>George street</span>
+                                                        <span>{option}</span>
                                                     </div>
                                                 </div>
                                             ))}
@@ -89,12 +127,35 @@ function McqListingPage() {
                                                 <input type='submit' value="Next"  className="submit-button" style={{ backgroundColor: '#3498db', color: '#fff', borderRadius: '20px', padding: '10px 20px', border: 'none', cursor: 'pointer' }}/>
                                             </div>
                                         </form>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <Modal
+                        isOpen={showModal}
+                        onRequestClose={() => setShowModal(false)}
+                        contentLabel="Result Modal"
+                        style={{
+                            overlay: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.75)'
+                            },
+                            content: {
+                                color: 'black',
+                                textAlign: 'center',
+                                top: '50%',
+                                left: '50%',
+                                right: 'auto',
+                                bottom: 'auto',
+                                marginRight: '-50%',
+                                transform: 'translate(-50%, -50%)'
+                            }
+                        }}
+                    >
+                        <h2>{modalContent.message}</h2>
+                        {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />}
+                        {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Go to the next page</Link>}
+                    </Modal>                    
                     <Footer/>
                 </>
             ): data.mode === 'qr' ? (

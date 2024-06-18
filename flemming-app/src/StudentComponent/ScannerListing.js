@@ -6,12 +6,20 @@ import Modal from 'react-modal'
 import axios from 'axios';
 import Footer from '../CommonComponent/Footer';
 import Header from '../CommonComponent/Header';
+import Tenor from '../assests/tenor.gif'
 
 const ScannerListing = ({data}) => {
     const [qrResult, setQrResult] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState({ message: '', imageUrl: '' , linkUrl: '' });
-    const descriptions = data?.description.map((inst) => inst.split('\n'))
+    const [modalContent, setModalContent] = useState({ message: '', imageUrl: false , linkUrl: '/game-list?taskId=3' });
+
+
+    let descriptions = '' || []
+    if ( data.description.includes("\n") ) {
+         descriptions = data?.description.map((inst) => inst.split('\n'))
+    } else {
+        descriptions = data.description
+    }    
 
     const handleResult = async (result) => {
         if (result) {
@@ -30,12 +38,12 @@ const ScannerListing = ({data}) => {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Congrats! Scan was successful.' , imageUrl: '' , linkUrl: ''});
+                    setModalContent({ message: 'Congrats! Scan was successful.' , imageUrl: true , linkUrl: '/game-list?taskId=1'});
                     setShowModal(true);
                 }
             } catch (error) {
                 console.error('Error posting scan result:', error);
-                setModalContent({ message: error.message, imageUrl: '' , linkUrl: ''});
+                setModalContent({ message: error.message, imageUrl: false , linkUrl: ``});
                 setShowModal(true);
             }
         }
@@ -53,11 +61,15 @@ const ScannerListing = ({data}) => {
                                     <>
                                         <h5 style={{ color: 'black' }}>Instructions List</h5>
                                         <ul style={{ color: 'black' }} className="list-group mb-3">
-                                            {
+                                        {
+                                            typeof descriptions === 'string' ? (
+                                                <li className="list-group-item">{descriptions}</li>
+                                            ) : (
                                                 descriptions.map((describe,index) => (
-                                                    <li key={index} className="list-group-item">{describe}</li>        
+                                                    <li key={index} className="list-group-item">{describe}</li>
                                                 ))
-                                            }
+                                            )
+                                        }
                                         </ul>
                                         <h1 className="scan-header">SCAN ME</h1>
                                         <QrReaderZ setQrResult={handleResult}/>
@@ -91,7 +103,7 @@ const ScannerListing = ({data}) => {
                 }}
             >
                 <h2>{modalContent.message}</h2>
-                {modalContent.imageUrl && <img src={modalContent.imageUrl} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />}
+                {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />}
                 {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Go to the next page</Link>}
             </Modal>            
         </>
