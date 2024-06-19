@@ -17,7 +17,8 @@ function StudentListPage() {
         const fetchStudents = async () => {
             if (selectedCampus) {
                 try {
-                    const response = await axios.get(`https://api-flrming.dhoomaworksbench.site/api/student/?campus_name=${selectedCampus}`, {
+                    // const response = await axios.get(`https://api-flrming.dhoomaworksbench.site/game-user`, {
+                        const response = await axios.get(`https://api-flrming.dhoomaworksbench.site/api/student/?campus_name=${selectedCampus}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }

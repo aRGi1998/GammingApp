@@ -21,8 +21,6 @@ import StatusPage from './StudentComponent/StatusPage';
 import ForgotPasswordPage from './CommonComponent/ForgetPasswordPage';
 import OtpVerificationPage from './CommonComponent/OtpVerificationPage';
 
-
-
 function App() {
   return (
     <Router>
@@ -45,6 +43,7 @@ function App() {
             <Route path="/status" element={<StatusPage />} />
             <Route path="/forgot-pwd" element={<ForgotPasswordPage />} />
             <Route path="/otp" element={<OtpVerificationPage />} />
+
           </Routes>
         </div>
     </Router>
