@@ -111,12 +111,12 @@ function McqListingPage() {
                                         <form style={{color:'black'}} onSubmit={handleSubmit}>
                                             <h3>Question: {data.tittle}?</h3>
                                             <h4> Choose the correct option from the list below!"</h4>
-                                            {data.options.length <= 0 ? (<p>no options found</p>) : data.options.map((index,option) => (
+                                            {data.options.length <= 0 ? (<p>no options found</p>) : data.options.map((option,index) => (
 
                                                 <div key={index} className="firstlevel-button" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <div className="rounded-button" style={{ display: 'flex', alignItems: 'center', backgroundColor: '#1ABC9C', borderRadius: '20px', padding: '10px' }}>
                                                         <input type="radio" name="options" value={option} style={{ marginRight: '5px' }} onChange={handleChange}/>
-                                                        {index}
+                                                        {index + 1}
                                                     </div>
                                                     <div className="span" style={{ marginLeft: '10px' }}>
                                                         <span>{option}</span>

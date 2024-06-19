@@ -23,13 +23,14 @@ const GameListPage = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const taskId = queryParams.get('taskId');
+    console.log(taskId)
 
     const getGameList = () => {
         const token = sessionStorage.getItem('accessToken');
         let url = ''
-        if ( taskId === 1) {
+        if ( taskId == 1) {            
              url = `https://api-flrming.dhoomaworksbench.site/user-game-list/${taskId}?game_mode=options&campus_name=fleming`;
-        } else if ( taskId === 2) {
+        } else if ( taskId == 2) {
             url = `https://api-flrming.dhoomaworksbench.site/user-game-list/${taskId}?game_mode=image&campus_name=fleming`;
         } else {
             url = `https://api-flrming.dhoomaworksbench.site/user-game-list/${taskId}?game_mode=qr&campus_name=fleming`;
