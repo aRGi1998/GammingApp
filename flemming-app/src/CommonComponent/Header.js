@@ -22,6 +22,7 @@ function Header() {
                     <nav className="d-flex align-items-center">
                         {isAdmin ? (
                             <>
+                                <a href="/admin-home" className="nav-link text-white">Home</a> |
                                 <a href="/student-list" className="nav-link text-white">Student List</a> |
                                 <a href="/question-list" className="nav-link text-white">Question List</a> |
                             </>
@@ -29,7 +30,7 @@ function Header() {
                             <>
                                 <a href="/home" className="nav-link text-white">Home</a>
                                 |
-                                <a href="/edit" className="nav-link text-white">Levels</a>
+                                <a href="/levels" className="nav-link text-white">Levels</a>
                                 |
                             </>
                         )}

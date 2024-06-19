@@ -20,8 +20,7 @@ import ScannerListing from './StudentComponent/ScannerListing';
 import StatusPage from './StudentComponent/StatusPage';
 import ForgotPasswordPage from './CommonComponent/ForgetPasswordPage';
 import OtpVerificationPage from './CommonComponent/OtpVerificationPage';
-import Header from './CommonComponent/Header';
-import Footer from './CommonComponent/Footer';
+
 
 
 function App() {
