@@ -9,7 +9,6 @@ function QuestionListPage() {
     const [responseData, setResponseData] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [updatedItem, setUpdatedItem] = useState(null);
-    const [itemToDelete, setItemToDelete] = useState(null);
 
     useEffect(() => {
         fetchData();
@@ -115,19 +114,19 @@ function QuestionListPage() {
                                     </select>
                                 </div>
                             </div>
-                            {responseData && responseData.results.map(item => (
-                                <div key={item.id} className="table-responsive">
-                                    <table className="table table-bordered table-striped mt-3">
-                                        <thead>
-                                            <tr>
-                                                {gameMode === 'options' && <th>Title</th>}
-                                                {gameMode === 'options' && <th>Game Options</th>}
-                                                {gameMode !== 'options' && <th>Description</th>}
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr style={{ height: '50px' }}>
+                            <div className="table-responsive">
+                                <table className="table table-bordered table-striped mt-3">
+                                    <thead>
+                                        <tr>
+                                            {gameMode === 'options' && <th>Title</th>}
+                                            {/* {gameMode === 'options' && <th>Game Options</th>} */}
+                                            {gameMode !== 'options' && <th>Description</th>}
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {responseData && responseData.results.map(item => (
+                                            <tr key={item.id} style={{ height: '50px' }}>
                                                 {gameMode === 'options' && (
                                                     <>
                                                         <td>
@@ -136,16 +135,17 @@ function QuestionListPage() {
                                                                     type="text"
                                                                     value={updatedItem.title}
                                                                     onChange={(e) => setUpdatedItem({ ...updatedItem, title: e.target.value })}
+                                                                    className="form-control"
                                                                 />
                                                             ) : (
-                                                                <span>{item.title}</span>
+                                                                <span>{item.tittle}</span>
                                                             )}
                                                         </td>
-                                                        <td>
+                                                        {/* <td>
                                                             {item.game_options.map(option => (
                                                                 <div key={option.id}>{option.title}</div>
                                                             ))}
-                                                        </td>
+                                                        </td> */}
                                                     </>
                                                 )}
                                                 {gameMode !== 'options' && (
@@ -155,6 +155,7 @@ function QuestionListPage() {
                                                                 type="text"
                                                                 value={updatedItem.description}
                                                                 onChange={(e) => setUpdatedItem({ ...updatedItem, description: e.target.value })}
+                                                                className="form-control"
                                                             />
                                                         ) : (
                                                             <span>{item.description}</span>
@@ -170,10 +171,10 @@ function QuestionListPage() {
                                                     <button className="btn btn-danger" onClick={() => handleDelete(item)}>Delete</button>
                                                 </td>
                                             </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            ))}
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
