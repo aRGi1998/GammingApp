@@ -67,7 +67,7 @@ function McqListingPage() {
                 }
             })
                 .then(response => {
-                    console.log(response.data || response.data[0])
+                    console.log(response.data || response.data[0],'op')
                     setData(response.data);
                     setCorrectAnswer(response.data?.answer_value) 
                 })

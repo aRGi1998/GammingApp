@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../StyleComponent/McqForm.css';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
+import { useNavigate } from 'react-router-dom';
 
 function McqCreationPage() {
     const [formData, setFormData] = useState({
@@ -10,6 +11,8 @@ function McqCreationPage() {
         options: ['', '', '', ''],
         correctAnswer: ''
     });
+    const navigate = useNavigate();
+
     const [popupMessage, setPopupMessage] = useState('');
     const [showPopup, setShowPopup] = useState(false);
     const token = sessionStorage.getItem('accessToken');
@@ -52,17 +55,21 @@ function McqCreationPage() {
             console.log('Response:', response.data);
 
             // Handle success (e.g., display a success message or redirect)
-            if (response.data.message === 'Sucessfully created') {
-                setPopupMessage('MCQ created successfully!');
-                setShowPopup(true);
+            if(response.data) {
+                navigate(`/admin-home`); // Pass buttonId in state object
 
-                // Clear the form
-                setFormData({
-                    question: '',
-                    options: ['', '', '', ''],
-                    correctAnswer: ''
-                });
             }
+            // if (response.data.message === 'Sucessfully created') {
+            //     setPopupMessage('MCQ created successfully!');
+            //     setShowPopup(true);
+
+            //     // Clear the form
+            //     setFormData({
+            //         question: '',
+            //         options: ['', '', '', ''],
+            //         correctAnswer: ''
+            //     });
+            // }
         } catch (error) {
             console.error('Error:', error);
 

@@ -7,9 +7,14 @@ function Header() {
     const savedName = sessionStorage.getItem('userName');
     const isAdmin = sessionStorage.getItem('isStaff') === 'true';
     const navigate = useNavigate();
+
     const handleLogout = () => {
         sessionStorage.clear();
         navigate('/');
+    };
+
+    const capitalizeFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
     return (
@@ -38,7 +43,7 @@ function Header() {
                     </nav>
                 </div>
                 <div className="mt-4 d-flex justify-content-between align-items-center">
-                    <h3> Hello {savedName}</h3>
+                    <h3>Hello {capitalizeFirstLetter(savedName)}</h3>
                 </div>
             </div>
         </header>
