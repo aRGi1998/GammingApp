@@ -19,14 +19,14 @@ function McqListingPage() {
         mode: ''
     })
     const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState({ message: '', imageUrl: false , linkUrl: '/game-list?taskId=1' });    
+    const [modalContent, setModalContent] = useState({ message: '' });    // linkUrl: '/game-list?taskId=1'
     
     const location = useLocation();
     const url = new URLSearchParams(location.search)
     const param = url.get('id')
 
     const navigate = useNavigate();
-
+    
     const handleResult = async (result) => {
         if (result) {
             try {
@@ -43,12 +43,12 @@ function McqListingPage() {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Congrats! your answer was correct' , imageUrl: true , linkUrl: '/game-list?taskId=1'});
+                    setModalContent({ message: 'Congrats! your answer was correct' });
                     setShowModal(true);
                 }
             } catch (error) {
                 console.error('Error posting scan result:', error);
-                setModalContent({ message: error.message, imageUrl: false , linkUrl: ``});
+                setModalContent({ message: error.message});
                 setShowModal(true);
             }
         }
@@ -84,12 +84,21 @@ function McqListingPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(selectedOption)
-        console.log(correctAnswer)
+        console.log("selected:",selectedOption)
+        console.log("correct",correctAnswer)
+        if ( selectedOption === '' || selectedOption === null ) {
+            console.log("here")
+            setModalContent({ message: "Sorry! You can't submit without selecting one of the option" });
+            setShowModal(true);
+            return
+        }
+
         if ( selectedOption === correctAnswer ) {
             handleResult(correctAnswer)
-        } else {
-            setModalContent({ message: 'Congrats! your answer was wrong' , imageUrl: true , linkUrl: '/game-list?taskId=1'});
+        }
+        
+        if (selectedOption !== correctAnswer) {
+            setModalContent({ message: 'Sorry! your answer was wrong' });
             setShowModal(true);
         }
     };  
@@ -136,6 +145,7 @@ function McqListingPage() {
                         isOpen={showModal}
                         onRequestClose={() => setShowModal(false)}
                         contentLabel="Result Modal"
+                        ariaHideApp={false}
                         style={{
                             overlay: {
                                 backgroundColor: 'rgba(0, 0, 0, 0.75)'
@@ -153,8 +163,8 @@ function McqListingPage() {
                         }}
                     >
                         <h2>{modalContent.message}</h2>
-                        {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />}
-                        {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Go to the next page</Link>}
+                        {/* {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />} */}
+                        {/* {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Go to the next page</Link>} */}
                     </Modal>                    
                     <Footer/>
                 </>

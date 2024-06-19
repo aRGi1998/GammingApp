@@ -11,7 +11,7 @@ import Tenor from '../assests/tenor.gif'
 const ScannerListing = ({data}) => {
     const [qrResult, setQrResult] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState({ message: '', imageUrl: false , linkUrl: '/game-list?taskId=3' });
+    const [modalContent, setModalContent] = useState({ message: '' }); // imageUrl: false , linkUrl: '/game-list?taskId=3'
 
 
     let descriptions = '' || []
@@ -39,12 +39,12 @@ const ScannerListing = ({data}) => {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Congrats! Scan was successful.' , imageUrl: true , linkUrl: '/game-list?taskId=3'});
+                    setModalContent({ message: 'Congrats! Scan was successful.' });
                     setShowModal(true);
                 }
             } catch (error) {
                 console.error('Error posting scan result:', error);
-                setModalContent({ message: error.message, imageUrl: false , linkUrl: ``});
+                setModalContent({ message: error.message });
                 setShowModal(true);
             }
         }
@@ -87,6 +87,7 @@ const ScannerListing = ({data}) => {
                 isOpen={showModal}
                 onRequestClose={() => setShowModal(false)}
                 contentLabel="Result Modal"
+                ariaHideApp={false}
                 style={{
                     overlay: {
                         backgroundColor: 'rgba(0, 0, 0, 0.75)'
@@ -104,8 +105,6 @@ const ScannerListing = ({data}) => {
                 }}
             >
                 <h2>{modalContent.message}</h2>
-                {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />}
-                {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Go to the next page</Link>}
             </Modal>            
         </>
     );

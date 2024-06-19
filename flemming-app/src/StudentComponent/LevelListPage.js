@@ -6,11 +6,16 @@ import { useNavigate } from 'react-router-dom';
 import { levelStatusChecker } from '../utils/StatusChecker'
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
+import Tenor from '../assests/tenor.gif'
+import Modal from 'react-modal';
+import { Link } from 'react-router-dom'
 
 function LevelListPage() {
     const [games, setGames] = useState([]);
     const [taskIds , setTaskIds] = useState([])
     const [error, setError] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState({ message: '' , imageUrl: false , linkUrl: '/game-list?taskId=1' })        
 
     useEffect(() => {
         getGameData();
@@ -79,6 +84,19 @@ function LevelListPage() {
             });
     };
 
+    const handleResult = async (result,gameId,url) => {
+        console.log("from",result)
+        if (result) {
+            try {
+                setModalContent({ message: `You Finished Level ${gameId} ` , imageUrl: true , linkUrl: url });
+                setShowModal(true);
+            } catch (error) {
+                setModalContent({ message: error.message , imageUrl: false , linkUrl: '' });
+                setShowModal(true);
+            }
+        }
+    };    
+
     const navigate = useNavigate();
     const navigateToTask = async (taskId) => {
         if ( taskIds.indexOf(taskId) === -1 ) {
@@ -93,10 +111,11 @@ function LevelListPage() {
             console.log(allow)
             if ( allow ) {
                 const url = `/game-list?taskId=${taskId}`;
-                navigate(url);                
+                handleResult(allow,taskIds[taskIds.indexOf(taskId) - 1],url)
+                // navigate(url);                
             } else {
-                navigate("/levels");
-                alert(`you must pass previous level ${taskIds[taskIds.indexOf(taskId) - 1]} before taking this level ${taskId}`)
+                setModalContent({ message: `you must pass previous level ${taskIds[taskIds.indexOf(taskId) - 1]} before taking this level ${taskId}` , imageUrl: false , linkUrl:'' });
+                setShowModal(true);                
             }
         }
     };
@@ -147,6 +166,35 @@ function LevelListPage() {
                     </div>
                 </div>
             </div>
+            <Modal
+                isOpen={showModal}
+                onRequestClose={() => setShowModal(false)}
+                contentLabel="Result Modal"
+                ariaHideApp={false}
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.75)'
+                    },
+                    content: {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        padding:'8px',
+                        color: 'black',
+                        textAlign: 'center',
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        marginRight: '-50%',
+                        transform: 'translate(-50%, -50%)'
+                    }
+                }}
+            >
+                <h2>{modalContent.message}</h2>
+                {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '350px', height: 'inherit' }} />}
+                {modalContent.linkUrl && <Link to={modalContent.linkUrl} style={{ textDecoration: 'none', backgroundColor:'black' , color:'white' , padding:'12px' , position:'relative' , top: '8px' , borderRadius: '8px'  }}> Next Level </Link>}
+            </Modal>            
             <Footer/>
         </>
     );
