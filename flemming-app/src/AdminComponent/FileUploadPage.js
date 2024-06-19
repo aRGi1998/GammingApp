@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Header from '../CommonComponent/Header';
+import Footer from '../CommonComponent/Footer';
 
 function FileUploadPage() {
     const [instructions, setInstructions] = useState(['']);
@@ -53,6 +55,7 @@ function FileUploadPage() {
 
     return (
         <>
+            <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -84,6 +87,7 @@ function FileUploadPage() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

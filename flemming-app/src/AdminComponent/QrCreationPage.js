@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import QRCode from 'qrcode.react';
+import Header from '../CommonComponent/Header';
+import Footer from '../CommonComponent/Footer';
 
 function QrCreationPage() {
     const [instructions, setInstructions] = useState(['']);
@@ -38,7 +40,7 @@ function QrCreationPage() {
             options: [],
             level: 0,
             // qr_value: qrText 
-        };          
+        };
 
         console.log('Data to send:', dataToSend);
 
@@ -62,6 +64,7 @@ function QrCreationPage() {
 
     return (
         <>
+            <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -106,13 +109,14 @@ function QrCreationPage() {
                                 ))}
                                 <button type="button" className="btn btn-success mb-3" onClick={addInstruction}>Add Instruction</button>
                                 <div className='d-flex justify-content-center'>
-                                    <button style={{marginLeft: "0px"}} type="submit" className="btn btn-primary">Submit</button>
+                                    <button style={{ marginLeft: "0px" }} type="submit" className="btn btn-primary">Submit</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

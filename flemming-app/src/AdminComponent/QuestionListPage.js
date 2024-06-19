@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Header from '../CommonComponent/Header';
+import Footer from '../CommonComponent/Footer';
 
 function QuestionListPage() {
     const [gameMode, setGameMode] = useState('');
@@ -14,6 +16,7 @@ function QuestionListPage() {
             const token = sessionStorage.getItem('accessToken');
             const backendValue = getBackendValue(gameMode);
             const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/?campus_name=${college}&game_mode=${backendValue}`;
+           // const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/`;
 
             axios.get(apiUrl, {
                 headers: {
@@ -62,16 +65,16 @@ function QuestionListPage() {
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => {
-            updatedData[editIndex] = response.data;
-            setData(updatedData);
-            setEditIndex(-1);
-            setEditQuestion('');
-            setEditAnswer('');
-        })
-        .catch(error => {
-            console.error('There was an error updating the data!', error);
-        });
+            .then(response => {
+                updatedData[editIndex] = response.data;
+                setData(updatedData);
+                setEditIndex(-1);
+                setEditQuestion('');
+                setEditAnswer('');
+            })
+            .catch(error => {
+                console.error('There was an error updating the data!', error);
+            });
     };
 
     const handleDelete = (index) => {
@@ -84,17 +87,17 @@ function QuestionListPage() {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(() => {
-            const updatedData = data.filter((_, i) => i !== index);
-            setData(updatedData);
-        })
-        .catch(error => {
-            console.error('There was an error deleting the data!', error);
-        });
+            .then(() => {
+                const updatedData = data.filter((_, i) => i !== index);
+                setData(updatedData);
+            })
+            .catch(error => {
+                console.error('There was an error deleting the data!', error);
+            });
     };
 
     return (
-        <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
+        <><Header /><div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
             <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                 <div className="col-md-8">
                     <div className="card text-white p-4 rounded shadow-lg" style={{ overflowY: 'auto', maxHeight: '80vh' }}>
@@ -146,8 +149,7 @@ function QuestionListPage() {
                                                         type="text"
                                                         className="form-control"
                                                         value={editQuestion}
-                                                        onChange={(e) => setEditQuestion(e.target.value)}
-                                                    />
+                                                        onChange={(e) => setEditQuestion(e.target.value)} />
                                                 ) : (
                                                     item.tittle
                                                 )}
@@ -158,8 +160,7 @@ function QuestionListPage() {
                                                         type="text"
                                                         className="form-control"
                                                         value={editAnswer}
-                                                        onChange={(e) => setEditAnswer(e.target.value)}
-                                                    />
+                                                        onChange={(e) => setEditAnswer(e.target.value)} />
                                                 ) : (
                                                     <ul className="pl-3">
                                                         {item.description.split('\n').map((line, i) => (
@@ -185,6 +186,8 @@ function QuestionListPage() {
                 </div>
             </div>
         </div>
+            <Footer />
+        </>
     );
 }
 

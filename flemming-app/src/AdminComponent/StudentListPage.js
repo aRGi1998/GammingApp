@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Header from '../CommonComponent/Header';
+import Footer from '../CommonComponent/Footer';
 
-function StudentListPage() { 
+function StudentListPage() {
     const [selectedCampus, setSelectedCampus] = useState('Sutherland'); // Set default campus to Sutherland
     const [students, setStudents] = useState([]);
     const campuses = ['Sutherland', 'Lindsay', 'Haliburton'];
@@ -21,7 +23,7 @@ function StudentListPage() {
                         }
                     });
                     setStudents(response.data.results); // Use response.data.results to get the students array
-                    console.log(response.data,'data')
+                    console.log(response.data, 'data')
                 } catch (error) {
                     console.error('Error fetching students:', error);
                 }
@@ -33,6 +35,7 @@ function StudentListPage() {
 
     return (
         <>
+            <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex flex-column align-items-center">
@@ -72,6 +75,7 @@ function StudentListPage() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

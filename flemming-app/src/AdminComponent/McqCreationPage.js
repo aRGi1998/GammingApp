@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../StyleComponent/McqForm.css';
+import Header from '../CommonComponent/Header';
+import Footer from '../CommonComponent/Footer';
 
 function McqCreationPage() {
     const [formData, setFormData] = useState({
@@ -30,11 +32,11 @@ function McqCreationPage() {
         const dataToSend = {
             tittle: question,
             level: 0,
-            description: 'string', 
-            status: true, 
-            mode: 'options', 
+            description: 'string',
+            status: true,
+            mode: 'options',
             collage_name: 'fleming',
-            game_type: 1, 
+            game_type: 1,
             options: options.filter(option => option !== ''),
             answer_value: correctAnswer
         };
@@ -77,6 +79,7 @@ function McqCreationPage() {
 
     return (
         <>
+            <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -151,6 +154,7 @@ function McqCreationPage() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }
