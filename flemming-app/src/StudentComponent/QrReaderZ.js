@@ -56,15 +56,15 @@ function QrReaderZ({ setQrResult }) {
                 //handleScan("");
 
                 if (err instanceof NotFoundException) {
-                    alert("No QR code found, try again !");
+                    console.log("No QR code found, try again !");
                 }
 
                 if (err instanceof ChecksumException) {
-                    alert("A code was found, but it's read value was not valid, scan qr with aspect ratio of qr screen");
+                    console.log("A code was found, but it's read value was not valid, scan qr with aspect ratio of qr screen");
                 }
 
                 if (err instanceof FormatException) {
-                    alert("A code was found, but it was in a invalid format, scan qr with aspect ratio of qr screen");
+                    console.log("A code was found, but it was in a invalid format, scan qr with aspect ratio of qr screen");
                 }
             }
             }

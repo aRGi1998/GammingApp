@@ -12,11 +12,11 @@ function FuListingPage({ data }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState({ message: '', imageUrl: false , linkUrl: '/game-list?taskId=2' });
+    const [modalContent, setModalContent] = useState({ message: '' }); // imageUrl: false , linkUrl: '/game-list?taskId=2'
 
     let descriptions = '' || []
     if ( data.description.includes("\n") ) {
-         descriptions = data?.description.map((inst) => inst.split('\n'))
+         descriptions = data?.description.split('\n')
     } else {
         descriptions = data.description
     }
@@ -30,7 +30,8 @@ function FuListingPage({ data }) {
             setError('');
         } else {
             setSelectedFile(null);
-            setError('Please select a valid PNG or JPG file.');
+            setModalContent({ message: 'Please select a valid PNG or JPG file' });
+            setShowModal(true);            
         }
     };
 
@@ -50,12 +51,12 @@ function FuListingPage({ data }) {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Congrats! file upload was successful.' , imageUrl: true , linkUrl: '/game-list?taskId=2'});
+                    setModalContent({ message: 'Congrats! file upload was successful.' });
                     setShowModal(true);
                 }
             } catch (error) {
                 console.error('Error posting scan result:', error);
-                setModalContent({ message: error.message, imageUrl: false , linkUrl: ``});
+                setModalContent({ message: error.message });
                 setShowModal(true);
             }
         }
@@ -79,7 +80,11 @@ function FuListingPage({ data }) {
         // Example API endpoint to handle file upload
         const apiUrl = 'https://example.com/upload';
 
-        axios.post(apiUrl, formData)
+        axios.post(apiUrl, formData, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+            }
+        })
             .then(response => {
                 console.log('File uploaded successfully:', response.data);
                 handleResult(response.status)
@@ -87,7 +92,8 @@ function FuListingPage({ data }) {
             })
             .catch(error => {
                 console.error('Error uploading file:', error);
-                setError('Failed to upload file.');
+                setModalContent({ message: "Failed to upload file."});
+                setShowModal(true);
             });
         
     };
@@ -146,6 +152,7 @@ function FuListingPage({ data }) {
                 isOpen={showModal}
                 onRequestClose={() => setShowModal(false)}
                 contentLabel="Result Modal"
+                ariaHideApp={false}
                 style={{
                     overlay: {
                         backgroundColor: 'rgba(0, 0, 0, 0.75)'
@@ -163,8 +170,8 @@ function FuListingPage({ data }) {
                 }}
             >
                 <h2>{modalContent.message}</h2>
-                {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />}
-                {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Go to the next page</Link>}
+                {/* {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />} */}
+                {/* {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Go to the next page</Link>} */}
             </Modal>            
             <Footer/>
         </>

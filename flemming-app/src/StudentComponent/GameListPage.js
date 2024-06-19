@@ -50,7 +50,7 @@ const GameListPage = () => {
                 setError('Failed to fetch game data.');
             });
     };
-    
+
     const navigateToFirstLevel = async (buttonId) => {
             console.log("btn",buttonId)
             console.log(gameIds.indexOf(buttonId))
@@ -70,6 +70,7 @@ const GameListPage = () => {
                 const gIndex = gameIds.indexOf(buttonId) - 1
                 const allow = await gameStatusChecker(gameIds[gIndex])
                 if (allow) {
+                    console.log("allow",allow)
                     navigate(`/mcq-list?id=${buttonId}`);
                 } else {
                     alert("you must complete previous game to unlock this game")
