@@ -16,7 +16,8 @@ const ScannerListing = ({data}) => {
 
     let descriptions = '' || []
     if ( data.description.includes("\n") ) {
-         descriptions = data?.description.map((inst) => inst.split('\n'))
+        console.log("here")
+         descriptions = data?.description.split('\n')
     } else {
         descriptions = data.description
     }    
