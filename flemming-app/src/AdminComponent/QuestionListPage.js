@@ -133,8 +133,8 @@ function QuestionListPage() {
                                                             {editMode && updatedItem.id === item.id ? (
                                                                 <input
                                                                     type="text"
-                                                                    value={updatedItem.title}
-                                                                    onChange={(e) => setUpdatedItem({ ...updatedItem, title: e.target.value })}
+                                                                    value={updatedItem.tittle}
+                                                                    onChange={(e) => setUpdatedItem({ ...updatedItem, tittle: e.target.value })}
                                                                     className="form-control"
                                                                 />
                                                             ) : (
