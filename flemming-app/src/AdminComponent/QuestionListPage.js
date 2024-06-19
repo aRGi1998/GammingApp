@@ -4,62 +4,43 @@ import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
 
 function QuestionListPage() {
-    const [gameMode, setGameMode] = useState('Mcq Question');
+    const [gameMode, setGameMode] = useState('options');
     const [college, setCollege] = useState('fleming');
-    const [data, setData] = useState([]);
-    const [editIndex, setEditIndex] = useState(-1);
-    const [editQuestion, setEditQuestion] = useState('');
-    const [editDescription, setEditDescription] = useState('');
-    const [editOptions, setEditOptions] = useState([]);
+    const [responseData, setResponseData] = useState(null);
+    const [editMode, setEditMode] = useState(false);
+    const [updatedItem, setUpdatedItem] = useState(null);
 
     useEffect(() => {
+        fetchData();
+    }, [gameMode, college]);
+
+    const fetchData = () => {
         const token = sessionStorage.getItem('accessToken');
-        const backendValue = getBackendValue(gameMode);
-        const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/?campus_name=${college}&game_mode=${backendValue}`;
-        axios.get(apiUrl, {
+        if (!token) {
+            console.error('Access token not found in session storage');
+            return;
+        }
+
+        axios.get(`https://api-flrming.dhoomaworksbench.site/api/game/?game_mode=${gameMode}&campus_name=${college}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(response => {
-            setData(response.data.results || []);
-            console.log(response.data.results, 'rs');
-        })
-        .catch(error => {
-            console.error('There was an error fetching the data!', error);
-        });
-    }, [gameMode, college]);
-
-    const getBackendValue = (mode) => {
-        switch (mode) {
-            case 'Mcq Question':
-                return 'options';
-            case 'File upload':
-                return 'image';
-            case 'QR scanner':
-                return 'qr';
-            default:
-                return '';
-        }
+            .then(response => {
+                console.log(response.data);
+                setResponseData(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
     };
 
-    const handleEdit = (index) => {
-        setEditIndex(index);
-        const item = data[index];
-        setEditQuestion(item.tittle);
-        setEditDescription(item.description);
-        if (gameMode === 'Mcq Question') {
-            setEditOptions(item.game_options.map(option => option.tittle));
-        }
+    const handleEdit = (item) => {
+        setUpdatedItem(item);
+        setEditMode(true);
     };
 
     const handleSave = () => {
-        const updatedData = [...data];
-        const updatedItem = { ...updatedData[editIndex], tittle: editQuestion, description: editDescription };
-        if (gameMode === 'Mcq Question') {
-            updatedItem.game_options = editOptions.map(option => ({ tittle: option, description: option }));
-        }
-
         const token = sessionStorage.getItem('accessToken');
         const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/${updatedItem.id}/`;
 
@@ -69,36 +50,33 @@ function QuestionListPage() {
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => {
-            updatedData[editIndex] = response.data;
-            setData(updatedData);
-            setEditIndex(-1);
-            setEditQuestion('');
-            setEditDescription('');
-            setEditOptions([]);
-        })
-        .catch(error => {
-            console.error('There was an error updating the data!', error);
-        });
+            .then(response => {
+                const updatedData = responseData.results.map(result => result.id === updatedItem.id ? response.data : result);
+                setResponseData({ ...responseData, results: updatedData });
+                setEditMode(false);
+                setUpdatedItem(null);
+            })
+            .catch(error => {
+                console.error('There was an error updating the data!', error);
+            });
     };
 
-    const handleDelete = (index) => {
-        const itemToDelete = data[index];
+    const handleDelete = (item) => {
         const token = sessionStorage.getItem('accessToken');
-        const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/${itemToDelete.id}/`;
+        const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/${item.id}/`;
 
         axios.delete(apiUrl, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(() => {
-            const updatedData = data.filter((_, i) => i !== index);
-            setData(updatedData);
-        })
-        .catch(error => {
-            console.error('There was an error deleting the data!', error);
-        });
+            .then(() => {
+                const updatedData = responseData.results.filter(result => result.id !== item.id);
+                setResponseData({ ...responseData, results: updatedData });
+            })
+            .catch(error => {
+                console.error('There was an error deleting the data!', error);
+            });
     };
 
     return (
@@ -106,8 +84,8 @@ function QuestionListPage() {
             <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
-                    <div className="col-md-8">
-                        <div className="card text-white p-4 rounded shadow-lg" style={{ overflowY: 'auto', maxHeight: '80vh' }}>
+                    <div className="col-md-8 d-flex justify-content-center">
+                        <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '700px' }}>
                             <div className="form-row mb-4">
                                 <div className="form-group col-md-6">
                                     <label htmlFor="collegeSelect">Select College</label>
@@ -130,82 +108,73 @@ function QuestionListPage() {
                                         value={gameMode}
                                         onChange={(e) => setGameMode(e.target.value)}
                                     >
-                                        <option value="Mcq Question">Mcq Question</option>
-                                        <option value="File upload">File upload</option>
-                                        <option value="QR scanner">QR scanner</option>
+                                        <option value="options">Mcq Question</option>
+                                        <option value="image">File upload</option>
+                                        <option value="qr">QR scanner</option>
                                     </select>
                                 </div>
                             </div>
-                            {data.length > 0 && (
-                                <table className="table table-striped table-light mt-4">
+                            <div className="table-responsive">
+                                <table className="table table-bordered table-striped mt-3">
                                     <thead>
                                         <tr>
-                                            <th>Question</th>
-                                            <th>Description</th>
-                                            <th>Actions</th>
+                                            {gameMode === 'options' && <th>Title</th>}
+                                            {/* {gameMode === 'options' && <th>Game Options</th>} */}
+                                            {gameMode !== 'options' && <th>Description</th>}
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {data.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>
-                                                    {editIndex === index ? (
-                                                        <input
-                                                            type="text"
-                                                            className="form-control"
-                                                            value={editQuestion}
-                                                            onChange={(e) => setEditQuestion(e.target.value)}
-                                                        />
-                                                    ) : (
-                                                        item.tittle
-                                                    )}
-                                                </td>
-                                                <td>
-                                                    {editIndex === index ? (
-                                                        <input
-                                                            type="text"
-                                                            className="form-control"
-                                                            value={editDescription}
-                                                            onChange={(e) => setEditDescription(e.target.value)}
-                                                        />
-                                                    ) : (
-                                                        <ul className="pl-3">
-                                                            {gameMode === 'Mcq Question' ? (
-                                                                editOptions.map((option, i) => (
-                                                                    <li key={i}>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control"
-                                                                            value={option}
-                                                                            onChange={(e) => {
-                                                                                const newOptions = [...editOptions];
-                                                                                newOptions[i] = e.target.value;
-                                                                                setEditOptions(newOptions);
-                                                                            }}
-                                                                        />
-                                                                    </li>
-                                                                ))
+                                        {responseData && responseData.results.map(item => (
+                                            <tr key={item.id} style={{ height: '50px' }}>
+                                                {gameMode === 'options' && (
+                                                    <>
+                                                        <td>
+                                                            {editMode && updatedItem.id === item.id ? (
+                                                                <input
+                                                                    type="text"
+                                                                    value={updatedItem.tittle}
+                                                                    onChange={(e) => setUpdatedItem({ ...updatedItem, tittle: e.target.value })}
+                                                                    className="form-control"
+                                                                />
                                                             ) : (
-                                                                item.description.split('\n').map((line, i) => (
-                                                                    <li key={i}>{line}</li>
-                                                                ))
+                                                                <span>{item.tittle}</span>
                                                             )}
-                                                        </ul>
-                                                    )}
-                                                </td>
-                                                <td className="d-flex">
-                                                    {editIndex === index ? (
-                                                        <button className="btn btn-success btn-sm mr-2" onClick={handleSave}>Save</button>
+                                                        </td>
+                                                        {/* <td>
+                                                            {item.game_options.map(option => (
+                                                                <div key={option.id}>{option.title}</div>
+                                                            ))}
+                                                        </td> */}
+                                                    </>
+                                                )}
+                                                {gameMode !== 'options' && (
+                                                    <td>
+                                                        {editMode && updatedItem.id === item.id ? (
+                                                            <input
+                                                                type="text"
+                                                                value={updatedItem.description}
+                                                                onChange={(e) => setUpdatedItem({ ...updatedItem, description: e.target.value })}
+                                                                className="form-control"
+                                                            />
+                                                        ) : (
+                                                            <span>{item.description}</span>
+                                                        )}
+                                                    </td>
+                                                )}
+                                                <td>
+                                                    {editMode && updatedItem.id === item.id ? (
+                                                        <button className="btn btn-success" onClick={handleSave}>Save</button>
                                                     ) : (
-                                                        <button className="btn btn-primary btn-sm mr-2" onClick={() => handleEdit(index)}>Edit</button>
+                                                        <button className="btn btn-primary mr-2" onClick={() => handleEdit(item)}>Edit</button>
                                                     )}
-                                                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(index)}>Delete</button>
+                                                    <button className="btn btn-danger" onClick={() => handleDelete(item)}>Delete</button>
                                                 </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                            )}
+                            </div>
                         </div>
                     </div>
                 </div>
