@@ -29,7 +29,7 @@ function McqCreationPage() {
 
         const dataToSend = {
             tittle: question,
-            level: 0,
+            level: 1,
             description: 'string', 
             status: true, 
             mode: 'options', 

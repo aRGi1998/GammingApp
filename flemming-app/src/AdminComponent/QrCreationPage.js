@@ -31,16 +31,16 @@ function QrCreationPage() {
         const description = instructions.join('\n');
 
         const dataToSend = {
-            tittle: 'Question 1',
-            level: 0,
+            tittle: '',
             description: description,
             status: true,
             mode: 'qr',
             collage_name: 'fleming',
-            game_type: 2,
+            game_type: 3,
             options: [],
-            qr_value: qrText // Setting the QR text/URL
+            // qr_value: qrText 
         };
+
 
         console.log('Data to send:', dataToSend);
 

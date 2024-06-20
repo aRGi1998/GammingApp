@@ -108,7 +108,7 @@ function QuestionListPage() {
         if (gameMode && college) {
             const token = sessionStorage.getItem('accessToken');
             const backendValue = getBackendValue(gameMode);
-            const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/?game_mode=${backendValue}&campus_name=${college}`;
+            const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game`;
             axios.get(apiUrl, {
                 headers: {
                     'Authorization': `Bearer ${token}`
