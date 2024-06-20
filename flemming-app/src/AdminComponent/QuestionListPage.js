@@ -4,39 +4,79 @@
 // import Footer from '../CommonComponent/Footer';
 
 // function QuestionListPage() {
-//     const [gameMode, setGameMode] = useState('');
-//     const [college, setCollege] = useState('');
+//     const [gameMode, setGameMode] = useState('options');
+//     const [college, setCollege] = useState('fleming');
+//     const [responseData, setResponseData] = useState(null);
+//     const [editMode, setEditMode] = useState(false);
+//     const [updatedItem, setUpdatedItem] = useState(null);
 
 //     useEffect(() => {
-//         if (gameMode && college) {
-//             const token = sessionStorage.getItem('accessToken');
-//             const backendValue = getBackendValue(gameMode);
-//             const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/?game_mode=${backendValue}&campus_name=${college}`;
-//             axios.get(apiUrl, {
-//                 headers: {
-//                     'Authorization': `Bearer ${token}`
-//                 }
-//             })
-//             .then(response => {
-//                 console.log(response.data.result);
-//             })
-//             .catch(error => {
-//                 console.error('There was an error fetching the data!', error);
-//             });
-//         }
+//         fetchData();
 //     }, [gameMode, college]);
 
-//     const getBackendValue = (mode) => {
-//         switch (mode) {
-//             case 'Mcq Question':
-//                 return 'option';
-//             case 'File upload':
-//                 return 'image';
-//             case 'QR scanner':
-//                 return 'qr';
-//             default:
-//                 return '';
+//     const fetchData = () => {
+//         const token = sessionStorage.getItem('accessToken');
+//         if (!token) {
+//             console.error('Access token not found in session storage');
+//             return;
 //         }
+
+//         axios.get(`https://api-flrming.dhoomaworksbench.site/api/game/?game_mode=${gameMode}&campus_name=${college}`, {
+//             headers: {
+//                 'Authorization': `Bearer ${token}`
+//             }
+//         })
+//             .then(response => {
+//                 console.log(response.data);
+//                 setResponseData(response.data);
+//             })
+//             .catch(error => {
+//                 console.error('Error fetching data:', error);
+//             });
+//     };
+
+//     const handleEdit = (item) => {
+//         setUpdatedItem(item);
+//         setEditMode(true);
+//     };
+
+//     const handleSave = () => {
+//         const token = sessionStorage.getItem('accessToken');
+//         const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/${updatedItem.id}/`;
+
+//         axios.put(apiUrl, updatedItem, {
+//             headers: {
+//                 'Authorization': `Bearer ${token}`,
+//                 'Content-Type': 'application/json'
+//             }
+//         })
+//             .then(response => {
+//                 const updatedData = responseData.results.map(result => result.id === updatedItem.id ? response.data : result);
+//                 setResponseData({ ...responseData, results: updatedData });
+//                 setEditMode(false);
+//                 setUpdatedItem(null);
+//             })
+//             .catch(error => {
+//                 console.error('There was an error updating the data!', error);
+//             });
+//     };
+
+//     const handleDelete = (item) => {
+//         const token = sessionStorage.getItem('accessToken');
+//         const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/${item.id}/`;
+
+//         axios.delete(apiUrl, {
+//             headers: {
+//                 'Authorization': `Bearer ${token}`
+//             }
+//         })
+//             .then(() => {
+//                 const updatedData = responseData.results.filter(result => result.id !== item.id);
+//                 setResponseData({ ...responseData, results: updatedData });
+//             })
+//             .catch(error => {
+//                 console.error('There was an error deleting the data!', error);
+//             });
 //     };
 
 //     return (
@@ -45,40 +85,101 @@
 //             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
 //                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
 //                     <div className="col-md-8 d-flex justify-content-center">
-//                         <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '600px' }}>
-//                             <div className="form-group">
-//                                 <label htmlFor="gameModeSelect">Select Game Mode</label>
-//                                 <select
-//                                     id="gameModeSelect"
-//                                     className="form-control"
-//                                     value={gameMode}
-//                                     onChange={(e) => setGameMode(e.target.value)}
-//                                 >
-//                                     <option value="">Select Game Mode</option>
-//                                     <option value="Mcq Question">Mcq Question</option>
-//                                     <option value="File upload">File upload</option>
-//                                     <option value="QR scanner">QR scanner</option>
-//                                 </select>
+//                         <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '700px' }}>
+//                             <div className="form-row mb-4">
+//                                 <div className="form-group col-md-6">
+//                                     <label htmlFor="collegeSelect">Select College</label>
+//                                     <select
+//                                         id="collegeSelect"
+//                                         className="form-control"
+//                                         value={college}
+//                                         onChange={(e) => setCollege(e.target.value)}
+//                                     >
+//                                         <option value="fleming">Sutherland</option>
+//                                         <option value="Lindsay">Lindsay</option>
+//                                         <option value="Haliburton">Haliburton</option>
+//                                     </select>
+//                                 </div>
+//                                 <div className="form-group col-md-6">
+//                                     <label htmlFor="gameModeSelect">Select Game Mode</label>
+//                                     <select
+//                                         id="gameModeSelect"
+//                                         className="form-control"
+//                                         value={gameMode}
+//                                         onChange={(e) => setGameMode(e.target.value)}
+//                                     >
+//                                         <option value="options">Mcq Question</option>
+//                                         <option value="image">File upload</option>
+//                                         <option value="qr">QR scanner</option>
+//                                     </select>
+//                                 </div>
 //                             </div>
-//                             <div className="form-group mt-3">
-//                                 <label htmlFor="collegeSelect">Select College</label>
-//                                 <select
-//                                     id="collegeSelect"
-//                                     className="form-control"
-//                                     value={college}
-//                                     onChange={(e) => setCollege(e.target.value)}
-//                                 >
-//                                     <option value="">Select College</option>
-//                                     <option value="Sutherland">Sutherland</option>
-//                                     <option value="Lindsay">Lindsay</option>
-//                                     <option value="Haliburton">Haliburton</option>
-//                                 </select>
+//                             <div className="table-responsive">
+//                                 <table className="table table-bordered table-striped mt-3">
+//                                     <thead>
+//                                         <tr>
+//                                             {gameMode === 'options' && <th>Title</th>}
+//                                             {/* {gameMode === 'options' && <th>Game Options</th>} */}
+//                                             {gameMode !== 'options' && <th>Description</th>}
+//                                             <th>Action</th>
+//                                         </tr>
+//                                     </thead>
+//                                     <tbody>
+//                                         {responseData && responseData.results.map(item => (
+//                                             <tr key={item.id} style={{ height: '50px' }}>
+//                                                 {gameMode === 'options' && (
+//                                                     <>
+//                                                         <td>
+//                                                             {editMode && updatedItem.id === item.id ? (
+//                                                                 <input
+//                                                                     type="text"
+//                                                                     value={updatedItem.tittle}
+//                                                                     onChange={(e) => setUpdatedItem({ ...updatedItem, tittle: e.target.value })}
+//                                                                     className="form-control"
+//                                                                 />
+//                                                             ) : (
+//                                                                 <span>{item.tittle}</span>
+//                                                             )}
+//                                                         </td>
+//                                                         {/* <td>
+//                                                             {item.game_options.map(option => (
+//                                                                 <div key={option.id}>{option.title}</div>
+//                                                             ))}
+//                                                         </td> */}
+//                                                     </>
+//                                                 )}
+//                                                 {gameMode !== 'options' && (
+//                                                     <td>
+//                                                         {editMode && updatedItem.id === item.id ? (
+//                                                             <input
+//                                                                 type="text"
+//                                                                 value={updatedItem.description}
+//                                                                 onChange={(e) => setUpdatedItem({ ...updatedItem, description: e.target.value })}
+//                                                                 className="form-control"
+//                                                             />
+//                                                         ) : (
+//                                                             <span>{item.description}</span>
+//                                                         )}
+//                                                     </td>
+//                                                 )}
+//                                                 <td>
+//                                                     {editMode && updatedItem.id === item.id ? (
+//                                                         <button className="btn btn-success" onClick={handleSave}>Save</button>
+//                                                     ) : (
+//                                                         <button className="btn btn-primary mr-2" onClick={() => handleEdit(item)}>Edit</button>
+//                                                     )}
+//                                                     <button className="btn btn-danger" onClick={() => handleDelete(item)}>Delete</button>
+//                                                 </td>
+//                                             </tr>
+//                                         ))}
+//                                     </tbody>
+//                                 </table>
 //                             </div>
 //                         </div>
 //                     </div>
 //                 </div>
 //             </div>
-//             <Footer style={{ position: 'absolute', bottom: '0', width: '100%' }} />
+//             <Footer />
 //         </>
 //     );
 // }
@@ -86,25 +187,20 @@
 // export default QuestionListPage;
 
 
-
-
-
-// with data
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
 
 function QuestionListPage() {
-    const [gameMode, setGameMode] = useState('');
-    const [college, setCollege] = useState('');
-    const [data, setData] = useState([]);
-    const [editIndex, setEditIndex] = useState(-1);
-    const [editQuestion, setEditQuestion] = useState('');
-    const [editAnswer, setEditAnswer] = useState('');
+    const [gameMode, setGameMode] = useState('options');
+    const [college, setCollege] = useState('fleming');
+    const [responseData, setResponseData] = useState(null);
+    const [editMode, setEditMode] = useState(false);
+    const [updatedItem, setUpdatedItem] = useState(null);
 
     useEffect(() => {
+<<<<<<< HEAD
         if (gameMode && college) {
             const token = sessionStorage.getItem('accessToken');
             const backendValue = getBackendValue(gameMode);
@@ -121,39 +217,74 @@ function QuestionListPage() {
                 console.error('There was an error fetching the data!', error);
             });
         }
+=======
+        fetchData();
+>>>>>>> f03ef715c13f49b8a90ff9ac8875a8d225b9b2a4
     }, [gameMode, college]);
 
-    const getBackendValue = (mode) => {
-        switch (mode) {
-            case 'Mcq Question':
-                return 'option';
-            case 'File upload':
-                return 'image';
-            case 'QR scanner':
-                return 'qr';
-            default:
-                return '';
+    const fetchData = () => {
+        const token = sessionStorage.getItem('accessToken');
+        if (!token) {
+            console.error('Access token not found in session storage');
+            return;
         }
+
+        axios.get(`https://api-flrming.dhoomaworksbench.site/api/game/?game_mode=${gameMode}&campus_name=${college}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                console.log(response.data);
+                setResponseData(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
     };
 
-    const handleEdit = (index) => {
-        setEditIndex(index);
-        setEditQuestion(data[index].question);
-        setEditAnswer(data[index].answer);
+    const handleEdit = (item) => {
+        setUpdatedItem(item);
+        setEditMode(true);
     };
 
     const handleSave = () => {
-        const updatedData = [...data];
-        updatedData[editIndex] = { ...updatedData[editIndex], question: editQuestion, answer: editAnswer };
-        setData(updatedData);
-        setEditIndex(-1);
-        setEditQuestion('');
-        setEditAnswer('');
+        const token = sessionStorage.getItem('accessToken');
+        const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/${updatedItem.id}/`;
+
+        axios.put(apiUrl, updatedItem, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                const updatedData = responseData.results.map(result => result.id === updatedItem.id ? response.data : result);
+                setResponseData({ ...responseData, results: updatedData });
+                setEditMode(false);
+                setUpdatedItem(null);
+            })
+            .catch(error => {
+                console.error('There was an error updating the data!', error);
+            });
     };
 
-    const handleDelete = (index) => {
-        const updatedData = data.filter((_, i) => i !== index);
-        setData(updatedData);
+    const handleDelete = (item) => {
+        const token = sessionStorage.getItem('accessToken');
+        const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/${item.id}/`;
+
+        axios.delete(apiUrl, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(() => {
+                const updatedData = responseData.results.filter(result => result.id !== item.id);
+                setResponseData({ ...responseData, results: updatedData });
+            })
+            .catch(error => {
+                console.error('There was an error deleting the data!', error);
+            });
     };
 
     return (
@@ -161,76 +292,84 @@ function QuestionListPage() {
             <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
-                    <div className="col-md-8 d-flex justify-content-center">
-                        <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '600px' }}>
-                            <div className="form-group">
-                                <label htmlFor="gameModeSelect">Select Game Mode</label>
-                                <select
-                                    id="gameModeSelect"
-                                    className="form-control"
-                                    value={gameMode}
-                                    onChange={(e) => setGameMode(e.target.value)}
-                                >
-                                    <option value="">Select Game Mode</option>
-                                    <option value="Mcq Question">Mcq Question</option>
-                                    <option value="File upload">File upload</option>
-                                    <option value="QR scanner">QR scanner</option>
-                                </select>
-                            </div>
-                            <div className="form-group mt-3">
-                                <label htmlFor="collegeSelect">Select College</label>
+                    <div className="col-md-10 d-flex flex-column align-items-center">
+                        <div className="row mb-4 w-100">
+                            <div className="col-md-6 mb-3">
+                                <label htmlFor="collegeSelect" className="text-black">Select College</label>
                                 <select
                                     id="collegeSelect"
                                     className="form-control"
                                     value={college}
                                     onChange={(e) => setCollege(e.target.value)}
                                 >
-                                    <option value="">Select College</option>
-                                    <option value="Sutherland">Sutherland</option>
+                                    <option value="fleming">Sutherland</option>
                                     <option value="Lindsay">Lindsay</option>
                                     <option value="Haliburton">Haliburton</option>
                                 </select>
                             </div>
-                            <table className="table table-striped table-light mt-4">
+                            <div className="col-md-6 mb-3">
+                                <label htmlFor="gameModeSelect" className="text-black">Select Game Mode</label>
+                                <select
+                                    id="gameModeSelect"
+                                    className="form-control"
+                                    value={gameMode}
+                                    onChange={(e) => setGameMode(e.target.value)}
+                                >
+                                    <option value="options">Mcq Question</option>
+                                    <option value="image">File upload</option>
+                                    <option value="qr">QR scanner</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="table-responsive">
+                            <table className="table table-bordered table-striped mt-3">
                                 <thead>
                                     <tr>
-                                        <th>Question</th>
-                                        <th>Answer</th>
-                                        <th>Actions</th>
+                                        {gameMode === 'options' && <th>Title</th>}
+                                        {gameMode !== 'options' && <th>Description</th>}
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data.map((item, index) => (
-                                        <tr key={index}>
+                                    {responseData && responseData.results.map(item => (
+                                        <tr key={item.id} style={{ height: '50px' }}>
+                                            {gameMode === 'options' && (
+                                                <>
+                                                    <td>
+                                                        {editMode && updatedItem.id === item.id ? (
+                                                            <input
+                                                                type="text"
+                                                                value={updatedItem.tittle}
+                                                                onChange={(e) => setUpdatedItem({ ...updatedItem, tittle: e.target.value })}
+                                                                className="form-control"
+                                                            />
+                                                        ) : (
+                                                            <span>{item.tittle}</span>
+                                                        )}
+                                                    </td>
+                                                </>
+                                            )}
+                                            {gameMode !== 'options' && (
+                                                <td>
+                                                    {editMode && updatedItem.id === item.id ? (
+                                                        <input
+                                                            type="text"
+                                                            value={updatedItem.description}
+                                                            onChange={(e) => setUpdatedItem({ ...updatedItem, description: e.target.value })}
+                                                            className="form-control"
+                                                        />
+                                                    ) : (
+                                                        <span>{item.description}</span>
+                                                    )}
+                                                </td>
+                                            )}
                                             <td>
-                                                {editIndex === index ? (
-                                                    <input 
-                                                        type="text" 
-                                                        value={editQuestion} 
-                                                        onChange={(e) => setEditQuestion(e.target.value)} 
-                                                    />
-                                                ) : (
-                                                    item.question
-                                                )}
-                                            </td>
-                                            <td>
-                                                {editIndex === index ? (
-                                                    <input 
-                                                        type="text" 
-                                                        value={editAnswer} 
-                                                        onChange={(e) => setEditAnswer(e.target.value)} 
-                                                    />
-                                                ) : (
-                                                    item.answer
-                                                )}
-                                            </td>
-                                            <td>
-                                                {editIndex === index ? (
+                                                {editMode && updatedItem.id === item.id ? (
                                                     <button className="btn btn-success" onClick={handleSave}>Save</button>
                                                 ) : (
-                                                    <button className="btn btn-primary" onClick={() => handleEdit(index)}>Edit</button>
+                                                    <button className="btn btn-primary mr-2" onClick={() => handleEdit(item)}>Edit</button>
                                                 )}
-                                                <button className="btn btn-danger ml-2" onClick={() => handleDelete(index)}>Delete</button>
+                                                <button className="btn btn-danger" onClick={() => handleDelete(item)}>Delete</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -240,9 +379,11 @@ function QuestionListPage() {
                     </div>
                 </div>
             </div>
-            <Footer style={{ position: 'absolute', bottom: '0', width: '100%' }} />
+            <Footer />
         </>
     );
 }
 
 export default QuestionListPage;
+
+

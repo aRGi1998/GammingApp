@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import lock from '../assests/lock.png';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
-import lock from '../assests/lock.png';
 
 function AdminHomePage() {
     const navigate = useNavigate();
@@ -43,7 +43,7 @@ function AdminHomePage() {
                     </div>
                 </div>
             </div>
-            <Footer style={{ position: 'absolute', bottom: '0', width: '100%' }} />
+            <Footer />
         </>
     );
 }

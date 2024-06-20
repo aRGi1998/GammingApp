@@ -29,6 +29,10 @@ function FileUploadPage() {
 
         const dataToSend = {
             tittle: '',
+<<<<<<< HEAD
+=======
+            level: 0,
+>>>>>>> f03ef715c13f49b8a90ff9ac8875a8d225b9b2a4
             description: description,
             status: true,
             mode: 'image',
@@ -86,7 +90,7 @@ function FileUploadPage() {
                     </div>
                 </div>
             </div>
-            <Footer style={{ position: 'absolute', bottom: '0', width: '100%' }} />
+            <Footer />
         </>
     );
 }

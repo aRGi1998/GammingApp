@@ -1,24 +1,58 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { QrReader } from 'react-qr-reader';
-import Header from '../CommonComponent/Header';
+import QrReaderZ from './QrReaderZ';
+import { Link } from 'react-router-dom';
+import Modal from 'react-modal'
+import axios from 'axios';
 import Footer from '../CommonComponent/Footer';
+import Header from '../CommonComponent/Header';
+import Tenor from '../assests/tenor.gif'
 
-const ScannerListing = () => {
+const ScannerListing = ({data}) => {
     const [qrResult, setQrResult] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState({ message: '' }); // imageUrl: false , linkUrl: '/game-list?taskId=3'
 
-    const handleScan = data => {
-        if (data) {
-            setQrResult(data);
+
+    let descriptions = '' || []
+    if ( data.description.includes("\n") ) {
+        console.log("here")
+         descriptions = data?.description.split('\n')
+    } else {
+        descriptions = data.description
+    }    
+
+    const handleResult = async (result) => {
+        if (result) {
+            setQrResult(result);
+            try {
+                const payload = {
+                    "game_id": data.id,
+                    "notes": 0,
+                    "answer_value": result, // Scanned values add here
+                    "status": "C"
+                };
+                const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+                    }
+                });
+
+                if (response.status === 200) {
+                    setModalContent({ message: 'Congrats! Scan was successful.' });
+                    setShowModal(true);
+                }
+            } catch (error) {
+                console.error('Error posting scan result:', error);
+                setModalContent({ message: error.message });
+                setShowModal(true);
+            }
         }
-    };
-
-    const handleError = err => {
-        console.error(err);
-    };
+    };    
 
     return (
         <>
-            <Header />
+            <Header/>
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -28,22 +62,19 @@ const ScannerListing = () => {
                                     <>
                                         <h5 style={{ color: 'black' }}>Instructions List</h5>
                                         <ul style={{ color: 'black' }} className="list-group mb-3">
-                                            <li className="list-group-item">Dummy</li>
-                                            <li className="list-group-item">Dummy</li>
-                                            <li className="list-group-item">Dummy</li>
-                                            <li className="list-group-item">Dummy</li>
-                                            <li className="list-group-item">Dummy</li>
-                                            <li className="list-group-item">Dummy</li>
-                                            <li className="list-group-item">Dummy</li>
+                                        {
+                                            typeof descriptions === 'string' ? (
+                                                <li className="list-group-item">{descriptions}</li>
+                                            ) : (
+                                                descriptions.map((describe,index) => (
+                                                    <li key={index} className="list-group-item">{describe}</li>
+                                                ))
+                                            )
+                                        }
                                         </ul>
                                         <h1 className="scan-header">SCAN ME</h1>
-                                        <QrReader
-                                            delay={500}
-                                            onError={handleError}
-                                            onScan={handleScan}
-                                            style={{ width: '100%' }}
-                                        />
-                                        <p>{qrResult}</p>
+                                        <QrReaderZ setQrResult={handleResult}/>
+                                        <p style={{ position:'relative' , zIndex:'1' , color:'black' , textAlign:'center' , fontWeight:'bolder'}}>the result: {qrResult || 'none'}</p>
                                     </>
                                 </div>
                             </div>
@@ -51,7 +82,30 @@ const ScannerListing = () => {
                     </div>
                 </div>
             </div>
-            <Footer style={{ position: 'absolute', bottom: '0', width: '100%' }} />
+            <Footer/>
+            <Modal
+                isOpen={showModal}
+                onRequestClose={() => setShowModal(false)}
+                contentLabel="Result Modal"
+                ariaHideApp={false}
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.75)'
+                    },
+                    content: {
+                        color: 'black',
+                        textAlign: 'center',
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        marginRight: '-50%',
+                        transform: 'translate(-50%, -50%)'
+                    }
+                }}
+            >
+                <h2>{modalContent.message}</h2>
+            </Modal>            
         </>
     );
 };

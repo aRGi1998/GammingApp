@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
-import Header from '../CommonComponent/Header';
-import Footer from '../CommonComponent/Footer';
+import React, { useState , useEffect } from 'react';
 import axios from 'axios';
+import Footer from '../CommonComponent/Footer';
+import Header from '../CommonComponent/Header';
+import Modal from 'react-modal'
+import Tenor from '../assests/tenor.gif'
+import {Link} from 'react-router-dom'
 
-function FuListingPage() {
+
+function FuListingPage({ data }) {
+    console.log("data",data)
     const [selectedFile, setSelectedFile] = useState(null);
     const [error, setError] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState({ message: '' }); // imageUrl: false , linkUrl: '/game-list?taskId=2'
+
+    let descriptions = '' || []
+    if ( data.description.includes("\n") ) {
+         descriptions = data?.description.split('\n')
+    } else {
+        descriptions = data.description
+    }
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -16,9 +30,38 @@ function FuListingPage() {
             setError('');
         } else {
             setSelectedFile(null);
-            setError('Please select a valid PNG or JPG file.');
+            setModalContent({ message: 'Please select a valid PNG or JPG file' });
+            setShowModal(true);            
         }
     };
+
+    const handleResult = async (result) => {
+        if (result) {
+            try {
+                const payload = {
+                    "game_id": data.id,
+                    "notes": 0,
+                    "answer_value": result, // Scanned values add here
+                    "status": "C"
+                };
+                const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+                    }
+                });
+
+                if (response.status === 200) {
+                    setModalContent({ message: 'Congrats! file upload was successful.' });
+                    setShowModal(true);
+                }
+            } catch (error) {
+                console.error('Error posting scan result:', error);
+                setModalContent({ message: error.message });
+                setShowModal(true);
+            }
+        }
+    };    
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -37,33 +80,43 @@ function FuListingPage() {
         // Example API endpoint to handle file upload
         const apiUrl = 'https://example.com/upload';
 
-        axios.post(apiUrl, formData)
+        axios.post(apiUrl, formData, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+            }
+        })
             .then(response => {
                 console.log('File uploaded successfully:', response.data);
+                handleResult(response.status)
                 // Add your success handling logic here
             })
             .catch(error => {
                 console.error('Error uploading file:', error);
-                setError('Failed to upload file.');
+                setModalContent({ message: "Failed to upload file."});
+                setShowModal(true);
             });
+        
     };
+
 
     return (
         <>
-            <Header />
+            <Header/>
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
                         <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '600px' }}>
                             <h5 style={{ color: 'black' }}>Instructions List</h5>
                             <ul style={{ color: 'black' }} className="list-group mb-3">
-                                <li className="list-group-item">Dummy</li>
-                                <li className="list-group-item">Dummy</li>
-                                <li className="list-group-item">Dummy</li>
-                                <li className="list-group-item">Dummy</li>
-                                <li className="list-group-item">Dummy</li>
-                                <li className="list-group-item">Dummy</li>
-                                <li className="list-group-item">Dummy</li>
+                                {
+                                    typeof descriptions === 'string' ? (
+                                        <li className="list-group-item">{descriptions}</li>
+                                    ) : (
+                                        descriptions.map((describe,index) => (
+                                            <li key={index} className="list-group-item">{describe}</li>
+                                        ))
+                                    )
+                                }
                                 {/* Uncomment and use instructions array to display dynamic instructions
                                 {instructions.map((instruction, index) => (
                                     <li key={index} className="list-group-item" style={{color: 'black'}}>
@@ -95,7 +148,32 @@ function FuListingPage() {
                     </div>
                 </div>
             </div>
-            <Footer style={{ position: 'absolute', bottom: '0', width: '100%' }} />
+            <Modal
+                isOpen={showModal}
+                onRequestClose={() => setShowModal(false)}
+                contentLabel="Result Modal"
+                ariaHideApp={false}
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.75)'
+                    },
+                    content: {
+                        color: 'black',
+                        textAlign: 'center',
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        marginRight: '-50%',
+                        transform: 'translate(-50%, -50%)'
+                    }
+                }}
+            >
+                <h2>{modalContent.message}</h2>
+                {/* {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />} */}
+                {/* {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Go to the next page</Link>} */}
+            </Modal>            
+            <Footer/>
         </>
     );
 }
