@@ -34,17 +34,10 @@ function McqCreationPage() {
 
         const dataToSend = {
             tittle: question,
-<<<<<<< HEAD
-            level: 1,
-            description: 'string', 
-            status: true, 
-            mode: 'options', 
-=======
             level: 0,
             description: 'string',
             status: true,
             mode: 'options',
->>>>>>> f03ef715c13f49b8a90ff9ac8875a8d225b9b2a4
             collage_name: 'fleming',
             game_type: 1,
             options: options.filter(option => option !== ''),

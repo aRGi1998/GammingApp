@@ -200,26 +200,7 @@ function QuestionListPage() {
     const [updatedItem, setUpdatedItem] = useState(null);
 
     useEffect(() => {
-<<<<<<< HEAD
-        if (gameMode && college) {
-            const token = sessionStorage.getItem('accessToken');
-            const backendValue = getBackendValue(gameMode);
-            const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game`;
-            axios.get(apiUrl, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(response => {
-                setData(response.data.result || []);
-            })
-            .catch(error => {
-                console.error('There was an error fetching the data!', error);
-            });
-        }
-=======
         fetchData();
->>>>>>> f03ef715c13f49b8a90ff9ac8875a8d225b9b2a4
     }, [gameMode, college]);
 
     const fetchData = () => {

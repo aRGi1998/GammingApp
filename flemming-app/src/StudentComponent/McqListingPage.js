@@ -28,8 +28,8 @@ function McqListingPage() {
 
     const navigate = useNavigate();
     
-    const handleResult = async (result) => {
-        if (result) {
+    const handleResult = async (result,state) => {
+        if (state) {
             try {
                 const payload = {
                     "game_id": data.id,
@@ -44,7 +44,7 @@ function McqListingPage() {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Congrats! your answer was correct' });
+                    setModalContent({ message: 'Well,Done !' });
                     setShowModal(true);
                 }
             } catch (error) {
@@ -52,6 +52,29 @@ function McqListingPage() {
                 setModalContent({ message: error.message});
                 setShowModal(true);
             }
+        } else {
+            try {
+                const payload = {
+                    "game_id": data.id,
+                    "notes": 0,
+                    "answer_value": result, // Scanned values add here
+                    "status": "F"
+                };
+                const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+                    }
+                });
+
+                if (response.status === 200) {
+                    setModalContent({ message: 'Well,Done !' });
+                    setShowModal(true);
+                }
+            } catch (error) {
+                console.error('Error posting scan result:', error);
+                setModalContent({ message: error.message});
+                setShowModal(true);
+            }            
         }
     };
 
@@ -87,20 +110,19 @@ function McqListingPage() {
         e.preventDefault();
         console.log("selected:",selectedOption)
         console.log("correct",correctAnswer)
-        if ( selectedOption === '' || selectedOption === null ) {
-            console.log("here")
-            setModalContent({ message: "Sorry! You can't submit without selecting one of the option" });
-            setShowModal(true);
-            return
-        }
+        // if ( selectedOption === '' || selectedOption === null ) {
+        //     console.log("here")
+        //     setModalContent({ message: "Sorry! You can't submit without selecting one of the option" });
+        //     setShowModal(true);
+        //     return
+        // }
 
         if ( selectedOption === correctAnswer ) {
-            handleResult(correctAnswer)
+            handleResult(correctAnswer,true)
         }
         
         if (selectedOption !== correctAnswer) {
-            setModalContent({ message: 'Sorry! your answer was wrong' });
-            setShowModal(true);
+            handleResult(selectedOption,false)
         }
     };  
 
@@ -167,7 +189,7 @@ function McqListingPage() {
                         <h2>{modalContent.message}</h2>
                         {/* {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />} */}
                         {/* {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Go to the next page</Link>} */}
-                    </Modal>                    
+                    </Modal>
                     <Footer/>
                 </>
             ): data.mode === 'qr' ? (

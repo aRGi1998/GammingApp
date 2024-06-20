@@ -51,7 +51,7 @@ function FuListingPage({ data }) {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Congrats! file upload was successful.' });
+                    setModalContent({ message: 'Well Done' });
                     setShowModal(true);
                 }
             } catch (error) {

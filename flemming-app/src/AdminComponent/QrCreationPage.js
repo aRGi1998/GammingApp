@@ -144,11 +144,7 @@ function QrCreationPage() {
             collage_name: 'fleming',
             game_type: 3,
             options: [],
-<<<<<<< HEAD
-            // qr_value: qrText 
-=======
             level: 0,
->>>>>>> f03ef715c13f49b8a90ff9ac8875a8d225b9b2a4
         };
 
 

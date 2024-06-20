@@ -247,7 +247,7 @@ function LevelListPage() {
         console.log("from",result)
         if (result) {
             try {
-                setModalContent({ message: `You Finished Level ${gameId} ` , imageUrl: true , linkUrl: url });
+                setModalContent({ message: `You Finished Level ${gameId} ` , imageUrl: false , linkUrl: url });
                 setShowModal(true);
             } catch (error) {
                 setModalContent({ message: error.message , imageUrl: false , linkUrl: '' });
