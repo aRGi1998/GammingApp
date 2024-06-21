@@ -27,16 +27,14 @@ function Header() {
                     <nav className="d-flex align-items-center">
                         {isAdmin ? (
                             <>
-                                <a href="/admin-home" className="nav-link text-white">Home</a> |
-                                <a href="/student-list" className="nav-link text-white">Student List</a> |
-                                <a href="/question-list" className="nav-link text-white">Question List</a> |
+                                <a href="/admin-home" className="nav-link text-white me-3">Home</a>
+                                <a href="/student-list" className="nav-link text-white me-3">Student List</a>
+                                <a href="/question-list" className="nav-link text-white me-3">Question List</a>
                             </>
                         ) : (
                             <>
-                                <a href="/home" className="nav-link text-white">Home</a>
-                                |
-                                <a href="/levels" className="nav-link text-white">Levels</a>
-                                |
+                                <a href="/home" className="nav-link text-white me-3">Home</a>
+                                <a href="/levels" className="nav-link text-white me-3">Levels</a>
                             </>
                         )}
                         <a href="#" onClick={handleLogout} className="nav-link text-white">Logout</a>

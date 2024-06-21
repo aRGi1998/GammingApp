@@ -1,41 +1,75 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import frametrophy from '../assests/Frame2.png';
-import rectangleImage from '../assests/Rectangle 11.png'
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
+import frametrophy from '../assests/Frame2.png';
+import rectangleImage from '../assests/Rectangle 11.png';
 
 function HomePage() {
-  const navigate = useNavigate();
-  const handleSubmit = () => {
-    navigate('/levels');
-  }
-  return (
-    <>
-      <Header/>
-      <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
-        <div className="container mt-5">
-          <div style={{ position: 'relative' }}>
-            <img className="image-style" src={rectangleImage} alt="Rectangle" style={{ zIndex: '1' }} />
-            <div style={{ position: 'absolute', bottom: '25px', left: '70px', color: 'white', zIndex: '5', fontWeight: 'bold' }}>Sutherland Campus</div>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginLeft:'60px' }}>
-            <div style={{ position: 'relative' }}>
-              {/* <img src={Substract} alt="Small Image" style={{ position: 'absolute', right: '20px', top: '13px', width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'yellow', padding: '5px' }} /> */}
-              <button onClick={handleSubmit} className="submit-button" style={{ backgroundColor: '#3498db', width: '250px', color: '#fff', borderRadius: '20px', padding: '10px 20px', border: 'none', cursor: 'pointer', fontWeight: 'bold', zIndex: '2' }}>Start Play</button>
+    const navigate = useNavigate();
+
+    const handleSubmit = () => {
+        navigate('/levels');
+    };
+
+    return (
+        <>
+            <Header />
+            <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
+                <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
+                    <div className="col-md-8 d-flex justify-content-center">
+                        <div className="card text-white p-4" style={{ height: 'auto', width: '100%', overflowY: 'auto', maxWidth: '600px', border:'none' }}>
+                            <div className="text-center mb-4">
+                                <img src={rectangleImage} alt="Rectangle" className="img-fluid" style={{ width: '100%', maxWidth: '400px' }} />
+                                <div className="position-absolute bottom-0 start-50 translate-middle-x text-white fw-bold">
+                                    Sutherland Campus
+                                </div>
+                            </div>
+                            <div className="d-flex justify-content-center">
+                                <button
+                                    onClick={handleSubmit}
+                                    className="btn btn-primary"
+                                    style={{
+                                        width: '250px',
+                                        borderRadius: '20px',
+                                        padding: '10px 20px',
+                                        fontWeight: 'bold',
+                                    }}
+                                >
+                                    Start Play
+                                </button>
+                            </div>
+                            <div className="d-flex justify-content-center mt-4">
+                                <button
+                                    className="btn btn-light shadow-sm d-flex flex-column align-items-center"
+                                    style={{
+                                        width: '100px',
+                                        height: '100px',
+                                        borderRadius: '20px',
+                                        backgroundColor: 'white',
+                                        padding: '10px',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        marginLeft:'75px'
+                                    }}
+                                >
+                                    <img src={frametrophy} alt="Trophy" className="mb-2" style={{ width: '50px', height: '50px', textAlign: 'center' }} />
+                                    <span style={{ color: 'black', textAlign: 'center' }}>
+                                        <a style={{ color: 'black', textAlign: 'center' }} href="/status">
+                                            Status
+                                        </a>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', marginBottom: '60px' , marginLeft:'30px'}}>
-            <button className="square-button" style={{ width: '100px', height: '100px', backgroundColor: 'white', padding: '10px', border: 'none', cursor: 'pointer', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', borderRadius: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <img src={frametrophy} alt="Right Image" style={{ width: '50px', height: '50px', marginBottom: '5px' }} />
-              <span style={{ color: 'black', textAlign: 'center' }}> <a style={{ color: 'black', textAlign: 'center' }} href="/status">Status</a></span>
-            </button>
-          </div>
-        </div>
-      </div>
-      <Footer/>
-    </>
-  );
+            <Footer />
+        </>
+    );
 }
 
 export default HomePage;
+
+

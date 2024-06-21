@@ -23,7 +23,7 @@ function FuListingPage({ data }) {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        const allowedTypes = ['image/png', 'image/jpeg'];
+        const allowedTypes = ['.png', '.jpeg'];
 
         if (file && allowedTypes.includes(file.type)) {
             setSelectedFile(file);

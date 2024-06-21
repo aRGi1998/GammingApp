@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import QRCode from 'qrcode.react';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
+import { useNavigate } from 'react-router-dom';
 
 function QrCreationPage() {
     const [instructions, setInstructions] = useState(['']);
-    const [qrText, setQrText] = useState('');
-    const [generatedQr, setGeneratedQr] = useState(null);
-    const [qrCodeUrl, setQrCodeUrl] = useState(null); // State to store QR code URL
+    const [qrCodeUrl, setQrCodeUrl] = useState(null);
     const token = sessionStorage.getItem('accessToken');
+    const navigate = useNavigate();
 
     const handleInstructionChange = (index, event) => {
         const newInstructions = instructions.slice();
@@ -42,7 +41,6 @@ function QrCreationPage() {
             level: 0,
         };
 
-
         console.log('Data to send:', dataToSend);
 
         try {
@@ -54,15 +52,9 @@ function QrCreationPage() {
             console.log('Response:', response.data);
             // Set the QR code URL from the response
             setQrCodeUrl(response.data.qr_code);
-            // Handle success (e.g., display a success message or redirect)
         } catch (error) {
             console.error('Error:', error);
-            // Handle error (e.g., display an error message)
         }
-    };
-
-    const handleQrGenerate = () => {
-        setGeneratedQr(qrText);
     };
 
     const handleQrDownload = () => {
@@ -73,6 +65,11 @@ function QrCreationPage() {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            alert('Instruction Created Successfully! & Successfully Downloaded QR');
+            // Clear form data
+            setInstructions(['']);
+            // Hide QR code section
+            setQrCodeUrl(null);
         }
     };
 
@@ -109,7 +106,6 @@ function QrCreationPage() {
                             {qrCodeUrl && (
                                 <div className="mt-4 text-center">
                                     <h5 className="mt-4 text-center" style={{marginRight:'65px'}}>Generated QR Code</h5>
-                                    {/* <img src={qrCodeUrl} alt="QR Code" style={{ maxWidth: '100%', height: 'auto' }} /> */}
                                     <button className="btn btn-info mt-2 ms-0" onClick={handleQrDownload}>
                                         <i className="fas fa-download"></i> Download QR Code
                                     </button>
@@ -125,4 +121,3 @@ function QrCreationPage() {
 }
 
 export default QrCreationPage;
-

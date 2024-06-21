@@ -53,35 +53,16 @@ function McqCreationPage() {
                 }
             });
             console.log('Response:', response.data);
+            alert('MCQ created successfully!');
+            setFormData({
+                question: '',
+                options: ['', '', '', ''],
+                correctAnswer: ''
+            });
 
-            // Handle success (e.g., display a success message or redirect)
-            if(response.data) {
-                navigate(`/admin-home`); // Pass buttonId in state object
-
-            }
-            // if (response.data.message === 'Sucessfully created') {
-            //     setPopupMessage('MCQ created successfully!');
-            //     setShowPopup(true);
-
-            //     // Clear the form
-            //     setFormData({
-            //         question: '',
-            //         options: ['', '', '', ''],
-            //         correctAnswer: ''
-            //     });
-            // }
         } catch (error) {
             console.error('Error:', error);
-
-            // Handle error (e.g., display an error message)
-            setPopupMessage('An error occurred while creating the MCQ.');
-            setShowPopup(true);
         }
-    };
-
-    const closePopup = () => {
-        setShowPopup(false);
-        setPopupMessage('');
     };
 
     return (
@@ -95,7 +76,7 @@ function McqCreationPage() {
                                 <h2 className="form-title mb-4">Multiple Choice Question Form</h2>
                                 <form onSubmit={handleSubmit}>
                                     <div className="form-group">
-                                        <label htmlFor="question" style={{ textAlign: 'left' }} >Question:</label>
+                                        <label htmlFor="question" style={{ textAlign: 'left' }}>Question: </label>
                                         <input
                                             type="text"
                                             id="question"
@@ -103,7 +84,7 @@ function McqCreationPage() {
                                             value={formData.question}
                                             onChange={handleChange}
                                             required
-                                            className="form-control"
+                                            className="form-control ms-2"
                                             placeholder="Enter your question here"
                                             style={{ textAlign: 'left' }} // Align input text to left
                                         />
@@ -148,14 +129,6 @@ function McqCreationPage() {
                                         <button type="submit" className="btn btn-primary btn-block">Submit</button>
                                     </div>
                                 </form>
-                                {/* {showPopup && (
-                                    <div className="popup">
-                                        <div className="popup-content">
-                                            <p>{popupMessage}</p>
-                                            <button onClick={closePopup} className="btn btn-secondary">Close</button>
-                                        </div>
-                                    </div>
-                                )} */}
                             </div>
                         </div>
                     </div>

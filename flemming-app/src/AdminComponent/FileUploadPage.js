@@ -49,7 +49,9 @@ function FileUploadPage() {
             });
             console.log('Response:', response.data);
             if(response.data) {
-                navigate('/admin-home')
+                alert('Instruction Created Successfully!')
+                // Clear form data
+                setInstructions(['']);
             }
             // Handle success (e.g., display a success message or redirect)
         } catch (error) {

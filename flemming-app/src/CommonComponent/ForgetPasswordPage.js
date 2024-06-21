@@ -1,30 +1,30 @@
-import React, { useState }  from 'react';
-import logo from '../assests/logo.png';
+import React, { useState } from 'react';
+import logo from '../assests/logo.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
     const handleEmailChange = (e) => {
-        setEmail(e.target.value); 
+        setEmail(e.target.value);
     }
     const navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate('/otp');
         try {
-            // Sending the email to the API
-            const response = await axios.post('https://api-flrming.dhoomaworksbench.site/api/api_student_send_verify_email_create', 
-            // {
-            //     email: email
-            // }
-        );
+            const response = await axios.post('https://api-flrming.dhoomaworksbench.site/api/student/forgot-password/',
+                {
+                    email: email
+                });
 
             console.log('Email sent successfully:', response.data);
-            // Handle success, maybe show a message to the user
+            // Pass email as state when navigating
+            if (response.data) {
+                navigate('/otp', { state: { email: email } });
+            }
+
         } catch (error) {
             console.error('Error sending email:', error);
-            // Handle error, maybe show an error message to the user
         }
     };
 
