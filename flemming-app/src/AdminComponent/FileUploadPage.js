@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
+import { useNavigate } from 'react-router-dom';
 
 function FileUploadPage() {
     const [instructions, setInstructions] = useState(['']);
     const token = sessionStorage.getItem('accessToken');
+    const navigate = useNavigate();
 
     const handleInstructionChange = (index, event) => {
         const newInstructions = instructions.slice();
@@ -46,6 +48,9 @@ function FileUploadPage() {
                 }
             });
             console.log('Response:', response.data);
+            if(response.data) {
+                navigate('/admin-home')
+            }
             // Handle success (e.g., display a success message or redirect)
         } catch (error) {
             console.error('Error:', error);
