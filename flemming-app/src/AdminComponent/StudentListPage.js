@@ -1,9 +1,6 @@
-// 
-
-
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {useNavigate } from 'react-router-dom'; 
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
 
@@ -12,6 +9,7 @@ function StudentListPage() {
     const [students, setStudents] = useState([]);
     const campuses = ['Sutherland', 'Lindsay', 'Haliburton'];
     const token = sessionStorage.getItem('accessToken');
+    const navigate = useNavigate();
 
     const handleCampusChange = (event) => {
         setSelectedCampus(event.target.value);
@@ -27,7 +25,6 @@ function StudentListPage() {
                         }
                     });
                     setStudents(response.data.results); // Use response.data.results to get the students array
-                    console.log(response.data, 'data');
                 } catch (error) {
                     console.error('Error fetching students:', error);
                 }
@@ -37,14 +34,18 @@ function StudentListPage() {
         fetchStudents();
     }, [selectedCampus, token]); // Call the API on initial render and when selectedCampus changes
 
+    const handleViewClick = (id) => {
+        navigate(`/student-detail/${id}`); // Navigate to the student detail page
+    };
+
     return (
         <>
             <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-10 d-flex flex-column align-items-center">
-                    <h3 className="text-black">Student List</h3>
-                        <div className="form-group mt-4">
+                        <h3 className="text-black">Student List</h3>
+                        <div className="form-group mt-4 custom-select">
                             <label htmlFor="campusSelect" className="text-black">Select Campus:</label>
                             <select id="campusSelect" className="form-control" value={selectedCampus} onChange={handleCampusChange}>
                                 <option value="" disabled>Select a campus</option>
@@ -59,8 +60,8 @@ function StudentListPage() {
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Contact Number</th>
-                                    <th>Campus</th>
                                     <th>Date Joined</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -69,8 +70,10 @@ function StudentListPage() {
                                         <td>{student.username}</td>
                                         <td>{student.email}</td>
                                         <td>{student.contact_number}</td>
-                                        <td>{student.collage_name}</td>
                                         <td>{new Date(student.date_joined).toLocaleDateString()}</td>
+                                        <td>
+                                            <button className="btn btn-primary" onClick={() => handleViewClick(student.id)}>View</button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -84,3 +87,4 @@ function StudentListPage() {
 }
 
 export default StudentListPage;
+

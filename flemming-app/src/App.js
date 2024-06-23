@@ -10,6 +10,7 @@ import McqCreationPage from './AdminComponent/McqCreationPage';
 import FileUploadPage from './AdminComponent/FileUploadPage';
 import QrCreationPage from './AdminComponent/QrCreationPage';
 import StudentListPage from './AdminComponent/StudentListPage';
+import StudentDetailPage from './AdminComponent/StudentDetailPage';
 import QuestionListPage from './AdminComponent/QuestionListPage';
 import HomePage from './StudentComponent/HomePage';
 import LevelListPage from './StudentComponent/LevelListPage';
@@ -33,6 +34,7 @@ function App() {
             <Route path="/fu-creation" element={<FileUploadPage />} />
             <Route path="/qr-creation" element={<QrCreationPage />} />
             <Route path="/student-list" element={<StudentListPage />} />
+            <Route path="/student-detail/:id" element={<StudentDetailPage />} /> 
             <Route path="/question-list" element={<QuestionListPage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/levels" element={<LevelListPage />} />
