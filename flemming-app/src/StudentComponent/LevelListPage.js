@@ -176,6 +176,7 @@ function LevelListPage() {
     const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({ message: '' , imageUrl: false , linkUrl: '/game-list?taskId=1' })        
+    const navigate = useNavigate()
 
     useEffect(() => {
         getGameData();
@@ -235,6 +236,7 @@ function LevelListPage() {
                                 })
                                 .catch(error => {
                                     console.error('Error fetching game data with new token:', error);
+                                    navigate("/")
                                     setError('Failed to fetch game data.');
                                 });
                         }
@@ -259,7 +261,6 @@ function LevelListPage() {
         }
     };    
 
-    const navigate = useNavigate();
     const navigateToTask = async (taskId, gameMode) => {
         if (taskIds.indexOf(taskId) === -1) {
             navigate("/levels");
