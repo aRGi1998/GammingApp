@@ -127,7 +127,7 @@ function StudentListPage() {
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-10 d-flex flex-column align-items-center">
                         <h3 className="text-black">Student List</h3>
-                        <div className="form-group mt-4">
+                        <div className="form-group mt-4 custom-select">
                             <label htmlFor="campusSelect" className="text-black">Select Campus:</label>
                             <select id="campusSelect" className="form-control" value={selectedCampus} onChange={handleCampusChange}>
                                 <option value="" disabled>Select a campus</option>
