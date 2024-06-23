@@ -69,8 +69,7 @@ function FuListingPage({ data }) {
                     }
                 });                
                 console.error('Error posting scan result:', error);
-                setModalContent({ message: 'Well,Done !' , linkUrl: '/game-list?taskId=2'  });
-                setShowModal(true);
+                response?.status === 200 ?? setModalContent({ message: 'Well,Done !' , linkUrl: '/game-list?taskId=2'  }); setShowModal(true);
             }
         }
     };    
@@ -106,6 +105,7 @@ function FuListingPage({ data }) {
             })
             .catch(error => {
                 console.error('Error uploading file:', error);
+
                 setModalContent({ message: error.message});
                 setShowModal(true);
             });        

@@ -26,26 +26,42 @@ const ScannerListing = ({data}) => {
         if (result) {
             setQrResult(result);
             try {
-                const payload = {
-                    "game_id": data.id,
-                    "notes": 0,
-                    "answer_value": result, // Scanned values add here
-                    "status": "C"
-                };
-                const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+                if ( result === data?.answer_value) {
+                    const payload = {
+                        "game_id": data.id,
+                        "notes": 0,
+                        "answer_value": result, // Scanned values add here
+                        "status": "C"
+                    };
+                    const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
+                        headers: {
+                            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+                        }
+                    });
+    
+                    if (response.status === 200) {
+                        setModalContent({ message: 'Well,Done !' , linkUrl: '/game-list?taskId=3' });
+                        setShowModal(true);
                     }
-                });
 
-                if (response.status === 200) {
-                    setModalContent({ message: 'Well,Done !' , linkUrl: '/game-list?taskId=3' });
-                    setShowModal(true);
+                } else {
+                    const payload = {
+                        "game_id": data.id,
+                        "notes": 0,
+                        "answer_value": result, // Scanned values add here
+                        "status": "F"
+                    };
+                    const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
+                        headers: {
+                            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+                        }
+                    });
+                    response.status === 2000 ?? setModalContent({ message: 'Well,Done !' , linkUrl: '/game-list?taskId=3' }); setShowModal(true);
                 }
-            } catch (error) {
-                console.error('Error posting scan result:', error);
-                setModalContent({ message: error.message });
-                setShowModal(true);
+            } catch (error) {                
+                    console.error('Error posting scan result:', error);
+                    setModalContent({ message: error.message , linkUrl: '' });
+                    setShowModal(true);                
             }
         }
     };    
