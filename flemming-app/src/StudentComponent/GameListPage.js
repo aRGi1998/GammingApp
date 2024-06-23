@@ -57,19 +57,16 @@ const GameListPage = () => {
     };
 
     const navigateToFirstLevel = async (buttonId) => {
-            // console.log("btn",buttonId)
-            // console.log(gameIds.indexOf(buttonId))
+
             if ( gameIds.indexOf(buttonId) === -1) {
-                navigate(`/mcq-list`); // Pass buttonId in state object
+                navigate(`/mcq-list`); 
             } else {
                 const gIndex = gameIds.indexOf(buttonId)
                 const allow = await gameStatusChecker(gameIds[gIndex])
                 if (allow) {
-                    console.log("allow",allow)
                     navigate(`/mcq-list?id=${buttonId}`);
                 } else {
-                    console.log("hmm",allow)
-                    setModalContent({  message: ` you already completed Game: ${gameIds.indexOf(buttonId)}` })
+                    setModalContent({  message: ` you already completed Game: ${gameIds.indexOf(buttonId) + 1}` })
                     setShowModal(true)
                 }                
             }

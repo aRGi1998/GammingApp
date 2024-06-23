@@ -231,6 +231,7 @@ function LevelListPage() {
                             })
                                 .then(response => {
                                     setGames(response.data.results);
+                                    setTaskIds(response.data.results.map((data, index) => data.id))
                                 })
                                 .catch(error => {
                                     console.error('Error fetching game data with new token:', error);

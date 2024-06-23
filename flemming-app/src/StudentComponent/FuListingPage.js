@@ -24,7 +24,6 @@ function FuListingPage({ data }) {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        console.log(file.type)
         const allowedTypes = ['.png', '.jpeg' , 'image/png' , 'image/jpeg'];
 
         if (file && allowedTypes.includes(file.type)) {
@@ -60,8 +59,8 @@ function FuListingPage({ data }) {
                 const payload = {
                     "game_id": data.id,
                     "notes": 0,
-                    "answer_value": result, 
-                    "status": "F"
+                    "answer_value": answer,
+                    "status": "O"
                 };
                 const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
                     headers: {
@@ -84,8 +83,6 @@ function FuListingPage({ data }) {
         }
 
         const formData = new FormData();
-        console.log(formData,'data')
-        console.log(selectedFile,'selectedFile')
 
         formData.append('profile','0')
         formData.append('picture', selectedFile);
@@ -101,11 +98,10 @@ function FuListingPage({ data }) {
             .then(response => {
                 let answerBuilder = `https://api-flrming.dhoomaworksbench.site/${response.data.picture}`
                 handleResult(response.status,answerBuilder)
-                // Add your success handling logic here
+
             })
             .catch(error => {
                 console.error('Error uploading file:', error);
-
                 setModalContent({ message: error.message});
                 setShowModal(true);
             });        
@@ -130,7 +126,7 @@ function FuListingPage({ data }) {
                                         ))
                                     )
                                 }
-                                {/* Uncomment and use instructions array to display dynamic instructions
+                                {/* 
                                 {instructions.map((instruction, index) => (
                                     <li key={index} className="list-group-item" style={{color: 'black'}}>
                                         {instruction}
