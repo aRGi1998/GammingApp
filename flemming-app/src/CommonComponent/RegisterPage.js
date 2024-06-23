@@ -33,8 +33,33 @@ function RegisterPage() {
         setCampus(e.target.value);
     }
 
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    };
+
+    const validatePhoneNumber = (phoneNumber) => {
+        const re = /^[0-9]+$/;
+        return re.test(phoneNumber);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        let validationErrors = {};
+
+        if (!validateEmail(email)) {
+            validationErrors.email = ['Invalid email format'];
+        }
+
+        if (!validatePhoneNumber(phoneNumber)) {
+            validationErrors.phoneNumber = ['Phone number must be numeric'];
+        }
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
         axios.post('https://api-flrming.dhoomaworksbench.site/api/student/', {
             username: username,
             password: password,
@@ -44,7 +69,7 @@ function RegisterPage() {
             collage_name: campus // Add the selected campus name here
         })
             .then(res => {
-                console.log(res.data)
+                console.log(res.data);
                 navigate('/');
             })
             .catch(error => {
