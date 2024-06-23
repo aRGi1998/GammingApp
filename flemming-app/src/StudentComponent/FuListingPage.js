@@ -153,7 +153,7 @@ function FuListingPage({ data }) {
                                         </div>
                                     )}
                                 </div>
-                                <div className="mt-5 d-flex justify-content-center align-items-center">
+                                <div className="mt-5 d-flex justify-content-center align-items-center" style={{ marginLeft:'100px'}}>
                                     <button style={{ transform: 'translateX(-50%)' }} type="submit" className="btn btn-primary">Submit</button>
                                 </div>
                             </form>

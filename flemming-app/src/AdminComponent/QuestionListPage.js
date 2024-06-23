@@ -3,6 +3,7 @@
 // import Header from '../CommonComponent/Header';
 // import Footer from '../CommonComponent/Footer';
 
+
 // function QuestionListPage() {
 //     const [gameMode, setGameMode] = useState('options');
 //     const [college, setCollege] = useState('fleming');
@@ -89,29 +90,33 @@
 //                         <div className="row mb-4 w-100">
 //                             <div className="col-md-6 mb-3">
 //                                 <label htmlFor="collegeSelect" className="text-black">Select College</label>
-//                                 <select
-//                                     id="collegeSelect"
-//                                     className="form-control"
-//                                     value={college}
-//                                     onChange={(e) => setCollege(e.target.value)}
-//                                 >
-//                                     <option value="fleming">Sutherland</option>
-//                                     <option value="Lindsay">Lindsay</option>
-//                                     <option value="Haliburton">Haliburton</option>
-//                                 </select>
+//                                 <div className="custom-select">
+//                                     <select
+//                                         id="collegeSelect"
+//                                         className="form-control"
+//                                         value={college}
+//                                         onChange={(e) => setCollege(e.target.value)}
+//                                     >
+//                                         <option value="fleming">Sutherland</option>
+//                                         <option value="Lindsay">Lindsay</option>
+//                                         <option value="Haliburton">Haliburton</option>
+//                                     </select>
+//                                 </div>
 //                             </div>
 //                             <div className="col-md-6 mb-3">
 //                                 <label htmlFor="gameModeSelect" className="text-black">Select Game Mode</label>
-//                                 <select
-//                                     id="gameModeSelect"
-//                                     className="form-control"
-//                                     value={gameMode}
-//                                     onChange={(e) => setGameMode(e.target.value)}
-//                                 >
-//                                     <option value="options">Mcq Question</option>
-//                                     <option value="image">File upload</option>
-//                                     <option value="qr">QR scanner</option>
-//                                 </select>
+//                                 <div className="custom-select">
+//                                     <select
+//                                         id="gameModeSelect"
+//                                         className="form-control"
+//                                         value={gameMode}
+//                                         onChange={(e) => setGameMode(e.target.value)}
+//                                     >
+//                                         <option value="options">Mcq Question</option>
+//                                         <option value="image">File upload</option>
+//                                         <option value="qr">QR scanner</option>
+//                                     </select>
+//                                 </div>
 //                             </div>
 //                         </div>
 //                         <div className="table-responsive">
@@ -179,12 +184,10 @@
 
 // export default QuestionListPage;
 
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
-
 
 function QuestionListPage() {
     const [gameMode, setGameMode] = useState('options');
@@ -227,15 +230,21 @@ function QuestionListPage() {
         const token = sessionStorage.getItem('accessToken');
         const apiUrl = `https://api-flrming.dhoomaworksbench.site/api/game/${updatedItem.id}/`;
 
-        axios.put(apiUrl, updatedItem, {
+        // Create a copy of updatedItem and remove qr_code if gameMode is 'qr'
+        const updatedData = { ...updatedItem };
+        if (gameMode === 'qr') {
+            delete updatedData.qr_code;
+        }
+
+        axios.put(apiUrl, updatedData, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         })
             .then(response => {
-                const updatedData = responseData.results.map(result => result.id === updatedItem.id ? response.data : result);
-                setResponseData({ ...responseData, results: updatedData });
+                const newResults = responseData.results.map(result => result.id === updatedItem.id ? response.data : result);
+                setResponseData({ ...responseData, results: newResults });
                 setEditMode(false);
                 setUpdatedItem(null);
             })
@@ -365,4 +374,3 @@ function QuestionListPage() {
 }
 
 export default QuestionListPage;
-
