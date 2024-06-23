@@ -168,6 +168,7 @@ import Footer from '../CommonComponent/Footer';
 import Tenor from '../assests/tenor.gif'
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom'
+import { BeatLoader } from 'react-spinners';
 
 function LevelListPage() {
     const [games, setGames] = useState([]);
@@ -214,6 +215,7 @@ function LevelListPage() {
             }
         })
             .then(response => {
+                console.log(response.data.results)
                 setGames(response.data.results);
                 setTaskIds(response.data.results.map((data, index) => data.id))
             })
@@ -300,26 +302,30 @@ function LevelListPage() {
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
                         <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '600px' }}>
-                            <div className="levels-page mt-5">
-                                {error && <div className="error-message" style={{ color: 'white' }}>{error}</div>}
-                                <div className="container oval-container mt-5" >
-                                    {games.map((game, index) => (
-                                        <div key={game.id} id={`task-${game.id}`} className="oval-button mb-3" style={{ backgroundColor: taskColors[index % taskColors.length] }} onClick={() => navigateToTask(game.id, game.game_mode)}>
-                                            <div className="left-side">*</div>
-                                            <span style={{ cursor: 'pointer' }}>{game.tittle}</span>
-                                            <div className="right-side">
-                                                {
-                                                    game.status ? (
-                                                        <img src={unlock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
-                                                    ) : (
-                                                        <img src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
-                                                    )
-                                                }
+                            { games.length > 0 ? (
+                                <div className="levels-page mt-5">
+                                    {error && <div className="error-message" style={{ color: 'white' }}>{error}</div>}
+                                    <div className="container oval-container mt-5" >
+                                        {games.map((game, index) => (
+                                            <div key={game.id} id={`task-${game.id}`} className="oval-button mb-3" style={{ backgroundColor: taskColors[index % taskColors.length] }} onClick={() => navigateToTask(game.id, game.game_mode)}>
+                                                <div className="left-side">*</div>
+                                                <span style={{ cursor: 'pointer' }}>{game.tittle}</span>
+                                                <div className="right-side">
+                                                    {
+                                                        game.status ? (
+                                                            <img src={unlock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
+                                                        ) : (
+                                                            <img src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
+                                                        )
+                                                    }
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <BeatLoader color={taskColors[Math.floor(Math.random() * taskColors.length % taskColors.length)]} cssOverride={{ margin: '0 auto' , position:'relative' ,  top: '50%' }} />
+                            ) }
                         </div>
                     </div>
                 </div>

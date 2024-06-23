@@ -4,7 +4,7 @@ import Footer from '../CommonComponent/Footer';
 import Header from '../CommonComponent/Header';
 import Modal from 'react-modal'
 import Tenor from '../assests/tenor.gif'
-import {Link} from 'react-router-dom'
+import {Link,useNavigate} from 'react-router-dom'
 
 
 function FuListingPage({ data }) {
@@ -12,9 +12,10 @@ function FuListingPage({ data }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState({ message: '' }); // imageUrl: false , linkUrl: '/game-list?taskId=2'
+    const [modalContent, setModalContent] = useState({ message: '' , linkUrl: '/game-list?taskId=2' }); // imageUrl: false , linkUrl: '/game-list?taskId=2'
+    const navigate = useNavigate();
 
-    let descriptions = '' || []
+    let descriptions = '' || [] 
     if ( data.description.includes("\n") ) {
          descriptions = data?.description.split('\n')
     } else {
@@ -23,25 +24,26 @@ function FuListingPage({ data }) {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        const allowedTypes = ['.png', '.jpeg'];
+        console.log(file.type)
+        const allowedTypes = ['.png', '.jpeg' , 'image/png' , 'image/jpeg'];
 
         if (file && allowedTypes.includes(file.type)) {
             setSelectedFile(file);
             setError('');
         } else {
             setSelectedFile(null);
-            setModalContent({ message: 'Please select a valid PNG or JPG file' });
+            setModalContent({ message: 'Please select a valid PNG or JPG file' , linkUrl:'' });
             setShowModal(true);            
         }
     };
 
-    const handleResult = async (result) => {
+    const handleResult = async (result,answer) => {
         if (result) {
             try {
                 const payload = {
                     "game_id": data.id,
                     "notes": 0,
-                    "answer_value": result, // Scanned values add here
+                    "answer_value": answer, 
                     "status": "C"
                 };
                 const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
@@ -51,12 +53,23 @@ function FuListingPage({ data }) {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Well Done' });
+                    setModalContent({ message: 'Well,Done !' , linkUrl: '/game-list?taskId=2' });
                     setShowModal(true);
                 }
             } catch (error) {
+                const payload = {
+                    "game_id": data.id,
+                    "notes": 0,
+                    "answer_value": result, 
+                    "status": "F"
+                };
+                const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+                    }
+                });                
                 console.error('Error posting scan result:', error);
-                setModalContent({ message: error.message });
+                setModalContent({ message: 'Well,Done !' , linkUrl: '/game-list?taskId=2'  });
                 setShowModal(true);
             }
         }
@@ -75,10 +88,11 @@ function FuListingPage({ data }) {
         console.log(formData,'data')
         console.log(selectedFile,'selectedFile')
 
-        formData.append('file', selectedFile);
+        formData.append('profile','0')
+        formData.append('picture', selectedFile);
 
         // Example API endpoint to handle file upload
-        const apiUrl = 'https://example.com/upload';
+        const apiUrl = 'https://api-flrming.dhoomaworksbench.site/file-update';
 
         axios.post(apiUrl, formData, {
             headers: {
@@ -86,16 +100,15 @@ function FuListingPage({ data }) {
             }
         })
             .then(response => {
-                console.log('File uploaded successfully:', response.data);
-                handleResult(response.status)
+                let answerBuilder = `https://api-flrming.dhoomaworksbench.site/${response.data.picture}`
+                handleResult(response.status,answerBuilder)
                 // Add your success handling logic here
             })
             .catch(error => {
                 console.error('Error uploading file:', error);
-                setModalContent({ message: "Failed to upload file."});
+                setModalContent({ message: error.message});
                 setShowModal(true);
-            });
-        
+            });        
     };
 
 
@@ -140,8 +153,8 @@ function FuListingPage({ data }) {
                                         </div>
                                     )}
                                 </div>
-                                <div className="mt-5 d-flex justify-content-center">
-                                    <button style={{ marginLeft: '0px' }} type="submit" className="btn btn-primary">Submit</button>
+                                <div className="mt-5 d-flex justify-content-center align-items-center">
+                                    <button style={{ transform: 'translateX(-50%)' }} type="submit" className="btn btn-primary">Submit</button>
                                 </div>
                             </form>
                         </div>
@@ -150,7 +163,7 @@ function FuListingPage({ data }) {
             </div>
             <Modal
                 isOpen={showModal}
-                onRequestClose={() => setShowModal(false)}
+                onRequestClose={() => { setShowModal(false); navigate("/game-list?taskId=2") }}
                 contentLabel="Result Modal"
                 ariaHideApp={false}
                 style={{
@@ -171,7 +184,7 @@ function FuListingPage({ data }) {
             >
                 <h2>{modalContent.message}</h2>
                 {/* {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />} */}
-                {/* {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Go to the next page</Link>} */}
+                {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Back</Link>}
             </Modal>            
             <Footer/>
         </>

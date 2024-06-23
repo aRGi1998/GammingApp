@@ -8,12 +8,17 @@ import { useLocation } from 'react-router-dom';
 import { gameStatusChecker } from '../utils/StatusChecker'
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
+import { BeatLoader } from 'react-spinners';
+import { Link } from 'react-router-dom'
+import Modal from 'react-modal';
 
 const GameListPage = () => {
 
     const [gameData, setGameData] = useState([]);
     const [gameIds , storeGameIds] = useState([])
     const [error, setError] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState({ message: '' , linkUrl: '/game-list?taskId=1' });      
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -52,32 +57,42 @@ const GameListPage = () => {
     };
 
     const navigateToFirstLevel = async (buttonId) => {
-            console.log("btn",buttonId)
-            console.log(gameIds.indexOf(buttonId))
+            // console.log("btn",buttonId)
+            // console.log(gameIds.indexOf(buttonId))
             if ( gameIds.indexOf(buttonId) === -1) {
                 navigate(`/mcq-list`); // Pass buttonId in state object
-            }
-
-            if ( gameIds.indexOf(buttonId) === 0  ) {
-                const allow = await gameStatusChecker(gameIds[0])
-                if (allow) {
-                    navigate(`/mcq-list?id=${buttonId}`);
-                } else {
-                    navigate(`/mcq-list`);
-                    alert("you must contact admin to unlock this level if you found this level as locked")
-                }                
             } else {
-                const gIndex = gameIds.indexOf(buttonId) - 1
+                const gIndex = gameIds.indexOf(buttonId)
                 const allow = await gameStatusChecker(gameIds[gIndex])
                 if (allow) {
                     console.log("allow",allow)
                     navigate(`/mcq-list?id=${buttonId}`);
                 } else {
-                    alert("you must complete previous game to unlock this game")
-                }
+                    console.log("hmm",allow)
+                    setModalContent({  message: ` you already completed Game: ${gameIds.indexOf(buttonId)}` })
+                    setShowModal(true)
+                }                
             }
 
+            // if ( gameIds.indexOf(buttonId) ) {
+            //     const allow = await gameStatusChecker(gameIds[0])
+            //     if (allow) {
+            //         navigate(`/mcq-list?id=${buttonId}`);
+            //     } else {
+            //         navigate(`/mcq-list`);
+            //         alert("you must contact admin to unlock this level if you found this level as locked")
+            //     }                
+            // } else {
+            //     const gIndex = gameIds.indexOf(buttonId)
+            //     const allow = await gameStatusChecker(gameIds[gIndex])
+            //     if (allow) {
+            //         navigate(`/mcq-list?id=${buttonId}`);
+            //     } else {
+            //         alert("you must complete previous game to unlock this game")
+            //     }
+            // }            
     }
+
     const taskColors = [
         'rgb(19, 203, 28)',
         'rgb(16, 241, 94)',
@@ -98,6 +113,7 @@ const GameListPage = () => {
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
                         <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '600px' }}>
+                        { gameData.length > 0 ? (
                             <div className="levels-page mt-5">
                                 {error && <div className="error-message" style={{ color: 'white' }}>{error}</div>}
                                 <div className="container oval-container mt-5" >
@@ -107,7 +123,7 @@ const GameListPage = () => {
                                             <span style={{ cursor: 'pointer' }}>Game: {index}</span>
                                             <div className="right-side">
                                                 {                                                
-                                                    game.status ? (
+                                                    game.status === "F" || game.status === "C" ? (
                                                         <img src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
                                                     ): <img src={unlock} alt="" style={{ width: '20px', height: '20px', color: 'white' }} />
                                                 }
@@ -116,10 +132,37 @@ const GameListPage = () => {
                                     ))}
                                 </div>
                             </div>
+                        ): (
+                            <BeatLoader color={taskColors[Math.floor(Math.random() * taskColors.length % taskColors.length)]} cssOverride={{ margin: '0 auto' , position:'relative' ,  top: '50%' }} />
+                        )}
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> 
+            <Modal
+                isOpen={showModal}
+                onRequestClose={() => setShowModal(false)}
+                contentLabel="Result Modal"
+                ariaHideApp={false}
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.75)'
+                    },
+                    content: {
+                        color: 'black',
+                        textAlign: 'center',
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        marginRight: '-50%',
+                        transform: 'translate(-50%, -50%)'
+                    }
+                }}
+            >
+                <h2>{modalContent.message}</h2>
+                {/* {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Back</Link>} */}
+            </Modal>            
             <Footer/>
         </>
     );

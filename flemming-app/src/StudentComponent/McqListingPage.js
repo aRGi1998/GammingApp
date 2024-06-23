@@ -8,6 +8,7 @@ import Footer from '../CommonComponent/Footer';
 import Modal from 'react-modal';
 import Tenor from '../assests/tenor.gif'
 import { Link } from 'react-router-dom'
+import { BeatLoader } from 'react-spinners';
 
 function McqListingPage() {
     const [correctAnswer,setCorrectAnswer] = useState('')
@@ -20,7 +21,7 @@ function McqListingPage() {
         mode: ''
     })
     const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState({ message: '' });    // linkUrl: '/game-list?taskId=1'
+    const [modalContent, setModalContent] = useState({ message: '' , linkUrl: '/game-list?taskId=1' });    // linkUrl: '/game-list?taskId=1'
     
     const location = useLocation();
     const url = new URLSearchParams(location.search)
@@ -44,12 +45,12 @@ function McqListingPage() {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Well,Done !' });
+                    setModalContent({ message: 'Well,Done !' ,  linkUrl: '/game-list?taskId=1' });
                     setShowModal(true);
                 }
             } catch (error) {
                 console.error('Error posting scan result:', error);
-                setModalContent({ message: error.message});
+                setModalContent({ message: error.message , linkUrl: ''});
                 setShowModal(true);
             }
         } else {
@@ -67,12 +68,12 @@ function McqListingPage() {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Well,Done !' });
+                    setModalContent({ message: 'Well,Done !' ,  linkUrl: '/game-list?taskId=1' });
                     setShowModal(true);
                 }
             } catch (error) {
                 console.error('Error posting scan result:', error);
-                setModalContent({ message: error.message});
+                setModalContent({ message: error.message , linkUrl: ''});
                 setShowModal(true);
             }            
         }
@@ -108,15 +109,7 @@ function McqListingPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("selected:",selectedOption)
         console.log("correct",correctAnswer)
-        // if ( selectedOption === '' || selectedOption === null ) {
-        //     console.log("here")
-        //     setModalContent({ message: "Sorry! You can't submit without selecting one of the option" });
-        //     setShowModal(true);
-        //     return
-        // }
-
         if ( selectedOption === correctAnswer ) {
             handleResult(correctAnswer,true)
         }
@@ -126,11 +119,6 @@ function McqListingPage() {
         }
     };  
 
-    // const handleSubmit = () => {
-    //     navigate('/levels');
-    // }
-    console.log("from listing",data)
-    console.log("from listing",data.game_options)
     return (
         <>
             { data.mode === 'options' ? (
@@ -167,7 +155,7 @@ function McqListingPage() {
                     </div>
                     <Modal
                         isOpen={showModal}
-                        onRequestClose={() => setShowModal(false)}
+                        onRequestClose={() => {setShowModal(false); navigate("/game-list?taskId=1")}}
                         contentLabel="Result Modal"
                         ariaHideApp={false}
                         style={{
@@ -187,8 +175,7 @@ function McqListingPage() {
                         }}
                     >
                         <h2>{modalContent.message}</h2>
-                        {/* {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />} */}
-                        {/* {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Go to the next page</Link>} */}
+                        {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Back</Link>}
                     </Modal>
                     <Footer/>
                 </>
@@ -196,7 +183,7 @@ function McqListingPage() {
                 <ScannerListing data={data}/>
             ): data.mode === 'image' ? ( 
                 <FuListingPage data={data}/>
-             ): <p style={{ fontWeight: 'bold' , fontSize: '24px'}}>loading...</p> }
+             ): <BeatLoader color="rgba(16, 18, 226, 2)" cssOverride={{ margin: '0 auto' , position:'relative' ,  top: '50%' }} /> }
         </>
     );
 }

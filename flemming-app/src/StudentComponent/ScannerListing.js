@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { QrReader } from 'react-qr-reader';
 import QrReaderZ from './QrReaderZ';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
 import Modal from 'react-modal'
 import axios from 'axios';
 import Footer from '../CommonComponent/Footer';
@@ -11,8 +11,8 @@ import Tenor from '../assests/tenor.gif'
 const ScannerListing = ({data}) => {
     const [qrResult, setQrResult] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState({ message: '' }); // imageUrl: false , linkUrl: '/game-list?taskId=3'
-
+    const [modalContent, setModalContent] = useState({ message: '' , linkUrl: '/game-list?taskId=3' }); // imageUrl: false , linkUrl: '/game-list?taskId=3'
+    const navigate = useNavigate();
 
     let descriptions = '' || []
     if ( data.description.includes("\n") ) {
@@ -39,7 +39,7 @@ const ScannerListing = ({data}) => {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Congrats! Scan was successful.' });
+                    setModalContent({ message: 'Well,Done !' , linkUrl: '/game-list?taskId=3' });
                     setShowModal(true);
                 }
             } catch (error) {
@@ -85,7 +85,7 @@ const ScannerListing = ({data}) => {
             <Footer/>
             <Modal
                 isOpen={showModal}
-                onRequestClose={() => setShowModal(false)}
+                onRequestClose={() => { setShowModal(false); navigate("/game-list?taskId=3") }}
                 contentLabel="Result Modal"
                 ariaHideApp={false}
                 style={{
@@ -105,6 +105,7 @@ const ScannerListing = ({data}) => {
                 }}
             >
                 <h2>{modalContent.message}</h2>
+                {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Back</Link>}
             </Modal>            
         </>
     );

@@ -46,27 +46,27 @@ function QrReaderZ({ setQrResult }) {
             selectedDeviceId,
             "video",
             (result, err) => {
-            if (result) {
-                // properly decoded qr code
-                console.log("Found QR code!", result.text);
-                setQrResult(result.text);
-            }
-
-            if (err) {
-                //handleScan("");
-
-                if (err instanceof NotFoundException) {
-                    console.log("No QR code found, try again !");
+                if (result) {
+                    // properly decoded qr code
+                    console.log("Found QR code!", result.text);
+                    setQrResult(result.text);
                 }
 
-                if (err instanceof ChecksumException) {
-                    console.log("A code was found, but it's read value was not valid, scan qr with aspect ratio of qr screen");
-                }
+                if (err) {
+                    //handleScan("");
 
-                if (err instanceof FormatException) {
-                    console.log("A code was found, but it was in a invalid format, scan qr with aspect ratio of qr screen");
+                    if (err instanceof NotFoundException) {
+                        console.log("No QR code found, try again !");
+                    }
+
+                    if (err instanceof ChecksumException) {
+                        console.log("A code was found, but it's read value was not valid, scan qr with aspect ratio of qr screen");
+                    }
+
+                    if (err instanceof FormatException) {
+                        console.log("A code was found, but it was in a invalid format, scan qr with aspect ratio of qr screen");
+                    }
                 }
-            }
             }
         );
     }    
@@ -79,7 +79,7 @@ function QrReaderZ({ setQrResult }) {
     );    
 
     return (
-        <section className="container" id="demo-content" style={{ display:'flex' , flexDirection: 'column' , alignItems:'center' , justifyContent:'center' , position:'relative', top:'-55px'}}>
+        <section className="container" id="demo-content" style={{ display:'flex' , flexDirection: 'column' , alignItems:'center' , justifyContent:'center' , position:'relative', top:'-55px' , width:'350px' }}>
             <div id="sourceSelectPanel">
                 <label for="sourceSelect">Change video source:</label>
                 <select
