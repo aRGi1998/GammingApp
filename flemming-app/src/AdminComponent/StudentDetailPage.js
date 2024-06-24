@@ -6,64 +6,78 @@ import Footer from '../CommonComponent/Footer';
 
 function StudentDetailPage() {
     const { id } = useParams(); // Get the student_id parameter from the URL
-    const [student, setStudent] = useState(null); // State to store student data
+    const [studentData, setStudentData] = useState([]); // State to store student data
+    const [gameMode, setGameMode] = useState('options'); // State to store selected game mode
     const token = sessionStorage.getItem('accessToken'); // Get the accessToken from sessionStorage
 
-    useEffect(() => {
-        const fetchStudentDetails = async () => {
-            try {
-                if (!token) {
-                    throw new Error('Access token not found.');
-                }
-
-                const response = await axios.get(`https://api-flrming.dhoomaworksbench.site/admin-user-game-list/${id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                setStudent(response.data); // Assuming response.data is the student object
-            } catch (error) {
-                console.error('Error fetching student details:', error);
+    const fetchStudentDetails = async (selectedGameMode) => {
+        try {
+            if (!token) {
+                throw new Error('Access token not found.');
             }
-        };
 
-        if (id) {
-            fetchStudentDetails();
+            const response = await axios.get(`https://api-flrming.dhoomaworksbench.site/admin-user-game-list/${id}?game_mode=${selectedGameMode}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            console.log('Student details:', response.data); // Log the response data
+            setStudentData(response.data.data); // Assuming response.data.data is the student data array
+        } catch (error) {
+            console.error('Error fetching student details:', error);
         }
-    }, [id, token]); // Fetch student details when id or token changes
+    };
+
+    useEffect(() => {
+        if (id) {
+            fetchStudentDetails(gameMode); // Fetch student details with the default game mode
+        }
+    }, [id, gameMode, token]); // Fetch student details when id, gameMode, or token changes
 
     return (
         <>
             <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
-                    <div className="col-md-10">
+                    <div className="col-md-10" style={{marginBottom:'100px'}} >
                         <h3 className="text-black mt-4 mb-3">Student Detail {id}</h3>
-                        {student ? (
-                            <table className="table table-bordered table-striped">
-                                <tbody>
+                        <label htmlFor="gameModeSelect" className="text-black">Select Game Mode</label>
+                        <div className="custom-select">
+                            <select
+                                id="gameModeSelect"
+                                className="form-control"
+                                value={gameMode}
+                                onChange={(e) => setGameMode(e.target.value)}
+                            >
+                                <option value="options">Mcq Question</option>
+                                <option value="image">File upload</option>
+                                <option value="qr">QR scanner</option>
+                            </select>
+                        </div>
+                        <table className="table table-bordered table-striped mt-4">
+                            <thead>
+                                <tr>
+                                    {gameMode === 'options' ? <th>Title</th> : <th>Description</th>}
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {studentData.length > 0 ? (
+                                    studentData.map((item) => (
+                                        <tr key={item.id}>
+                                            {gameMode === 'options' ? <td>{item.tittle}</td> : <td>{item.description}</td>}
+                                            <td style={{ color: item.status === 'F' ? 'red' : 'black' }}>
+                                                {item.status === 'F' ? 'Failed' : item.status}
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
                                     <tr>
-                                        <th>Username</th>
-                                        {/* <td>{student.username}</td> */}
+                                        <td colSpan="2">No data available</td>
                                     </tr>
-                                    <tr>
-                                        <th>Email</th>
-                                        {/* <td>{student.email}</td> */}
-                                    </tr>
-                                    <tr>
-                                        <th>Contact Number</th>
-                                        {/* <td>{student.contact_number}</td> */}
-                                    </tr>
-                                    <tr>
-                                        <th>Date Joined</th>
-                                        {/* <td>{new Date(student.date_joined).toLocaleDateString()}</td> */}
-                                    </tr>
-                                    {/* Add more rows for additional details as needed */}
-                                </tbody>
-                            </table>
-                        ) : (
-                            <p>Loading...</p>
-                        )}
+                                )}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -73,3 +87,4 @@ function StudentDetailPage() {
 }
 
 export default StudentDetailPage;
+

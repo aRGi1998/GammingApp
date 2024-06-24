@@ -43,7 +43,7 @@ function StudentListPage() {
             <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
-                    <div className="col-md-10 d-flex flex-column align-items-center">
+                    <div className="col-md-10 d-flex flex-column align-items-center" style={{marginBottom:'100px'}}>
                         <h3 className="text-black">Student List</h3>
                         <div className="form-group mt-4 custom-select">
                             <label htmlFor="campusSelect" className="text-black">Select Campus:</label>
