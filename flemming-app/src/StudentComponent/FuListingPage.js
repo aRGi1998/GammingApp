@@ -43,7 +43,7 @@ function FuListingPage({ data }) {
                     "game_id": data.id,
                     "notes": 0,
                     "answer_value": answer, 
-                    "status": "C"
+                    "status": ""
                 };
                 const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
                     headers: {
@@ -60,7 +60,7 @@ function FuListingPage({ data }) {
                     "game_id": data.id,
                     "notes": 0,
                     "answer_value": answer,
-                    "status": "O"
+                    "status": ""
                 };
                 const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
                     headers: {

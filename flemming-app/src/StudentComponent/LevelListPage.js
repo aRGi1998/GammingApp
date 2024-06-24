@@ -169,6 +169,7 @@ import Tenor from '../assests/tenor.gif'
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom'
 import { BeatLoader } from 'react-spinners';
+import { useQuery } from '@tanstack/react-query';
 
 function LevelListPage() {
     const [games, setGames] = useState([]);
@@ -183,7 +184,7 @@ function LevelListPage() {
     }, []);
 
     const refreshAccessToken = () => {
-        const refreshToken = sessionStorage.getItem('refreshToken');
+        const refreshToken = sessionStorage.getItem('refreshToken') || false;
         if (!refreshToken) {
             console.error('Refresh token not found in local storage');
             return Promise.reject('No refresh token');
@@ -236,10 +237,14 @@ function LevelListPage() {
                                 })
                                 .catch(error => {
                                     console.error('Error fetching game data with new token:', error);
-                                    navigate("/")
                                     setError('Failed to fetch game data.');
                                 });
                         }
+                    })
+                    .catch ((err) => {
+                        console.log(err)
+                        // console.log("no refresh token found , reason: ",err)
+                        navigate("/")
                     });
                 } else {
                     console.error('Error fetching game data:', error);

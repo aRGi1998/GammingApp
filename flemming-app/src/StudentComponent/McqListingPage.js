@@ -29,14 +29,13 @@ function McqListingPage() {
 
     const navigate = useNavigate();
     
-    const handleResult = async (result,state) => {
-        if (state) {
+    const handleResult = async (result) => {
             try {
                 const payload = {
                     "game_id": data.id,
                     "notes": 0,
                     "answer_value": result, // Scanned values add here
-                    "status": "C"
+                    "status":""
                 };
                 const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
                     headers: {
@@ -53,30 +52,6 @@ function McqListingPage() {
                 setModalContent({ message: error.message , linkUrl: ''});
                 setShowModal(true);
             }
-        } else {
-            try {
-                const payload = {
-                    "game_id": data.id,
-                    "notes": 0,
-                    "answer_value": result, // Scanned values add here
-                    "status": "F"
-                };
-                const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
-                    }
-                });
-
-                if (response.status === 200) {
-                    setModalContent({ message: 'Well,Done !' ,  linkUrl: '/game-list?taskId=1' });
-                    setShowModal(true);
-                }
-            } catch (error) {
-                console.error('Error posting scan result:', error);
-                setModalContent({ message: error.message , linkUrl: ''});
-                setShowModal(true);
-            }            
-        }
     };
 
     const handleChange = (e) => {
@@ -95,6 +70,7 @@ function McqListingPage() {
                     console.log(response.data || response.data[0],'op')
                     setData(response.data);
                     setCorrectAnswer(response.data?.answer_value) 
+                    console.log("c",response.data?.answer_value, response.data.hasOwnProperty("answer_value"))
                 })
                 .catch(error => {
                     console.error('Error fetching game data:', error);
@@ -109,14 +85,7 @@ function McqListingPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("correct",correctAnswer)
-        if ( selectedOption === correctAnswer ) {
-            handleResult(correctAnswer,true)
-        }
-        
-        if (selectedOption !== correctAnswer) {
-            handleResult(selectedOption,false)
-        }
+        handleResult(selectedOption)
     };  
 
     return (

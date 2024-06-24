@@ -21,11 +21,13 @@ import ScannerListing from './StudentComponent/ScannerListing';
 import StatusPage from './StudentComponent/StatusPage';
 import ForgotPasswordPage from './CommonComponent/ForgetPasswordPage';
 import OtpVerificationPage from './CommonComponent/OtpVerificationPage';
+import NetworkStatus from './CommonComponent/NetWorkStatus';
 
 function App() {
   return (
     <Router>
       <div className="App">
+          <NetworkStatus/>
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
