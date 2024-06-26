@@ -99,7 +99,7 @@ const GameListPage = () => {
                                                 <span style={{ cursor: 'pointer' }}>Game: {index + 1}</span>
                                                 <div className="right-side">
                                                     {
-                                                        (game.status === "O" || game.status === "F") ? (
+                                                        (game.status === "O") ? (
                                                             <img src={unlock} alt="Unlock" style={{ width: '20px', height: '20px', color: 'white' }} />
                                                         ) : (
                                                             <img src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
