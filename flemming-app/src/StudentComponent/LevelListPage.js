@@ -100,6 +100,7 @@ function LevelListPage() {
         if (result) {
             try {
                  alert(`You Finished Level ${gameId} `)
+                 navigate(url)
             } catch (error) {
                  alert(error.message)
             }

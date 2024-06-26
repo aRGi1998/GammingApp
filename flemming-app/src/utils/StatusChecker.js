@@ -40,7 +40,9 @@ export async function levelStatusChecker(levelId,gameMode,campusName = sessionSt
         }
 
         const response = res.data.data
-        const game = response.filter((gameObj) => gameObj.status)
+        const game = response.map((gameObj) => gameObj.status )
+
+        console.log("games",game)        
         return game.every((elem) => elem === 'F' || elem ==='C')
         
     } catch (error) {
