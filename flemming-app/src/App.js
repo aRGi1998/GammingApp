@@ -22,6 +22,7 @@ import StatusPage from './StudentComponent/StatusPage';
 import ForgotPasswordPage from './CommonComponent/ForgetPasswordPage';
 import OtpVerificationPage from './CommonComponent/OtpVerificationPage';
 import NetworkStatus from './CommonComponent/NetWorkStatus';
+import AdminRouteProtector from './routes/adminRoute';
 
 function App() {
   return (
@@ -31,10 +32,26 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/admin-home" element={<AdminHomePage />} />
-            <Route path="/mcq-creation" element={<McqCreationPage />} />
-            <Route path="/fu-creation" element={<FileUploadPage />} />
-            <Route path="/qr-creation" element={<QrCreationPage />} />
+            <Route path="/admin-home" element={
+              <AdminRouteProtector>
+                <AdminHomePage />
+              </AdminRouteProtector>
+            } />
+            <Route path="/mcq-creation" element={
+                <AdminRouteProtector>
+                  <McqCreationPage />
+                </AdminRouteProtector>
+            }/>
+            <Route path="/fu-creation" element={
+              <AdminRouteProtector>
+                <FileUploadPage />
+              </AdminRouteProtector>
+            } />
+            <Route path="/qr-creation" element={
+              <AdminRouteProtector>
+                <QrCreationPage />
+              </AdminRouteProtector>
+            } />
             <Route path="/student-list" element={<StudentListPage />} />
             <Route path="/student-detail/:id" element={<StudentDetailPage />} /> 
             <Route path="/question-list" element={<QuestionListPage />} />

@@ -44,8 +44,8 @@ const NetworkStatus = () => {
         if (isPolling) {
             pollingInterval = setInterval(checkNetworkStatus, 500); 
         } else {
-            timeout = setTimeout(() => {
-                checkNetworkStatus();
+            timeout = setTimeout(async() => {
+                await checkNetworkStatus();
                 pollingInterval = setInterval(checkNetworkStatus, 500); 
             }, 30 * 60 * 1000); 
         }
@@ -64,7 +64,7 @@ const NetworkStatus = () => {
 
     return (
         <>
-            {!online ? (
+            {!online && (
                 <div style={{
                     color: 'white',
                     textAlign: 'center',
@@ -79,7 +79,7 @@ const NetworkStatus = () => {
                 }}>
                     You are offline. Please connect.
                 </div>
-            ) : null}
+            )}
         </>
     );
 };

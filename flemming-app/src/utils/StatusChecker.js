@@ -25,23 +25,23 @@ export async function gameStatusChecker(gameId){
     }
 }
 
-export async function levelStatusChecker(levelId){
+export async function levelStatusChecker(levelId,gameMode,campusName = sessionStorage.getItem('campusName')){
     try {
-
-        const res = await axios.get(`https://api-flrming.dhoomaworksbench.site/api/game/type/`,{
+        // `https://api-flrming.dhoomaworksbench.site/api/game/type/`
+        const url = `https://api-flrming.dhoomaworksbench.site/user-game-list/${levelId}?game_mode=${gameMode}&campus_name=${campusName}`
+        const res = await axios.get(url,{
             headers: {
                 'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`
             }            
         })
-
         
-        if(res.status === 200) {
-            const response = res.data.results
-            const game = response.filter((gameObj) => gameObj.id == levelId)[0]
-            return game?.status
+        if(res.status !== 200) {
+            alert("something went wrong !")
         }
 
-        return false
+        const response = res.data.data
+        const game = response.filter((gameObj) => gameObj.status)
+        return game.every((elem) => elem === 'F' || elem ==='C')
         
     } catch (error) {
         throw new Error(error.message)

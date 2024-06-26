@@ -19,11 +19,13 @@ function LevelListPage() {
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({ message: '', imageUrl: false, linkUrl: '/game-list?taskId=1' })
     const navigate = useNavigate()
+    const [allowed,setAllowed] = useState()
 
     useEffect(() => {
         getGameData();
     }, []);
 
+    
     const refreshAccessToken = () => {
         const refreshToken = sessionStorage.getItem('refreshToken') || false;
         if (!refreshToken) {
@@ -95,19 +97,18 @@ function LevelListPage() {
     };
 
     const handleResult = async (result, gameId, url) => {
-        console.log("from", result)
         if (result) {
             try {
-                setModalContent({ message: `You Finished Level ${gameId} `, imageUrl: false, linkUrl: url });
-                setShowModal(true);
+                 alert(`You Finished Level ${gameId} `)
             } catch (error) {
-                setModalContent({ message: error.message, imageUrl: false, linkUrl: '' });
-                setShowModal(true);
+                 alert(error.message)
             }
         }
     };
+
     const navigateToTask = async (taskId) => {
         let gameMode;
+
         if (taskId === 1) {
             gameMode = "options";
         } else if (taskId === 2) {
@@ -118,7 +119,23 @@ function LevelListPage() {
             gameMode = ""; // default or another mode if applicable
         }
 
-        console.log(`Game Mode for taskId ${taskId}:`, gameMode);
+        const getGameMode = (id) => {
+            let gameMode = ''
+            switch (id) {
+                case 1:
+                    gameMode = "options"
+                    break
+                case 2:
+                    gameMode = "image"
+                    break
+                case 3:        
+                    gameMode = "qr"            
+                    break
+                default:
+                    break
+            }
+            return gameMode
+        }
 
         if (taskIds.indexOf(taskId) === -1) {
             navigate("/levels");
@@ -128,14 +145,12 @@ function LevelListPage() {
             const url = `/game-list?taskId=${taskId}&game_mode=${gameMode}`; // Pass game_mode as a parameter
             navigate(url);
         } else {
-            const allow = await levelStatusChecker(taskIds[taskIds.indexOf(taskId) - 1]);
-            console.log(allow);
+            const allow = await levelStatusChecker(taskIds[taskIds.indexOf(taskId) - 1],getGameMode(taskIds[taskIds.indexOf(taskId) - 1]));
             if (allow) {
                 const url = `/game-list?taskId=${taskId}&game_mode=${gameMode}`;
                 handleResult(allow, taskIds[taskIds.indexOf(taskId) - 1], url);
             } else {
-                setModalContent({ message: `You must pass previous level ${taskIds[taskIds.indexOf(taskId) - 1]} before taking this level ${taskId}`, imageUrl: false, linkUrl: '' });
-                setShowModal(true);
+                alert(`complete all levels from level(${taskIds[taskIds.indexOf(taskId) - 1]}) and unlock level(${taskId})`);
             }
         }
     };

@@ -46,10 +46,10 @@ const ScannerListing = ({data}) => {
             } catch (error) {                
                     console.error('Error posting scan result:', error);
                     setModalContent({ message: error.message , linkUrl: '' });
-                    setShowModal(true);                
+                    setShowModal(true);
             }
         }
-    };    
+    };
 
     return (
         <>

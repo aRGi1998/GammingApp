@@ -49,6 +49,7 @@ const GameListPage = () => {
             }
         })
             .then(response => {
+                console.log(response.data)
                 setGameData(response.data.data);
                 storeGameIds(response.data.data.map((game) => game.id));
             })
@@ -59,9 +60,9 @@ const GameListPage = () => {
     };
 
     const navigateToFirstLevel = (buttonId, status) => {
-        if (status === "O") {
+        if ( status === "O" ) {
             navigate(`/mcq-list?id=${buttonId}`);
-        } else if (status === "F") {
+        } else if ( status === "F" || status === "C" || status === "P") {
             alert("You have already played this level.");
         } else {
             navigate(`/mcq-list`);

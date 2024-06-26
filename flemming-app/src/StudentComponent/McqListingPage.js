@@ -67,6 +67,7 @@ function McqListingPage() {
                 }
             })
                 .then(response => {
+                    console.log(response.data)
                     console.log(response.data || response.data[0],'op')
                     setData(response.data);
                     setCorrectAnswer(response.data?.answer_value) 
@@ -75,7 +76,7 @@ function McqListingPage() {
                 .catch(error => {
                     console.error('Error fetching game data:', error);
                     alert('Failed to fetch game data.');
-                });        
+                }); 
     }      
 
     useEffect(() => {        
@@ -100,7 +101,7 @@ function McqListingPage() {
                                     <div>
                                         <form style={{color:'black'}} onSubmit={handleSubmit}>
                                             <h3>Question: {data.tittle}?</h3>
-                                            <h4> Choose the correct option from the list below!"</h4>
+                                            <h4> Choose the correct option from the list below! </h4>
                                             {data.game_options.length <= 0 ? (<p>no options found</p>) : data.game_options.map((obj,index) => (
 
                                                 <div key={index} className="firstlevel-button" style={{ display: 'flex', alignItems: 'center' }}>
