@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import lock from '../assests/lock.png';
 import unlock from '../assests/unlock.png.png';
+import redlocker from '../assests/redlocker.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
@@ -60,9 +61,9 @@ const GameListPage = () => {
     };
 
     const navigateToFirstLevel = (buttonId, status) => {
-        if ( status === "O" ) {
+        if (status === "O") {
             navigate(`/mcq-list?id=${buttonId}`);
-        } else if ( status === "F" || status === "C" || status === "P") {
+        } else if (status === "F" || status === "C" || status === "P") {
             alert("You have already played this level.");
         } else {
             navigate(`/mcq-list`);
@@ -99,8 +100,10 @@ const GameListPage = () => {
                                                 <span style={{ cursor: 'pointer' }}>Game: {index + 1}</span>
                                                 <div className="right-side">
                                                     {
-                                                        (game.status === "O") ? (
+                                                        game.status === "O" ? (
                                                             <img src={unlock} alt="Unlock" style={{ width: '20px', height: '20px', color: 'white' }} />
+                                                        ) : game.status === "F" || game.status === "C" || game.status === "P" ? (
+                                                            <img src={redlocker} alt="lock" style={{ width: '20px', height: '20px' }} />
                                                         ) : (
                                                             <img src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
                                                         )

@@ -10,7 +10,6 @@ import Tenor from '../assests/tenor.gif'
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom'
 import { BeatLoader } from 'react-spinners';
-import { useQuery } from '@tanstack/react-query';
 
 function LevelListPage() {
     const [games, setGames] = useState([]);
@@ -19,13 +18,13 @@ function LevelListPage() {
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({ message: '', imageUrl: false, linkUrl: '/game-list?taskId=1' })
     const navigate = useNavigate()
-    const [allowed,setAllowed] = useState()
+    const [allowed, setAllowed] = useState()
 
     useEffect(() => {
         getGameData();
     }, []);
 
-    
+
     const refreshAccessToken = () => {
         const refreshToken = sessionStorage.getItem('refreshToken') || false;
         if (!refreshToken) {
@@ -99,10 +98,10 @@ function LevelListPage() {
     const handleResult = async (result, gameId, url) => {
         if (result) {
             try {
-                 alert(`You Finished Level ${gameId} `)
-                 navigate(url)
+                alert(`You Finished Level ${gameId} `)
+                navigate(url)
             } catch (error) {
-                 alert(error.message)
+                alert(error.message)
             }
         }
     };
@@ -129,8 +128,8 @@ function LevelListPage() {
                 case 2:
                     gameMode = "image"
                     break
-                case 3:        
-                    gameMode = "qr"            
+                case 3:
+                    gameMode = "qr"
                     break
                 default:
                     break
@@ -146,7 +145,7 @@ function LevelListPage() {
             const url = `/game-list?taskId=${taskId}&game_mode=${gameMode}`; // Pass game_mode as a parameter
             navigate(url);
         } else {
-            const allow = await levelStatusChecker(taskIds[taskIds.indexOf(taskId) - 1],getGameMode(taskIds[taskIds.indexOf(taskId) - 1]));
+            const allow = await levelStatusChecker(taskIds[taskIds.indexOf(taskId) - 1], getGameMode(taskIds[taskIds.indexOf(taskId) - 1]));
             if (allow) {
                 const url = `/game-list?taskId=${taskId}&game_mode=${gameMode}`;
                 handleResult(allow, taskIds[taskIds.indexOf(taskId) - 1], url);
