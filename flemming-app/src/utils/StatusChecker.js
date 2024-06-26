@@ -8,7 +8,7 @@ export async function gameStatusChecker(gameId){
             }
         })
 
-        // console.log("res: ",res)
+        console.log("res: ",res)
         if(res.status === 200) {
             const response = res.data.results.filter((obj) => obj.game === gameId)[0]
             console.log("response",response)

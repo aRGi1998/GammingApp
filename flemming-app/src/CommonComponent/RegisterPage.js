@@ -146,6 +146,7 @@ function RegisterPage() {
                         <option value="Sutherland">Sutherland</option>
                         <option value="Lindsay">Lindsay</option>
                         <option value="Haliburton">Haliburton</option>
+                        <option value="fleming">Fleming</option>
                     </select>
                 </div>
                 <button onClick={handleSubmit} className="btn btn-primary btn-lg" type="submit">SUBMIT</button>

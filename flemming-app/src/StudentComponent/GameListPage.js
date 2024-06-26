@@ -1,45 +1,48 @@
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import lock from '../assests/lock.png';
-import unlock from '../assests/unlock.png.png'
-import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
-import { gameStatusChecker } from '../utils/StatusChecker'
+import unlock from '../assests/unlock.png.png';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
 import { BeatLoader } from 'react-spinners';
-import { Link } from 'react-router-dom'
 import Modal from 'react-modal';
 
 const GameListPage = () => {
-
     const [gameData, setGameData] = useState([]);
-    const [gameIds , storeGameIds] = useState([])
+    const [gameIds, storeGameIds] = useState([]);
     const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState({ message: '' , linkUrl: '/game-list?taskId=1' });      
+    const [modalContent, setModalContent] = useState({ message: '', linkUrl: '/game-list?taskId=1' });
     const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const taskId = queryParams.get('taskId');
+    const campusName = sessionStorage.getItem('campusName');
+
+    const getGameMode = (taskId) => {
+        switch (taskId) {
+            case '1':
+                return 'options';
+            case '2':
+                return 'image';
+            case '3':
+                return 'qr';
+            default:
+                return 'default_mode';
+        }
+    };
+
+    const gameMode = getGameMode(taskId);
 
     useEffect(() => {
         getGameList();
     }, []);
 
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const taskId = queryParams.get('taskId');
-    console.log(taskId)
-
     const getGameList = () => {
         const token = sessionStorage.getItem('accessToken');
-        let url = ''
-        if ( taskId == 1) {            
-             url = `https://api-flrming.dhoomaworksbench.site/user-game-list/${taskId}?game_mode=options&campus_name=fleming`;
-        } else if ( taskId == 2) {
-            url = `https://api-flrming.dhoomaworksbench.site/user-game-list/${taskId}?game_mode=image&campus_name=fleming`;
-        } else {
-            url = `https://api-flrming.dhoomaworksbench.site/user-game-list/${taskId}?game_mode=qr&campus_name=fleming`;
-        }
+        const url = `https://api-flrming.dhoomaworksbench.site/user-game-list/${taskId}?game_mode=${gameMode}&campus_name=${campusName}`;
+
         axios.get(url, {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -47,8 +50,7 @@ const GameListPage = () => {
         })
             .then(response => {
                 setGameData(response.data.data);
-                console.log(response.data.data, 'response -')
-                storeGameIds(response.data.data.map((game,index) => game.id))
+                storeGameIds(response.data.data.map((game) => game.id));
             })
             .catch(error => {
                 console.error('Error fetching game data:', error);
@@ -56,39 +58,13 @@ const GameListPage = () => {
             });
     };
 
-    const navigateToFirstLevel = async (buttonId) => {
-
-            if ( gameIds.indexOf(buttonId) === -1) {
-                navigate(`/mcq-list`); 
-            } else {
-                const gIndex = gameIds.indexOf(buttonId)
-                const allow = await gameStatusChecker(gameIds[gIndex])
-                if (allow) {
-                    navigate(`/mcq-list?id=${buttonId}`);
-                } else {
-                    setModalContent({  message: ` you already completed Game: ${gameIds.indexOf(buttonId) + 1}` })
-                    setShowModal(true)
-                }                
-            }
-
-            // if ( gameIds.indexOf(buttonId) ) {
-            //     const allow = await gameStatusChecker(gameIds[0])
-            //     if (allow) {
-            //         navigate(`/mcq-list?id=${buttonId}`);
-            //     } else {
-            //         navigate(`/mcq-list`);
-            //         alert("you must contact admin to unlock this level if you found this level as locked")
-            //     }                
-            // } else {
-            //     const gIndex = gameIds.indexOf(buttonId)
-            //     const allow = await gameStatusChecker(gameIds[gIndex])
-            //     if (allow) {
-            //         navigate(`/mcq-list?id=${buttonId}`);
-            //     } else {
-            //         alert("you must complete previous game to unlock this game")
-            //     }
-            // }            
-    }
+    const navigateToFirstLevel = (buttonId, status) => {
+        if (status === "O" || status === "F") {
+            navigate(`/mcq-list?id=${buttonId}`);
+        } else {
+            navigate(`/mcq-list`);
+        }
+    };
 
     const taskColors = [
         'rgb(19, 203, 28)',
@@ -105,37 +81,39 @@ const GameListPage = () => {
 
     return (
         <>
-            <Header/>
+            <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
                         <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '600px' }}>
-                        { gameData.length > 0 ? (
-                            <div className="levels-page mt-5">
-                                {error && <div className="error-message" style={{ color: 'white' }}>{error}</div>}
-                                <div className="container oval-container mt-5" >
-                                    {gameData.map((game, index) => (                                        
-                                        <div key={game.id} id={`task-${game.id}`} className="oval-button mb-3" style={{ backgroundColor: taskColors[index % taskColors.length] }} onClick={() => navigateToFirstLevel(game.id)}>
-                                            <div className="left-side">*</div>
-                                            <span style={{ cursor: 'pointer' }}>Game: {index + 1}</span>
-                                            <div className="right-side">
-                                                {                                                
-                                                    game.status === "F" || game.status === "C" ? (
-                                                        <img src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
-                                                    ): <img src={unlock} alt="" style={{ width: '20px', height: '20px', color: 'white' }} />
-                                                }
+                            {gameData.length > 0 ? (
+                                <div className="levels-page mt-5">
+                                    {error && <div className="error-message" style={{ color: 'white' }}>{error}</div>}
+                                    <div className="container oval-container mt-5" >
+                                        {gameData.map((game, index) => (
+                                            <div key={game.id} id={`task-${game.id}`} className="oval-button mb-3" style={{ backgroundColor: taskColors[index % taskColors.length] }} onClick={() => navigateToFirstLevel(game.id, game.status)}>
+                                                <div className="left-side">*</div>
+                                                <span style={{ cursor: 'pointer' }}>Game: {index + 1}</span>
+                                                <div className="right-side">
+                                                    {
+                                                        (game.status === "O" || game.status === "F") ? (
+                                                            <img src={unlock} alt="Unlock" style={{ width: '20px', height: '20px', color: 'white' }} />
+                                                        ) : (
+                                                            <img src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
+                                                        )
+                                                    }
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        ): (
-                            <BeatLoader color={taskColors[Math.floor(Math.random() * taskColors.length % taskColors.length)]} cssOverride={{ margin: '0 auto' , position:'relative' ,  top: '50%' }} />
-                        )}
+                            ) : (
+                                <BeatLoader color={taskColors[Math.floor(Math.random() * taskColors.length % taskColors.length)]} cssOverride={{ margin: '0 auto', position: 'relative', top: '50%' }} />
+                            )}
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
             <Modal
                 isOpen={showModal}
                 onRequestClose={() => setShowModal(false)}
@@ -158,13 +136,11 @@ const GameListPage = () => {
                 }}
             >
                 <h2>{modalContent.message}</h2>
-                {/* {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Back</Link>} */}
-            </Modal>            
-            <Footer/>
+            </Modal>
+            <Footer />
         </>
     );
 };
 
 export default GameListPage;
-
 

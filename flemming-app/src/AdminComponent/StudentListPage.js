@@ -5,9 +5,9 @@ import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
 
 function StudentListPage() {
-    const [selectedCampus, setSelectedCampus] = useState('Sutherland'); // Set default campus to Sutherland
+    const [selectedCampus, setSelectedCampus] =useState(['Sutherland']) // Set default campus to Sutherland
     const [students, setStudents] = useState([]);
-    const campuses = ['Sutherland', 'Lindsay', 'Haliburton'];
+    const campuses = ['Sutherland', 'Lindsay', 'Haliburton', 'fleming'];
     const token = sessionStorage.getItem('accessToken');
     const navigate = useNavigate();
 
