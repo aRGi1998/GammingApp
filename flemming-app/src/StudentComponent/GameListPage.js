@@ -59,8 +59,10 @@ const GameListPage = () => {
     };
 
     const navigateToFirstLevel = (buttonId, status) => {
-        if (status === "O" || status === "F") {
+        if (status === "O") {
             navigate(`/mcq-list?id=${buttonId}`);
+        } else if (status === "F") {
+            alert("You have already played this level.");
         } else {
             navigate(`/mcq-list`);
         }
@@ -143,4 +145,3 @@ const GameListPage = () => {
 };
 
 export default GameListPage;
-
