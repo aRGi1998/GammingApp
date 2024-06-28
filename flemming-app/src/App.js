@@ -21,6 +21,7 @@ import ScannerListing from './StudentComponent/ScannerListing';
 import StatusPage from './StudentComponent/StatusPage';
 import ForgotPasswordPage from './CommonComponent/ForgetPasswordPage';
 import OtpVerificationPage from './CommonComponent/OtpVerificationPage';
+import RegisterOtpVerificationPage from './CommonComponent/RegisterOtpVerificationPage';
 import NetworkStatus from './CommonComponent/NetWorkStatus';
 import AdminRouteProtector from './routes/adminRoute';
 
@@ -28,45 +29,45 @@ function App() {
   return (
     <Router>
       <div className="App">
-          <NetworkStatus/>
-          <Routes>
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/admin-home" element={
-              <AdminRouteProtector>
-                <AdminHomePage />
-              </AdminRouteProtector>
-            } />
-            <Route path="/mcq-creation" element={
-                <AdminRouteProtector>
-                  <McqCreationPage />
-                </AdminRouteProtector>
-            }/>
-            <Route path="/fu-creation" element={
-              <AdminRouteProtector>
-                <FileUploadPage />
-              </AdminRouteProtector>
-            } />
-            <Route path="/qr-creation" element={
-              <AdminRouteProtector>
-                <QrCreationPage />
-              </AdminRouteProtector>
-            } />
-            <Route path="/student-list" element={<StudentListPage />} />
-            <Route path="/student-detail/:id" element={<StudentDetailPage />} /> 
-            <Route path="/question-list" element={<QuestionListPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/levels" element={<LevelListPage />} />
-            <Route path="/game-list" element={<GameListPage />} />
-            <Route path="/mcq-list" element={<McqListingPage />} />
-            <Route path="/fu-list" element={<FuListingPage />} />
-            <Route path="/qr-list" element={<ScannerListing />} />
-            <Route path="/status" element={<StatusPage />} />
-            <Route path="/forgot-pwd" element={<ForgotPasswordPage />} />
-            <Route path="/otp" element={<OtpVerificationPage />} />
-
-          </Routes>
-        </div>
+        <NetworkStatus />
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/admin-home" element={
+            <AdminRouteProtector>
+              <AdminHomePage />
+            </AdminRouteProtector>
+          } />
+          <Route path="/mcq-creation" element={
+            <AdminRouteProtector>
+              <McqCreationPage />
+            </AdminRouteProtector>
+          } />
+          <Route path="/fu-creation" element={
+            <AdminRouteProtector>
+              <FileUploadPage />
+            </AdminRouteProtector>
+          } />
+          <Route path="/qr-creation" element={
+            <AdminRouteProtector>
+              <QrCreationPage />
+            </AdminRouteProtector>
+          } />
+          <Route path="/student-list" element={<StudentListPage />} />
+          <Route path="/student-detail/:id" element={<StudentDetailPage />} />
+          <Route path="/question-list" element={<QuestionListPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/levels" element={<LevelListPage />} />
+          <Route path="/game-list" element={<GameListPage />} />
+          <Route path="/mcq-list" element={<McqListingPage />} />
+          <Route path="/fu-list" element={<FuListingPage />} />
+          <Route path="/qr-list" element={<ScannerListing />} />
+          <Route path="/status" element={<StatusPage />} />
+          <Route path="/forgot-pwd" element={<ForgotPasswordPage />} />
+          <Route path="/otp" element={<OtpVerificationPage />} />
+          <Route path="/register-otp" element={<RegisterOtpVerificationPage />} />
+        </Routes>
+      </div>
     </Router>
   );
 }

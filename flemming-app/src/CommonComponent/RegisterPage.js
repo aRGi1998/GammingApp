@@ -15,7 +15,7 @@ function RegisterPage() {
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
-    }
+    };
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -31,7 +31,7 @@ function RegisterPage() {
 
     const handleCampusChange = (e) => {
         setCampus(e.target.value);
-    }
+    };
 
     const validateEmail = (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -70,7 +70,7 @@ function RegisterPage() {
         })
             .then(res => {
                 console.log(res.data);
-                navigate('/');
+                navigate('/register-otp', { state: { email: email } });
             })
             .catch(error => {
                 if (error.response && error.response.data) {
@@ -92,7 +92,7 @@ function RegisterPage() {
         <div className="wrapper">
             <div className="background-image"></div>
             <div className="gradient"></div>
-            <form className="register-form">
+            <form className="register-form" onSubmit={handleSubmit}>
                 <img src={logo} alt="logo" style={{ width: '50%', height: '20%', marginBottom: '20px' }} />
                 <div className="form-group">
                     <input
@@ -143,13 +143,13 @@ function RegisterPage() {
                         required
                     >
                         <option value="" disabled>Select Your Campus</option>
-                        <option value="Sutherland">Sutherland</option>
+                        <option value="fleming">Sutherland</option>
                         <option value="Lindsay">Lindsay</option>
                         <option value="Haliburton">Haliburton</option>
                         <option value="fleming">Fleming</option>
                     </select>
                 </div>
-                <button onClick={handleSubmit} className="btn btn-primary btn-lg" type="submit">SUBMIT</button>
+                <button className="btn btn-primary btn-lg" type="submit">SUBMIT</button>
                 {Object.keys(errors).map((key, index) => (
                     <p style={{ color: 'red' }} key={index} className="error-message">{key}: {errors[key].join(', ')}</p>
                 ))}

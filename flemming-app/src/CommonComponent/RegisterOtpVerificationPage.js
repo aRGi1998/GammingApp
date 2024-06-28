@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import '../StyleComponent/OtpPage.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const initialValues = {
     otp: ["", "", "", "", "", ""]
 };
 
-function OtpVerificationPage() {
+function RegisterOtpVerificationPage() {
     const location = useLocation();
     const email = location.state?.email || '';
 
     const [otp, setOtp] = useState(initialValues.otp);
-
+    const navigate = useNavigate();
+    
     const handleChange = (e, index) => {
         const newOtp = [...otp];
         newOtp[index] = e.target.value;
@@ -23,16 +24,22 @@ function OtpVerificationPage() {
         e.preventDefault();
         const otpString = otp.join('');
 
-        const apiEndpoint = 'https://api-flrming.dhoomaworksbench.site/api/student/otp-reset-password/';
+        const apiEndpoint = 'https://api-flrming.dhoomaworksbench.site/api/student/otp-verification/';
         const payload = {
-            email: email,
-            otp: otpString
+            mail_otp: otpString,
+            email: email
         };
 
         try {
             const response = await axios.post(apiEndpoint, payload);
             console.log('OTP verified successfully:', response.data);
-            // Handle success, maybe navigate to reset password page or show success message
+            if (response.data.status === true && response.data.message === "Mail verified successfully.") {
+                navigate('/login'); // Redirect to login page
+            } else {
+                // Handle other cases, maybe show an error message
+                alert( response.data.message)
+                console.error('Error verifying OTP:', response.data.message);
+            }
         } catch (error) {
             console.error('Error verifying OTP:', error);
             // Handle error, maybe show an error message to the user
@@ -69,4 +76,4 @@ function OtpVerificationPage() {
     );
 }
 
-export default OtpVerificationPage;
+export default RegisterOtpVerificationPage;
