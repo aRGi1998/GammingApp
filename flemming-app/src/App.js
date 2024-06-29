@@ -24,6 +24,7 @@ import OtpVerificationPage from './CommonComponent/OtpVerificationPage';
 import RegisterOtpVerificationPage from './CommonComponent/RegisterOtpVerificationPage';
 import NetworkStatus from './CommonComponent/NetWorkStatus';
 import AdminRouteProtector from './routes/adminRoute';
+import ScoreBoardPage from './AdminComponent/ScoreBoardPage';
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
           <Route path="/forgot-pwd" element={<ForgotPasswordPage />} />
           <Route path="/otp" element={<OtpVerificationPage />} />
           <Route path="/register-otp" element={<RegisterOtpVerificationPage />} />
+          <Route path="/score-board" element={<ScoreBoardPage />} />
         </Routes>
       </div>
     </Router>
