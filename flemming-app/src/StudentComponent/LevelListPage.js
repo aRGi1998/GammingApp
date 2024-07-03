@@ -425,7 +425,7 @@ function LevelListPage() {
                                                 <div className="right-side">
                                                     {game.status === 'C' && <img src={redlocker} alt="Red Lock" style={{ width: '20px', height: '20px', color: 'white' }} />}
                                                     {game.status === 'O' && <img src={unlock} alt="Unlock" style={{ width: '20px', height: '20px', color: 'white' }} />}
-                                                    {game.status === 'F' && <img src={lock} alt="lock" style={{ width: '20px', height: '20px', color: 'white' }} />}
+                                                    {game.status === '' && <img src={lock} alt="lock" style={{ width: '20px', height: '20px', color: 'white' }} />}
                                                 </div>
                                             </div>
                                         ))}

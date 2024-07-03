@@ -34,7 +34,7 @@ function RegisterOtpVerificationPage() {
             const response = await axios.post(apiEndpoint, payload);
             console.log('OTP verified successfully:', response.data);
             if (response.data.status === true && response.data.message === "Mail verified successfully.") {
-                navigate('/login'); // Redirect to login page
+                navigate('/'); // Redirect to login page
             } else {
                 // Handle other cases, maybe show an error message
                 alert( response.data.message)
