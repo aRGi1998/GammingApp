@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import lock from '../assests/lock.png';
 import unlock from '../assests/unlock.png.png';
-import redlocker from '../assests/redlocker.png';
+import redlocker from '../assests/Vector.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';

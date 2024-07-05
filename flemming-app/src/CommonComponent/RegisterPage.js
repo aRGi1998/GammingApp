@@ -143,7 +143,7 @@ function RegisterPage() {
                         required
                     >
                         <option value="" disabled>Select Your Campus</option>
-                        <option value="fleming">Sutherland</option>
+                        <option value="Sutherland">Sutherland</option>
                         <option value="Lindsay">Lindsay</option>
                         <option value="Haliburton">Haliburton</option>
                     </select>

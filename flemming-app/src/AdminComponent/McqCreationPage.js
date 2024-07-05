@@ -12,7 +12,7 @@ function McqCreationPage() {
         correctAnswer: ''
     });
     const navigate = useNavigate();
-
+    const campusName = sessionStorage.getItem('campusName');
     const [popupMessage, setPopupMessage] = useState('');
     const [showPopup, setShowPopup] = useState(false);
     const token = sessionStorage.getItem('accessToken');
@@ -38,7 +38,7 @@ function McqCreationPage() {
             description: 'string',
             status: true,
             mode: 'options',
-            collage_name: 'fleming',
+            collage_name: campusName,
             game_type: 1,
             options: options.filter(option => option !== ''),
             answer_value: correctAnswer

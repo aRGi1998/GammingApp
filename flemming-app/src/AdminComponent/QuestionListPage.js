@@ -102,7 +102,7 @@ function QuestionListPage() {
                                         value={college}
                                         onChange={(e) => setCollege(e.target.value)}
                                     >
-                                        <option value="fleming">Sutherland</option>
+                                        <option value="Sutherland">Sutherland</option>
                                         <option value="Lindsay">Lindsay</option>
                                         <option value="Haliburton">Haliburton</option>
                                     </select>

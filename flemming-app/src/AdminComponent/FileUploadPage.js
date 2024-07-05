@@ -24,6 +24,7 @@ function FileUploadPage() {
         newInstructions.splice(index, 1);
         setInstructions(newInstructions);
     };
+    const campusName = sessionStorage.getItem('campusName');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -35,7 +36,7 @@ function FileUploadPage() {
             description: description,
             status: true,
             mode: 'image',
-            collage_name: 'fleming',
+            collage_name: campusName,
             game_type: 2,
             options: []
         };

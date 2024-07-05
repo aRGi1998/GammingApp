@@ -1,59 +1,61 @@
 import React, { useEffect, useState } from 'react';
 import { QrReader } from 'react-qr-reader';
 import QrReaderZ from './QrReaderZ';
-import { Link , useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Modal from 'react-modal'
 import axios from 'axios';
 import Footer from '../CommonComponent/Footer';
 import Header from '../CommonComponent/Header';
 import Tenor from '../assests/tenor.gif'
 
-const ScannerListing = ({data}) => {
+const ScannerListing = ({ data }) => {
     const [qrResult, setQrResult] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState({ message: '' , linkUrl: '/game-list?taskId=3' }); // imageUrl: false , linkUrl: '/game-list?taskId=3'
+    const [modalContent, setModalContent] = useState({ message: '', linkUrl: '/game-list?taskId=3' }); // imageUrl: false , linkUrl: '/game-list?taskId=3'
     const navigate = useNavigate();
-
+    const location = useLocation();
+    // Extract the id from the query params
+    const queryParams = new URLSearchParams(location.search);
+    const id = queryParams.get('id');
     let descriptions = '' || []
-    if ( data.description.includes("\n") ) {
+    if (data.description.includes("\n")) {
         console.log("here")
-         descriptions = data?.description.split('\n')
+        descriptions = data?.description.split('\n')
     } else {
         descriptions = data.description
-    }    
+    }
 
     const handleResult = async (result) => {
         if (result) {
             setQrResult(result);
             try {
-                    const payload = {
-                        "game_id": data.id,
-                        "notes": 0,
-                        "answer_value": result, // Scanned values add here
-                        "status": ""
-                    };
-                    const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
-                        headers: {
-                            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
-                        }
-                    });
-    
-                    if (response.status === 200) {
-                        setModalContent({ message: 'Well,Done !' , linkUrl: '/game-list?taskId=3' });
-                        setShowModal(true);
+                const payload = {
+                    "game_id": data.id,
+                    "notes": 0,
+                    "answer_value": result, // Scanned values add here
+                    "status": ""
+                };
+                const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
                     }
+                });
 
-            } catch (error) {                
-                    console.error('Error posting scan result:', error);
-                    setModalContent({ message: error.message , linkUrl: '' });
+                if (response.status === 200) {
+                    setModalContent({ message: 'Well,Done !', linkUrl: '/game-list?taskId=3' });
                     setShowModal(true);
+                }
+            } catch (error) {
+                console.error('Error posting scan result:', data.id);
+                setModalContent({ message: 'Please Scan a valid QR Code!', linkUrl:`/mcq-list?id=${data.id}` });
+                setShowModal(true);
             }
         }
     };
 
     return (
         <>
-            <Header/>
+            <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -63,19 +65,19 @@ const ScannerListing = ({data}) => {
                                     <>
                                         <h5 style={{ color: 'black' }}>Instructions List</h5>
                                         <ul style={{ color: 'black' }} className="list-group mb-3">
-                                        {
-                                            typeof descriptions === 'string' ? (
-                                                <li className="list-group-item">{descriptions}</li>
-                                            ) : (
-                                                descriptions.map((describe,index) => (
-                                                    <li key={index} className="list-group-item">{describe}</li>
-                                                ))
-                                            )
-                                        }
+                                            {
+                                                typeof descriptions === 'string' ? (
+                                                    <li className="list-group-item">{descriptions}</li>
+                                                ) : (
+                                                    descriptions.map((describe, index) => (
+                                                        <li key={index} className="list-group-item">{describe}</li>
+                                                    ))
+                                                )
+                                            }
                                         </ul>
                                         <h1 className="scan-header">SCAN ME</h1>
-                                        <QrReaderZ setQrResult={handleResult}/>
-                                        <p style={{ position:'relative' , zIndex:'1' , color:'black' , textAlign:'center' , fontWeight:'bolder'}}>the result: {qrResult || 'none'}</p>
+                                        <QrReaderZ setQrResult={handleResult} />
+                                        <p style={{ position: 'relative', zIndex: '1', color: 'black', textAlign: 'center', fontWeight: 'bolder' }}>the result: {qrResult || 'none'}</p>
                                     </>
                                 </div>
                             </div>
@@ -83,7 +85,7 @@ const ScannerListing = ({data}) => {
                     </div>
                 </div>
             </div>
-            <Footer/>
+            <Footer />
             <Modal
                 isOpen={showModal}
                 onRequestClose={() => { setShowModal(false); navigate("/game-list?taskId=3") }}
@@ -107,7 +109,7 @@ const ScannerListing = ({data}) => {
             >
                 <h2>{modalContent.message}</h2>
                 {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Back</Link>}
-            </Modal>            
+            </Modal>
         </>
     );
 };

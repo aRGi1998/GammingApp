@@ -135,6 +135,7 @@ function QrCreationPage() {
     const [qrCodeUrl, setQrCodeUrl] = useState(null);
     const token = sessionStorage.getItem('accessToken');
     const navigate = useNavigate();
+    const campusName = sessionStorage.getItem('campusName');
 
     const handleInstructionChange = (index, event) => {
         const newInstructions = instructions.slice();
@@ -161,7 +162,7 @@ function QrCreationPage() {
             description: description,
             status: true,
             mode: 'qr',
-            collage_name: 'fleming',
+            collage_name: campusName,
             game_type: 3,
             options: [],
             level: 0,
@@ -178,6 +179,7 @@ function QrCreationPage() {
             console.log('Response:', response.data);
             // Set the QR code URL from the response
             const qrCodeUrl = response.data.qr_code;
+            console.log(qrCodeUrl, 'QrLink')
             setQrCodeUrl(qrCodeUrl);
 
             // Automatically download the QR code
