@@ -5,7 +5,7 @@ import Footer from '../CommonComponent/Footer';
 
 function QuestionListPage() {
     const [gameMode, setGameMode] = useState('options');
-    const [college, setCollege] = useState('fleming');
+    const [college, setCollege] = useState('Sutherland');
     const [responseData, setResponseData] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [updatedItem, setUpdatedItem] = useState(null);
