@@ -48,7 +48,6 @@ function QrReaderZ({ setQrResult }) {
             (result, err) => {
                 if (result) {
                     // properly decoded qr code
-                    console.log("Found QR code!", result.text);
                     setQrResult(result.text);
                 }
 

@@ -3,25 +3,26 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
+import { Modal } from 'react-bootstrap';
 
 function StudentDetailPage() {
     const { id } = useParams();
     const [studentData, setStudentData] = useState([]);
     const [gameMode, setGameMode] = useState('options');
     const token = sessionStorage.getItem('accessToken');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedImageUrl, setSelectedImageUrl] = useState('');
 
     const fetchStudentDetails = async (selectedGameMode) => {
         try {
             if (!token) {
                 throw new Error('Access token not found.');
             }
-
             const response = await axios.get(`https://api-flrming.dhoomaworksbench.site/admin-user-game-list/${id}?game_mode=${selectedGameMode}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            console.log('Student details:', response.data);
             setStudentData(response.data.data);
         } catch (error) {
             console.error('Error fetching student details:', error);
@@ -33,7 +34,6 @@ function StudentDetailPage() {
             fetchStudentDetails(gameMode);
         }
     }, [id, gameMode, token]);
-
     const handleCheckboxChange = async (item, isChecked) => {
         const status = isChecked ? 'C' : 'F';
         try {
@@ -43,14 +43,11 @@ function StudentDetailPage() {
                 answer_value: item.answer_value,
                 status: status
             };
-
             const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            console.log('Update response:', response.data);
-
             setStudentData((prevData) =>
                 prevData.map((dataItem) =>
                     dataItem.id === item.id ? { ...dataItem, status: status } : dataItem
@@ -59,6 +56,10 @@ function StudentDetailPage() {
         } catch (error) {
             console.error('Error updating game status:', error);
         }
+    };
+    const handleImageClick = (imageUrl) => {
+        setSelectedImageUrl(imageUrl);
+        setIsModalOpen(true);
     };
 
     return (
@@ -86,7 +87,6 @@ function StudentDetailPage() {
                                 <tr>
                                     <th>{gameMode === 'options' ? 'Title' : 'Description'}</th>
                                     {gameMode === 'image' && <th>uploaded Image</th>}
-                                    {/* {gameMode === 'image' && <th>Correct</th>} */}
                                     {gameMode !== 'image' && <th>Status</th>}
                                 </tr>
                             </thead>
@@ -99,16 +99,14 @@ function StudentDetailPage() {
                                                 <>
                                                     <td>
                                                         {item.answer_value ? (
-                                                            <img src={item.answer_value} alt="Uploaded file" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                                                            <img
+                                                                src={item.answer_value}
+                                                                alt="Uploaded file"
+                                                                style={{ maxWidth: '100px', maxHeight: '100px', cursor: 'pointer' }}
+                                                                onClick={() => handleImageClick(item.answer_value)}
+                                                            />
                                                         ) : 'No image'}
                                                     </td>
-                                                    {/* <td>
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={item.status === 'C'}
-                                                            onChange={(e) => handleCheckboxChange(item, e.target.checked)}
-                                                        />
-                                                    </td> */}
                                                 </>
                                             )}
                                             {gameMode !== 'image' && (
@@ -129,8 +127,18 @@ function StudentDetailPage() {
                 </div>
             </div>
             <Footer />
+
+            <Modal show={isModalOpen} onHide={() => setIsModalOpen(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Image Zoom</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <img src={selectedImageUrl} alt="Zoomed file" style={{ width: '100%' }} />
+                </Modal.Body>
+            </Modal>
         </>
     );
 }
 
 export default StudentDetailPage;
+

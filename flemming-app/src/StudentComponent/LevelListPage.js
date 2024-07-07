@@ -46,54 +46,6 @@ function LevelListPage() {
             });
     };
 
-    // const getGameData = () => {
-    //     const token = sessionStorage.getItem('accessToken');
-    //     if (!token) {
-    //         console.error('Access token not found in local storage');
-    //         return;
-    //     }
-
-    //     axios.get('https://api-flrming.dhoomaworksbench.site/user-game-type', {
-    //         headers: {
-    //             Authorization: `Bearer ${token}`
-    //         }
-    //     })
-    //         .then(response => {
-    //             console.log(response, 'data');
-    //             setGames(response.data.data);
-    //             setTaskIds(response.data.data.map((data, index) => index + 1));
-    //         })
-    //         .catch(error => {
-    //             if (error.response && error.response.data.code === 'token_not_valid') {
-    //                 console.log('Token expired, refreshing token...');
-    //                 refreshAccessToken().then(newToken => {
-    //                     if (newToken) {
-    //                         axios.get('https://api-flrming.dhoomaworksbench.site/user-game-type', {
-    //                             headers: {
-    //                                 Authorization: `Bearer ${newToken}`
-    //                             }
-    //                         })
-    //                             .then(response => {
-    //                                 setGames(response.data.data);
-    //                                 setTaskIds(response.data.data.map((data, index) => index + 1));
-    //                             })
-    //                             .catch(error => {
-    //                                 console.error('Error fetching game data with new token:', error);
-    //                                 setError('Failed to fetch game data.');
-    //                             });
-    //                     }
-    //                 })
-    //                     .catch((err) => {
-    //                         console.log(err);
-    //                         navigate("/");
-    //                     });
-    //             } else {
-    //                 console.error('Error fetching game data:', error);
-    //                 setError('Failed to fetch game data.');
-    //             }
-    //         });
-    // };
-
     const getGameData = () => {
         const token = sessionStorage.getItem('accessToken');
         if (!token) {
@@ -107,7 +59,6 @@ function LevelListPage() {
             }
         })
             .then(response => {
-                console.log(response, 'data');
                 setGames(response.data.data);
                 setTaskIds(response.data.data.map((data, index) => index + 1));
             })
@@ -117,7 +68,6 @@ function LevelListPage() {
                         alert('You do not have permission to play this game!');
                         navigate('/home');
                     } else if (error.response.data.code === 'token_not_valid') {
-                        console.log('Token expired, refreshing token...');
                         refreshAccessToken().then(newToken => {
                             if (newToken) {
                                 axios.get('https://api-flrming.dhoomaworksbench.site/user-game-type', {
@@ -153,7 +103,7 @@ function LevelListPage() {
     const handleResult = async (result, gameId, url) => {
         if (result) {
             try {
-                alert(`You Finished Level ${gameId}`);
+                // alert(`You Finished Level ${gameId}`);
                 navigate(url);
             } catch (error) {
                 alert(error.message);
@@ -205,7 +155,7 @@ function LevelListPage() {
                 const url = `/game-list?taskId=${taskId}&game_mode=${gameMode}`;
                 handleResult(allow, taskIds[taskIds.indexOf(taskId) - 1], url);
             } else {
-                alert(`complete all levels from level(${taskIds[taskIds.indexOf(taskId) - 1]}) and unlock level(${taskId})`);
+                // alert(`complete all levels from level(${taskIds[taskIds.indexOf(taskId) - 1]}) and unlock level(${taskId})`);
             }
         }
     };

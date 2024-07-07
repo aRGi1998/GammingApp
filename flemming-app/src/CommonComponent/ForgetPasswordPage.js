@@ -17,7 +17,6 @@ const ForgotPasswordPage = () => {
                     email: email
                 });
 
-            console.log('Email sent successfully:', response.data);
             // Pass email as state when navigating
             if (response.data) {
                 navigate('/otp', { state: { email: email } });

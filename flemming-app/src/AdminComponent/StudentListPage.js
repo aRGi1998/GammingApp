@@ -5,19 +5,15 @@ import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
 
 function StudentListPage() {
-    const [selectedCampus, setSelectedCampus] = useState('Sutherland'); // Set default campus to Sutherland
     const [students, setStudents] = useState([]);
     const token = sessionStorage.getItem('accessToken');
+    const campusName = sessionStorage.getItem('campusName');
     const navigate = useNavigate();
 
-    const handleCampusChange = (event) => {
-        setSelectedCampus(event.target.value);
-    };
-
     const fetchStudents = async () => {
-        if (selectedCampus) {
+        if (campusName) {
             try {
-                const response = await axios.get(`https://api-flrming.dhoomaworksbench.site/api/student/?campus_name=${selectedCampus}&active_student=True`, {
+                const response = await axios.get(`https://api-flrming.dhoomaworksbench.site/api/student/?campus_name=${campusName}&active_student=True`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -31,7 +27,7 @@ function StudentListPage() {
 
     useEffect(() => {
         fetchStudents();
-    }, [selectedCampus, token]); // Call the API on initial render and when selectedCampus changes
+    }, [campusName, token]); // Call the API on initial render and when campusName changes
 
     const handleViewClick = (id) => {
         navigate(`/student-detail/${id}`); // Navigate to the student detail page
@@ -57,7 +53,6 @@ function StudentListPage() {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            setSelectedCampus(''); // Reset campus selection after deletion
             setStudents([]); // Clear the student list
         } catch (error) {
             console.error('Error deleting campus:', error);
@@ -69,27 +64,13 @@ function StudentListPage() {
             <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
-                    <div className="col-12 col-md-10 d-flex flex-column align-items-center" style={{ marginBottom: '100px' }}>
-                        <h3 className="text-black mt-3">Student List</h3>
-                        <div className="row w-100 mt-4">
-                            <div className="col-12 col-md-8 mb-2 mb-md-0">
-                                <div className="form-group custom-select" style={{ marginLeft: '-31px' }}>
-                                    <label htmlFor="collegeSelect" className="text-black">Select Campus:</label>
-                                    <select
-                                        id="collegeSelect"
-                                        className="form-control"
-                                        value={selectedCampus}
-                                        onChange={handleCampusChange}
-                                    >
-                                        <option value="" disabled>Select a campus</option>
-                                        <option value="Sutherland">Sutherland</option>
-                                        <option value="Lindsay">Lindsay</option>
-                                        <option value="Haliburton">Haliburton</option>
-                                    </select>
-                                </div>
+                    <div className="col-12 col-md-10 d-flex flex-column" style={{ marginBottom: '100px' }}>
+                        <div className='row m-3'>
+                            <div className='col-md-6'>
+                                <h3 className="text-black">Student List</h3>
                             </div>
-                            <div className="col-12 col-md-4 text-md-right" style={{ marginLeft: '0px', marginTop: '4px' }}>
-                                <button style={{ height: '53px' }} className="btn btn-danger w-100" onClick={handleDeleteCampus}>Delete Student List</button>
+                            <div className='col-md-6 d-flex justify-content-end'>
+                                <button className="btn btn-danger" onClick={handleDeleteCampus}>Delete Student List</button>
                             </div>
                         </div>
                         <table className="table table-striped table-light mt-4">
@@ -126,3 +107,4 @@ function StudentListPage() {
 }
 
 export default StudentListPage;
+

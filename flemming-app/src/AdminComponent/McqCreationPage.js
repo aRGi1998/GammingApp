@@ -43,16 +43,12 @@ function McqCreationPage() {
             options: options.filter(option => option !== ''),
             answer_value: correctAnswer
         };
-
-        console.log(dataToSend, 'data to send');
-
         try {
             const response = await axios.post('https://api-flrming.dhoomaworksbench.site/game', dataToSend, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            console.log('Response:', response.data);
             alert('MCQ created successfully!');
             setFormData({
                 question: '',

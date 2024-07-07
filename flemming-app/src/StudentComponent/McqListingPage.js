@@ -67,8 +67,6 @@ function McqListingPage() {
                 }
             })
                 .then(response => {
-                    console.log(response.data)
-                    console.log(response.data || response.data[0],'op')
                     setData(response.data);
                     setCorrectAnswer(response.data?.answer_value) 
                     console.log("c",response.data?.answer_value, response.data.hasOwnProperty("answer_value"))
@@ -81,7 +79,6 @@ function McqListingPage() {
 
     useEffect(() => {        
         fetchDetails()
-        console.log("response",data)
     }, []);
 
     const handleSubmit = async (e) => {

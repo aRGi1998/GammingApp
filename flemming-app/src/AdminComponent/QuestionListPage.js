@@ -5,10 +5,10 @@ import Footer from '../CommonComponent/Footer';
 
 function QuestionListPage() {
     const [gameMode, setGameMode] = useState('options');
-    const [college, setCollege] = useState('Sutherland');
     const [responseData, setResponseData] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [updatedItem, setUpdatedItem] = useState(null);
+    const college = sessionStorage.getItem('campusName'); // Get the college name from session storage
 
     useEffect(() => {
         fetchData();
@@ -27,7 +27,6 @@ function QuestionListPage() {
             }
         })
             .then(response => {
-                console.log(response.data);
                 setResponseData(response.data);
             })
             .catch(error => {
@@ -90,26 +89,12 @@ function QuestionListPage() {
             <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
-                    <div className="col-md-10 d-flex flex-column align-items-center">
-                    <h3 className="text-black mt-3">Question List</h3>
-                        <div className="row mb-4 w-100">
-                            <div className="col-md-6 mb-3">
-                                <label htmlFor="collegeSelect" className="text-black">Select College</label>
-                                <div className="custom-select">
-                                    <select
-                                        id="collegeSelect"
-                                        className="form-control"
-                                        value={college}
-                                        onChange={(e) => setCollege(e.target.value)}
-                                    >
-                                        <option value="Sutherland">Sutherland</option>
-                                        <option value="Lindsay">Lindsay</option>
-                                        <option value="Haliburton">Haliburton</option>
-                                    </select>
-                                </div>
+                    <div className="col-md-10 d-flex flex-column" style={{ marginBottom: '100px' }}>
+                        <div className='row m-3'>
+                            <div className='col-md-6'>
+                                <h3 className="text-black">Question  List</h3>
                             </div>
-                            <div className="col-md-6 mb-3">
-                                <label htmlFor="gameModeSelect" className="text-black">Select Game Mode</label>
+                            <div className='col-md-6 d-flex justify-content-end'>
                                 <div className="custom-select">
                                     <select
                                         id="gameModeSelect"

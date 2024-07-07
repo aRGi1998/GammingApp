@@ -69,7 +69,6 @@ function RegisterPage() {
             collage_name: campus // Add the selected campus name here
         })
             .then(res => {
-                console.log(res.data);
                 navigate('/register-otp', { state: { email: email } });
             })
             .catch(error => {

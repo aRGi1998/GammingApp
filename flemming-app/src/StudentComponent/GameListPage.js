@@ -50,7 +50,6 @@ const GameListPage = () => {
             }
         })
             .then(response => {
-                console.log(response.data)
                 setGameData(response.data.data);
                 storeGameIds(response.data.data.map((game) => game.id));
             })

@@ -40,16 +40,13 @@ function FileUploadPage() {
             game_type: 2,
             options: []
         };
-        console.log('Data to send:', dataToSend);
-
         try {
             const response = await axios.post('https://api-flrming.dhoomaworksbench.site/api/game/', dataToSend, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            console.log('Response:', response.data);
-            if(response.data) {
+            if (response.data) {
                 alert('Instruction Created Successfully!')
                 // Clear form data
                 setInstructions(['']);

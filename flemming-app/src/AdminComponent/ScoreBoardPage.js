@@ -16,7 +16,6 @@ function ScoreBoardPage() {
                     },
                 });
                 setScores(response.data);
-                console.log(response.data);
             } catch (error) {
                 console.error('Error fetching scores:', error);
             }
@@ -32,7 +31,6 @@ function ScoreBoardPage() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log('Game reset successfully');
             // Optionally, fetch updated scores or update local state after reset
         } catch (error) {
             console.error('Error resetting game:', error);
@@ -45,7 +43,7 @@ function ScoreBoardPage() {
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center mt-4" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-10 d-flex flex-column ">
-                        <div className='row'>
+                        <div className='row m-3'>
                             <div className='col-md-6'>
                                 <h3 className="text-black">Score Board</h3>
                             </div>
@@ -53,24 +51,30 @@ function ScoreBoardPage() {
                                 <button className="btn btn-danger" onClick={handleResetGame}>Reset Game</button>
                             </div>
                         </div>
-                        <table className="table table-striped table-light mt-4">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Contact No:</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {/* {scores.map((score) => (
-                                    <tr key={score.id}>
-                                        <td>{score.username}</td>
-                                        <td>{score.email}</td>
-                                        <td>{score.contact_number}</td>
+                        {scores.length > 0 ? (
+                            <table className="table table-striped table-light mt-4">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Contact No:</th>
                                     </tr>
-                                ))} */}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {scores.map((score) => (
+                                        <tr key={score.username}>
+                                            <td>{score.username}</td>
+                                            <td>{score.email}</td>
+                                            <td>{score.contact_number}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <div className="alert alert-info mt-4">
+                                Currently no data available.
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

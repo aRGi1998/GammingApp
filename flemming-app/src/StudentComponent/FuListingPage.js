@@ -8,7 +8,6 @@ import {Link,useNavigate} from 'react-router-dom'
 
 
 function FuListingPage({ data }) {
-    console.log("data",data)
     const [selectedFile, setSelectedFile] = useState(null);
     const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false);

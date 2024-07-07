@@ -37,9 +37,8 @@ function OtpVerificationPage() {
 
         try {
             const response = await axios.post(apiEndpoint, payload);
-            console.log('OTP and password updated successfully:', response.data);
             // Handle success, maybe navigate to login page or show success message
-            if (response.data.status=== true && response.data.message === 'Password update Successfully') {
+            if (response.data.status === true && response.data.message === 'Password update Successfully') {
                 navigate('/');
             }
         } catch (error) {
