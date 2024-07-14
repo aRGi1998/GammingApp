@@ -4,6 +4,8 @@ import '../StyleComponent/McqForm.css';
 import Header from '../CommonComponent/Header';
 import Footer from '../CommonComponent/Footer';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 function McqCreationPage() {
     const [formData, setFormData] = useState({
@@ -69,7 +71,14 @@ function McqCreationPage() {
                     <div className="col-md-8 d-flex justify-content-center">
                         <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '800px' }}>
                             <div className="container oval-container">
-                                <h2 className="form-title mb-4">Multiple Choice Question Form</h2>
+                                <div className='row m-3'>
+                                    <div className='col-md-8'>
+                                    <h2 className="form-title mb-4">Multiple Choice Question Form</h2>
+                                    </div>
+                                    <div className='col-md-4 d-flex justify-content-end'>
+                                    <FontAwesomeIcon icon={faArrowLeft} size="lg" onClick={() => navigate(-1)} style={{ cursor: 'pointer', color: "blue" }} />
+                                    </div>
+                                </div>
                                 <form onSubmit={handleSubmit}>
                                     <div className="form-group">
                                         <label htmlFor="question" style={{ textAlign: 'left' }}>Question: </label>

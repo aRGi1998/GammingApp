@@ -84,6 +84,16 @@ function QuestionListPage() {
             });
     };
 
+    const handleDownload = (item) => {
+        const link = document.createElement('a');
+        link.href = item.qr_code;
+        link.download = 'qr_code.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        alert('Download started for ' + item.description);
+    };
+
     return (
         <>
             <Header />
@@ -92,7 +102,7 @@ function QuestionListPage() {
                     <div className="col-md-10 d-flex flex-column" style={{ marginBottom: '100px' }}>
                         <div className='row m-3'>
                             <div className='col-md-6'>
-                                <h3 className="text-black">Question  List</h3>
+                                <h3 className="text-black">Question List</h3>
                             </div>
                             <div className='col-md-6 d-flex justify-content-end'>
                                 <div className="custom-select">
@@ -155,7 +165,13 @@ function QuestionListPage() {
                                                 {editMode && updatedItem.id === item.id ? (
                                                     <button className="btn btn-success" onClick={handleSave}>Save</button>
                                                 ) : (
-                                                    <button className="btn btn-primary mr-2" onClick={() => handleEdit(item)}>Edit</button>
+                                                    <>
+                                                        {gameMode === 'qr' ? (
+                                                            <button className="btn btn-secondary" onClick={() => handleDownload(item)}>Download</button>
+                                                        ) : (
+                                                            <button className="btn btn-primary mr-2" onClick={() => handleEdit(item)}>Edit</button>
+                                                        )}
+                                                    </>
                                                 )}
                                                 <button className="btn btn-danger" onClick={() => handleDelete(item)}>Delete</button>
                                             </td>

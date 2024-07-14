@@ -18,7 +18,7 @@ function HomePage() {
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
-                        <div className="card text-white p-4" style={{ height: 'auto', width: '100%', overflowY: 'auto', maxWidth: '600px', border:'none' }}>
+                        <div className="card text-white p-4" style={{ height: 'auto', width: '100%', overflowY: 'auto', maxWidth: '600px', border: 'none' }}>
                             <div className="text-center mb-4">
                                 <img src={rectangleImage} alt="Rectangle" className="img-fluid" style={{ width: '100%', maxWidth: '400px' }} />
                                 <div className="position-absolute bottom-0 start-50 translate-middle-x text-white fw-bold">
@@ -32,8 +32,9 @@ function HomePage() {
                                     style={{
                                         width: '250px',
                                         borderRadius: '20px',
-                                        padding: '10px 20px',
+                                        padding: '10px 10px',
                                         fontWeight: 'bold',
+                                        marginLeft: '60px'
                                     }}
                                 >
                                     Start Play
@@ -50,7 +51,7 @@ function HomePage() {
                                         padding: '10px',
                                         border: 'none',
                                         cursor: 'pointer',
-                                        marginLeft:'75px'
+                                        marginLeft: '75px'
                                     }}
                                 >
                                     <img src={frametrophy} alt="Trophy" className="mb-2" style={{ width: '50px', height: '50px', textAlign: 'center' }} />
