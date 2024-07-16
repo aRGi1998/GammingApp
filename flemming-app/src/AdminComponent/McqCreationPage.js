@@ -73,7 +73,7 @@ function McqCreationPage() {
                             <div className="container oval-container">
                                 <div className='row m-3'>
                                     <div className='col-md-8'>
-                                    <h2 className="form-title mb-4">Multiple Choice Question Form</h2>
+                                    <h2 className="form-title mb-4">Multiple Choice Questions Form</h2>
                                     </div>
                                     <div className='col-md-4 d-flex justify-content-end'>
                                     <FontAwesomeIcon icon={faArrowLeft} size="lg" onClick={() => navigate(-1)} style={{ cursor: 'pointer', color: "blue" }} />

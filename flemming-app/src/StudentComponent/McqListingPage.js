@@ -44,7 +44,7 @@ function McqListingPage() {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Your Answer is saved !' ,  linkUrl: '/game-list?taskId=1' });
+                    setModalContent({ message: 'Your Response Saved Successfully!' ,  linkUrl: '/game-list?taskId=1' });
                     setShowModal(true);
                 }
             } catch (error) {

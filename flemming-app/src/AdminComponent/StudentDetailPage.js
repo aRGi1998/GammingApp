@@ -57,6 +57,7 @@ function StudentDetailPage() {
             console.error('Error updating game status:', error);
         }
     };
+    // zooming the image function 
     const handleImageClick = (imageUrl) => {
         setSelectedImageUrl(imageUrl);
         setIsModalOpen(true);
@@ -77,8 +78,8 @@ function StudentDetailPage() {
                                 value={gameMode}
                                 onChange={(e) => setGameMode(e.target.value)}
                             >
-                                <option value="options">Mcq Question</option>
-                                <option value="image">File upload</option>
+                                <option value="options">Mcq Questions</option>
+                                <option value="image">File uploads</option>
                                 <option value="qr">QR scanner</option>
                             </select>
                         </div>

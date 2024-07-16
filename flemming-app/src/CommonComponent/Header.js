@@ -28,8 +28,8 @@ function Header() {
                         {isAdmin ? (
                             <>
                                 <a href="/admin-home" className="nav-link text-white me-3">Home</a>
-                                <a href="/student-list" className="nav-link text-white me-3">Student List</a>
-                                <a href="/question-list" className="nav-link text-white me-3">Question List</a>
+                                <a href="/student-list" className="nav-link text-white me-3">Student Lists</a>
+                                <a href="/question-list" className="nav-link text-white me-3">Question Lists</a>
                                 <a href="/score-board" className="nav-link text-white me-3">Score Board</a>
                             </>
                         ) : (

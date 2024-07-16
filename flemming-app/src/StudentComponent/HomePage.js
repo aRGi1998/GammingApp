@@ -37,7 +37,7 @@ function HomePage() {
                                         marginLeft: '60px'
                                     }}
                                 >
-                                    Start Play
+                                    Start
                                 </button>
                             </div>
                             <div className="d-flex justify-content-center mt-4">

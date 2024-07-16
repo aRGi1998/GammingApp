@@ -102,7 +102,7 @@ function QuestionListPage() {
                     <div className="col-md-10 d-flex flex-column" style={{ marginBottom: '100px' }}>
                         <div className='row m-3'>
                             <div className='col-md-6'>
-                                <h3 className="text-black">Question List</h3>
+                                <h3 className="text-black">Question Lists</h3>
                             </div>
                             <div className='col-md-6 d-flex justify-content-end'>
                                 <div className="custom-select">
@@ -112,8 +112,8 @@ function QuestionListPage() {
                                         value={gameMode}
                                         onChange={(e) => setGameMode(e.target.value)}
                                     >
-                                        <option value="options">Mcq Question</option>
-                                        <option value="image">File upload</option>
+                                        <option value="options">Mcq Questions</option>
+                                        <option value="image">File uploads</option>
                                         <option value="qr">QR scanner</option>
                                     </select>
                                 </div>
@@ -167,9 +167,9 @@ function QuestionListPage() {
                                                 ) : (
                                                     <>
                                                         {gameMode === 'qr' ? (
-                                                            <button className="btn btn-secondary" onClick={() => handleDownload(item)}>Download</button>
+                                                            <button className="btn btn-secondary ms-2" onClick={() => handleDownload(item)}>Download</button>
                                                         ) : (
-                                                            <button className="btn btn-primary mr-2" onClick={() => handleEdit(item)}>Edit</button>
+                                                            <button className="btn btn-primary ms-2" onClick={() => handleEdit(item)}>Edit</button>
                                                         )}
                                                     </>
                                                 )}

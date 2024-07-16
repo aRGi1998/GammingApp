@@ -27,11 +27,11 @@ function AdminHomePage() {
                         <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '600px' }}>
                             <div className="m-2 p-5 level">
                                 <div id="MCQ" className="btn oval-button mt-4 mb-3" style={{ backgroundColor: 'rgb(19, 223, 91)', cursor: "pointer", width: '100%', height: '30%', borderRadius: '10px' }} onClick={() => navigateToMcq('MCQ')}>
-                                    <span style={{ color: 'white' }} >Multiple Choice Question</span>
+                                    <span style={{ color: 'white' }} >Multiple Choice Questions</span>
                                     <img className="ms-1" src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
                                 </div>
                                 <div id="FU" className="btn oval-button mb-3" style={{ backgroundColor: 'rgb(19, 223, 148)', cursor: "pointer", width: '100%', height: '30%', borderRadius: '10px' }} onClick={() => navigateToFileUpload('FU')}>
-                                    <span style={{ color: 'white' }} >File Upload</span>
+                                    <span style={{ color: 'white' }} >File Uploads</span>
                                     <img className="ms-1" src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
                                 </div>
                                 <div id="QRS" className="btn oval-button mb-3" style={{ backgroundColor: 'rgb(11, 156, 103)', cursor: "pointer", width: '100%', height: '30%', borderRadius: '10px' }} onClick={() => navigateToQRScanner('QRS')}>
