@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { QrReader } from 'react-qr-reader';
 import QrReaderZ from './QrReaderZ';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import Modal from 'react-modal'
+import { useNavigate, useLocation } from 'react-router-dom';
+import Modal from 'react-modal';
 import axios from 'axios';
 import Footer from '../CommonComponent/Footer';
 import Header from '../CommonComponent/Header';
-import Tenor from '../assests/tenor.gif'
 
 const ScannerListing = ({ data }) => {
     const [qrResult, setQrResult] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState({ message: '', linkUrl: '/game-list?taskId=3' }); // imageUrl: false , linkUrl: '/game-list?taskId=3'
+    const [modalContent, setModalContent] = useState({ message: '', linkUrl: '/game-list?taskId=3' });
     const navigate = useNavigate();
     const location = useLocation();
-    // Extract the id from the query params
     const queryParams = new URLSearchParams(location.search);
     const id = queryParams.get('id');
-    let descriptions = '' || []
+    let descriptions = '' || [];
     if (data.description.includes("\n")) {
-        console.log("here")
-        descriptions = data?.description.split('\n')
+        descriptions = data?.description.split('\n');
     } else {
-        descriptions = data.description
+        descriptions = data.description;
     }
 
     const handleResult = async (result) => {
@@ -30,10 +27,10 @@ const ScannerListing = ({ data }) => {
             setQrResult(result);
             try {
                 const payload = {
-                    "game_id": data.id,
-                    "notes": 0,
-                    "answer_value": result, // Scanned values add here
-                    "status": ""
+                    game_id: data.id,
+                    notes: 0,
+                    answer_value: result,
+                    status: ""
                 };
                 const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
                     headers: {
@@ -42,12 +39,12 @@ const ScannerListing = ({ data }) => {
                 });
 
                 if (response.status === 200) {
-                    setModalContent({ message: 'Well,Done !', linkUrl: '/game-list?taskId=3' });
+                    setModalContent({ message: 'Successfully Scanned!', linkUrl: '/game-list?taskId=3' });
                     setShowModal(true);
                 }
             } catch (error) {
                 console.error('Error posting scan result:', data.id);
-                setModalContent({ message: 'Please Scan a valid QR Code!', linkUrl:`/mcq-list?id=${data.id}` });
+                setModalContent({ message: 'Please Scan a valid QR Code!', linkUrl: `/mcq-list?id=${data.id}` });
                 setShowModal(true);
             }
         }
@@ -108,7 +105,7 @@ const ScannerListing = ({ data }) => {
                 }}
             >
                 <h2>{modalContent.message}</h2>
-                {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Back</Link>}
+                <button className="btn btn-primary mt-1" onClick={() => { setShowModal(false); navigate(modalContent.linkUrl) }}>Back</button>
             </Modal>
         </>
     );

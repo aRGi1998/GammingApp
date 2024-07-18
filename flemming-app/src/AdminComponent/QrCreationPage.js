@@ -131,10 +131,13 @@ import Footer from '../CommonComponent/Footer';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import Modal from 'react-modal';
 
 function QrCreationPage() {
     const [instructions, setInstructions] = useState(['']);
     const [qrCodeUrl, setQrCodeUrl] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
     const token = sessionStorage.getItem('accessToken');
     const navigate = useNavigate();
     const campusName = sessionStorage.getItem('campusName');
@@ -177,7 +180,8 @@ function QrCreationPage() {
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                alert('Instruction Created Successfully! & Successfully Downloaded QR');
+                setModalMessage('Instruction Created Successfully! & Successfully Downloaded QR');
+                setShowModal(true);
                 // Clear form data
                 setInstructions(['']);
                 // Hide QR code section
@@ -185,6 +189,8 @@ function QrCreationPage() {
             }
         } catch (error) {
             console.error('Error:', error);
+            setModalMessage('Error creating instruction. Please try again.');
+            setShowModal(true);
         }
     };
 
@@ -196,11 +202,11 @@ function QrCreationPage() {
                     <div className="col-md-8 d-flex justify-content-center">
                         <div className="card p-4 rounded shadow-lg" style={{ height: 'auto', width: '100%', overflowY: 'auto', maxWidth: '800px' }}>
                             <div className='row m-3'>
-                                <div className='col-md-8'>
-                                    <h5 style={{ color: 'blue' }}>Add Instructions For QR Scanning</h5>
-                                </div>
-                                <div className='col-md-4 d-flex justify-content-end'>
+                                <div className='col-md-4 d-flex justify-content-start'>
                                     <FontAwesomeIcon icon={faArrowLeft} size="lg" onClick={() => navigate(-1)} style={{ cursor: 'pointer', color: "blue" }} />
+                                </div>
+                                <div className='col-md-8 d-flex justify-content-start'>
+                                    <h5 style={{ color: 'blue' }}>Add Instructions For QR Scanning</h5>
                                 </div>
                             </div>
                             <form onSubmit={handleSubmit}>
@@ -232,8 +238,33 @@ function QrCreationPage() {
                 </div>
             </div>
             <Footer />
+            <Modal
+                isOpen={showModal}
+                onRequestClose={() => setShowModal(false)}
+                contentLabel="Result Modal"
+                ariaHideApp={false}
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.75)'
+                    },
+                    content: {
+                        color: 'black',
+                        textAlign: 'center',
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        marginRight: '-50%',
+                        transform: 'translate(-50%, -50%)'
+                    }
+                }}
+            >
+                <h2>{modalMessage}</h2>
+                <button className="btn btn-primary mt-1" onClick={() => setShowModal(false)}>Close</button>
+            </Modal>
         </>
     );
 }
 
 export default QrCreationPage;
+

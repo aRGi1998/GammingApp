@@ -25,6 +25,7 @@ function AdminHomePage() {
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
                         <div className="card text-white p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '600px' }}>
+                        <h2 className="form-title m-0">Question Composer</h2>
                             <div className="m-2 p-5 level">
                                 <div id="MCQ" className="btn oval-button mt-4 mb-3" style={{ backgroundColor: 'rgb(19, 223, 91)', cursor: "pointer", width: '100%', height: '30%', borderRadius: '10px' }} onClick={() => navigateToMcq('MCQ')}>
                                     <span style={{ color: 'white' }} >Multiple Choice Questions</span>

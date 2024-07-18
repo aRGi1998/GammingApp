@@ -5,9 +5,6 @@ import '../StyleComponent/LoginPage.css';
 import logo from '../assests/logo.png';
 import '../StyleComponent/RegisterPage.css';
 import axios from 'axios';
-import { MdEmail } from "react-icons/md";
-import { IoMdLock } from "react-icons/io";
-import { AiFillEyeInvisible } from "react-icons/ai";
 import base64 from 'base-64';
 
 function LoginPage() {

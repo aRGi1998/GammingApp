@@ -1,60 +1,41 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import Footer from '../CommonComponent/Footer';
 import Header from '../CommonComponent/Header';
-import Modal from 'react-modal'
-import Tenor from '../assests/tenor.gif'
-import {Link,useNavigate} from 'react-router-dom'
-
+import Modal from 'react-modal';
+import { useNavigate } from 'react-router-dom';
 
 function FuListingPage({ data }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState({ message: '' , linkUrl: '/game-list?taskId=2' }); // imageUrl: false , linkUrl: '/game-list?taskId=2'
+    const [modalContent, setModalContent] = useState({ message: '', linkUrl: '/game-list?taskId=2' });
     const navigate = useNavigate();
 
-    let descriptions = '' || [] 
-    if ( data.description.includes("\n") ) {
-         descriptions = data?.description.split('\n')
+    let descriptions = '';
+    if (data.description.includes('\n')) {
+        descriptions = data?.description.split('\n');
     } else {
-        descriptions = data.description
+        descriptions = data.description;
     }
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        const allowedTypes = ['.png', '.jpeg' , 'image/png' , 'image/jpeg'];
+        const allowedTypes = ['image/png', 'image/jpeg'];
 
         if (file && allowedTypes.includes(file.type)) {
             setSelectedFile(file);
             setError('');
         } else {
             setSelectedFile(null);
-            setModalContent({ message: 'Please select a valid PNG or JPG file' , linkUrl:'' });
-            setShowModal(true);            
+            setModalContent({ message: 'Please select a valid PNG or JPG file', linkUrl: '' });
+            setShowModal(true);
         }
     };
 
-    const handleResult = async (result,answer) => {
+    const handleResult = async (result, answer) => {
         if (result) {
             try {
-                const payload = {
-                    "game_id": data.id,
-                    "notes": 0,
-                    "answer_value": answer, 
-                    "status": ""
-                };
-                const response = await axios.post('https://api-flrming.dhoomaworksbench.site/user-game-update', payload, {
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
-                    }
-                });
-
-                if (response.status === 200) {
-                    setModalContent({ message: 'Well,Done !' , linkUrl: '/game-list?taskId=2' });
-                    setShowModal(true);
-                }
-            } catch (error) {
                 const payload = {
                     "game_id": data.id,
                     "notes": 0,
@@ -65,13 +46,19 @@ function FuListingPage({ data }) {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
                     }
-                });                
+                });
+
+                if (response.status === 200) {
+                    setModalContent({ message: 'Successfully Saved Your Data!', linkUrl: '/game-list?taskId=2' });
+                    setShowModal(true);
+                }
+            } catch (error) {
                 console.error('Error posting scan result:', error);
-                response?.status === 200 ?? setModalContent({ message: 'Well,Done !' , linkUrl: '/game-list?taskId=2'  }); setShowModal(true);
+                setModalContent({ message: 'Error posting scan result', linkUrl: '' });
+                setShowModal(true);
             }
         }
-    };    
-
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -82,11 +69,9 @@ function FuListingPage({ data }) {
         }
 
         const formData = new FormData();
-
-        formData.append('profile','0')
+        formData.append('profile', '0');
         formData.append('picture', selectedFile);
 
-        // Example API endpoint to handle file upload
         const apiUrl = 'https://api-flrming.dhoomaworksbench.site/file-update';
 
         axios.post(apiUrl, formData, {
@@ -95,21 +80,19 @@ function FuListingPage({ data }) {
             }
         })
             .then(response => {
-                let answerBuilder = `https://api-flrming.dhoomaworksbench.site/${response.data.picture}`
-                handleResult(response.status,answerBuilder)
-
+                let answerBuilder = `https://api-flrming.dhoomaworksbench.site/${response.data.picture}`;
+                handleResult(response.status, answerBuilder);
             })
             .catch(error => {
                 console.error('Error uploading file:', error);
-                setModalContent({ message: error.message});
+                setModalContent({ message: error.message });
                 setShowModal(true);
-            });        
+            });
     };
-
 
     return (
         <>
-            <Header/>
+            <Header />
             <div className="container-fluid bg-gradient" style={{ overflow: 'hidden' }}>
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8 d-flex justify-content-center">
@@ -120,17 +103,11 @@ function FuListingPage({ data }) {
                                     typeof descriptions === 'string' ? (
                                         <li className="list-group-item">{descriptions}</li>
                                     ) : (
-                                        descriptions.map((describe,index) => (
+                                        descriptions.map((describe, index) => (
                                             <li key={index} className="list-group-item">{describe}</li>
                                         ))
                                     )
                                 }
-                                {/* 
-                                {instructions.map((instruction, index) => (
-                                    <li key={index} className="list-group-item" style={{color: 'black'}}>
-                                        {instruction}
-                                    </li>
-                                ))} */}
                             </ul>
                             <h5 style={{ color: 'black' }}>Upload File</h5>
                             <form onSubmit={handleSubmit}>
@@ -148,7 +125,7 @@ function FuListingPage({ data }) {
                                         </div>
                                     )}
                                 </div>
-                                <div className="mt-5 d-flex justify-content-center align-items-center" style={{ marginLeft:'100px'}}>
+                                <div className="mt-5 d-flex justify-content-center align-items-center" style={{ marginLeft: '100px' }}>
                                     <button style={{ transform: 'translateX(-50%)' }} type="submit" className="btn btn-primary">Submit</button>
                                 </div>
                             </form>
@@ -158,7 +135,7 @@ function FuListingPage({ data }) {
             </div>
             <Modal
                 isOpen={showModal}
-                onRequestClose={() => { setShowModal(false); navigate("/game-list?taskId=2") }}
+                onRequestClose={() => { setShowModal(false); navigate(modalContent.linkUrl) }}
                 contentLabel="Result Modal"
                 ariaHideApp={false}
                 style={{
@@ -178,10 +155,9 @@ function FuListingPage({ data }) {
                 }}
             >
                 <h2>{modalContent.message}</h2>
-                {/* {modalContent.imageUrl && <img src={Tenor} alt="Result" style={{ maxWidth: '100%', height: 'auto' }} />} */}
-                {modalContent.linkUrl && <Link to={modalContent.linkUrl}>Back</Link>}
-            </Modal>            
-            <Footer/>
+                <button className="btn btn-primary mt-1" onClick={() => { setShowModal(false); navigate(modalContent.linkUrl) }}>Back</button>
+            </Modal>
+            <Footer />
         </>
     );
 }
