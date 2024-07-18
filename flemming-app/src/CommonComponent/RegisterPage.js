@@ -3,6 +3,7 @@ import '../StyleComponent/RegisterPage.css';
 import logo from '../assests/logo.png';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import base64 from 'base-64';
 
 function RegisterPage() {
     const [username, setUsername] = useState('');
@@ -59,10 +60,10 @@ function RegisterPage() {
             setErrors(validationErrors);
             return;
         }
-
+        const encodedPassword = base64.encode(password);
         axios.post('https://api-flrming.dhoomaworksbench.site/api/student/', {
             username: username,
-            password: password,
+            password: encodedPassword,
             email: email,
             contact_number: phoneNumber,
             student_code: "null",

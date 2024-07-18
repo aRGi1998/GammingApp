@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../StyleComponent/OtpPage.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import base64 from 'base-64';
 
 const initialValues = {
     otp: ["", "", "", "", "", ""]
@@ -27,12 +28,12 @@ function OtpVerificationPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const otpString = otp.join('');
-
+        const encodedPassword = base64.encode(newPassword);
         const apiEndpoint = 'https://api-flrming.dhoomaworksbench.site/api/student/otp-reset-password/';
         const payload = {
             email: email,
             otp: otpString,
-            password: newPassword // Include the new password in the payload
+            password: encodedPassword  // Include the new password in the payload
         };
 
         try {
