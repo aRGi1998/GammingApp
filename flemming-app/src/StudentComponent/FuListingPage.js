@@ -12,11 +12,16 @@ function FuListingPage({ data }) {
     const [modalContent, setModalContent] = useState({ message: '', linkUrl: '/game-list?taskId=2' });
     const navigate = useNavigate();
 
+    // Function to capitalize the first letter of each word and make the remaining letters lowercase
+    const toCapitalCase = (str) => {
+        return str.replace(/\b\w+/g, (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+    };
+
     let descriptions = '';
     if (data.description.includes('\n')) {
-        descriptions = data?.description.split('\n');
+        descriptions = data?.description.split('\n').map(line => toCapitalCase(line));
     } else {
-        descriptions = data.description;
+        descriptions = toCapitalCase(data.description);
     }
 
     const handleFileChange = (event) => {

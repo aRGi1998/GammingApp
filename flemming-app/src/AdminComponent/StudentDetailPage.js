@@ -79,7 +79,7 @@ function StudentDetailPage() {
                                 onChange={(e) => setGameMode(e.target.value)}
                             >
                                 <option value="options">Mcq Questions</option>
-                                <option value="image">File uploads</option>
+                                <option value="image">Images uploads</option>
                                 <option value="qr">QR scanner</option>
                             </select>
                         </div>

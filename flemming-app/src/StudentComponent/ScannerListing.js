@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { QrReader } from 'react-qr-reader';
 import QrReaderZ from './QrReaderZ';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Modal from 'react-modal';
@@ -15,11 +14,17 @@ const ScannerListing = ({ data }) => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const id = queryParams.get('id');
+
+    // Function to capitalize the first letter of each word and make the remaining letters lowercase
+    const toCapitalCase = (str) => {
+        return str.replace(/\b\w+/g, (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+    };
+
     let descriptions = '' || [];
     if (data.description.includes("\n")) {
-        descriptions = data?.description.split('\n');
+        descriptions = data?.description.split('\n').map(line => toCapitalCase(line));
     } else {
-        descriptions = data.description;
+        descriptions = toCapitalCase(data.description);
     }
 
     const handleResult = async (result) => {

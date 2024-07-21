@@ -36,7 +36,7 @@ function McqCreationPage() {
         const { question, options, correctAnswer } = formData;
 
         const dataToSend = {
-            title: question,
+            tittle: question,
             level: 0,
             description: 'string',
             status: true,
@@ -73,7 +73,7 @@ function McqCreationPage() {
             <div className="container-fluid bg-gradient">
                 <div className="row justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 181px)' }}>
                     <div className="col-md-8  d-flex justify-content-center">
-                        <div className="card text-dark bg-light p-4 rounded shadow-lg" style={{ height: '60vh', width: '100%', overflowY: 'auto', maxWidth: '800px' }}>
+                        <div className="card text-dark bg-light p-4 rounded shadow-lg m-3" style={{ width: '100%', overflowY: 'auto', maxWidth: '800px' }}>
                             <div className="container oval-container">
                                 <div className='row mb-3'>
                                     <div className='col-md-4 d-flex justify-content-start'>

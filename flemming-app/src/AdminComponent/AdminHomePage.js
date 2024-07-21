@@ -32,7 +32,7 @@ function AdminHomePage() {
                                     <img className="ms-1" src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
                                 </div>
                                 <div id="FU" className="btn oval-button mb-3" style={{ backgroundColor: 'rgb(19, 223, 148)', cursor: "pointer", width: '100%', height: '30%', borderRadius: '10px' }} onClick={() => navigateToFileUpload('FU')}>
-                                    <span style={{ color: 'white' }} >File Uploads</span>
+                                    <span style={{ color: 'white' }} >Image Uploads</span>
                                     <img className="ms-1" src={lock} alt="Lock" style={{ width: '20px', height: '20px', color: 'white' }} />
                                 </div>
                                 <div id="QRS" className="btn oval-button mb-3" style={{ backgroundColor: 'rgb(11, 156, 103)', cursor: "pointer", width: '100%', height: '30%', borderRadius: '10px' }} onClick={() => navigateToQRScanner('QRS')}>
