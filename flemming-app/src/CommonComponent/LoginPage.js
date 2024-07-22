@@ -48,13 +48,14 @@ function LoginPage() {
       email: email,
     })
       .then(res => {
-        const { access, name, status, is_staff, collage_name } = res.data;
+        const { access, name, status, is_staff, collage_name, student_id } = res.data;
         if (status) {
           // Store access token, name, and is_staff in session storage
           sessionStorage.setItem('accessToken', access);
           sessionStorage.setItem('userName', name);
           sessionStorage.setItem('isStaff', is_staff.toString()); // Store as string 'true' or 'false'
           sessionStorage.setItem('campusName', collage_name);
+          sessionStorage.setItem('studentId', student_id);
           // Redirect based on is_staff value
           if (is_staff) {
             navigate('/admin-home');
