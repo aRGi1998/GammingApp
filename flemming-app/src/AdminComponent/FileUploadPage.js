@@ -150,7 +150,7 @@ function FileUploadPage() {
         const description = instructions.join('\n');
 
         const dataToSend = {
-            tittle: '',
+            tittle: description,
             level: 0,
             description: description,
             status: true,

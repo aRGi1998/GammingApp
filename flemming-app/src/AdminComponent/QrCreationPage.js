@@ -171,7 +171,7 @@ function QrCreationPage() {
         const description = instructions.join('\n');
 
         const dataToSend = {
-            tittle: '',
+            tittle: description,
             description: description,
             status: true,
             mode: 'qr',
