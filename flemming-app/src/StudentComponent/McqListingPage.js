@@ -218,8 +218,10 @@ function McqListingPage() {
                 console.log('Scoreboard Response:', scoreData);
                 console.log('scoreData.total_games:', scoreData.total_games);
                 console.log('scoreData.success_games:', scoreData.success_games);
-
-                if (scoreData.total_games === scoreData.success_games) {
+                // if (scoreData.total_games === scoreData.success_games) {
+                //     navigate('/levels');
+                // } 
+                if (scoreData.success_games >= scoreData.total_games) {
                     navigate('/levels');
                 }
             }
