@@ -70,7 +70,6 @@ function LoginPage() {
       .catch(error => {
         // Display API error message
         setApiError('Invalid email or password.');
-        console.log(error, 'error');
       });
   };
 

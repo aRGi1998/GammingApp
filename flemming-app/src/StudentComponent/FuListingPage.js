@@ -67,7 +67,7 @@ function FuListingPage({ data }) {
                     const scoreData = scoreResponse.data.data.results[1];
                     console.log('Scoreboard Response:', scoreData);
 
-                    if (scoreData.total_games >= scoreData.success_games) {
+                    if (scoreData.total_games <= scoreData.success_games) {
                         navigate('/levels');
                     }
                 }
